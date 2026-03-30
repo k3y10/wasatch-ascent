@@ -54,24 +54,36 @@ const HeroSection = () => {
         </h1>
 
         <p
-          className="max-w-2xl mx-auto text-lg md:text-xl text-frost-dim font-light leading-relaxed mb-10 animate-fade-in"
+          className="max-w-2xl mx-auto text-lg md:text-xl text-frost-dim font-light leading-relaxed mb-4 animate-fade-in"
           style={{ animationDelay: "0.8s", opacity: 0 }}
         >
-          Modular terrain analysis systems born in the Wasatch.
-          <br className="hidden sm:block" />
-          Avalanche · Wildfire · Water · Geology · Infrastructure.
+          Born in the Wasatch. Fusing drone flights, LiDAR, weather forecasts,
+          and snowpack science into actionable terrain intelligence.
+        </p>
+
+        <p
+          className="max-w-xl mx-auto text-sm text-muted-foreground font-mono tracking-wide mb-10 animate-fade-in"
+          style={{ animationDelay: "0.9s", opacity: 0 }}
+        >
+          AI-Powered · Field-Grade · Decision Support
         </p>
 
         <div
           className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in"
           style={{ animationDelay: "1s", opacity: 0 }}
         >
-          <button className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-display font-semibold text-lg tracking-wide hover:shadow-[var(--shadow-amber)] transition-all duration-300 hover:scale-[1.02]">
-            Access Platform
-          </button>
-          <button className="px-8 py-3.5 rounded-lg glass-card text-foreground font-display font-semibold text-lg tracking-wide hover:border-primary/40 transition-all duration-300">
-            Explore Modules
-          </button>
+          <a
+            href="#documents"
+            className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-display font-semibold text-lg tracking-wide hover:shadow-[var(--shadow-amber)] transition-all duration-300 hover:scale-[1.02]"
+          >
+            Explore the Tech
+          </a>
+          <a
+            href="#modules"
+            className="px-8 py-3.5 rounded-lg glass-card text-foreground font-display font-semibold text-lg tracking-wide hover:border-primary/40 transition-all duration-300"
+          >
+            View Modules
+          </a>
         </div>
 
         {/* HUD coordinates */}

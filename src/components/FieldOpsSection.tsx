@@ -1,19 +1,52 @@
 import terrainBanners from "@/assets/terrain-banners.png";
 
+const useCases = [
+  {
+    title: "Ski Resorts & Patrol",
+    desc: "Hazard mapping and daily briefings with AvyTS overlays for controlled slope management.",
+    icon: "⛰️",
+  },
+  {
+    title: "Backcountry Guides",
+    desc: "Education, route planning, and field operations with terrain-aware decision support.",
+    icon: "🎿",
+  },
+  {
+    title: "Search & Rescue",
+    desc: "Rapid terrain analysis and operational planning for mountain rescue teams.",
+    icon: "🚁",
+  },
+  {
+    title: "Avalanche Centers",
+    desc: "Leveraging AvyTS analytics and forecast integration for regional warnings.",
+    icon: "⛷️",
+  },
+  {
+    title: "Land Managers",
+    desc: "Comprehensive terrain tracking, ecosystem insights, and environmental compliance.",
+    icon: "🏔️",
+  },
+  {
+    title: "Wildfire Response",
+    desc: "Real-time hazard assessment, fuel analysis, and evacuation planning.",
+    icon: "🔥",
+  },
+];
+
 const FieldOpsSection = () => {
   return (
     <section className="relative py-32 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <div className="signal-badge signal-badge-amber mx-auto mb-4 w-fit">
-            <span className="font-mono text-[10px]">FIELD OPERATIONS</span>
+            <span className="font-mono text-[10px]">PURPOSE-BUILT</span>
           </div>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Built for the <span className="text-primary">Field</span>
+            Built for Every <span className="text-primary">Team</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            From avalanche forecasters to wildfire incident commanders —
-            terrain intelligence that deploys where you operate.
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Whether you run a patrol, guide in the backcountry, respond to emergencies,
+            or manage terrain — TerraSatch scales to your mission.
           </p>
         </div>
 
@@ -27,24 +60,8 @@ const FieldOpsSection = () => {
               loading="lazy"
             />
             <div className="p-8">
-              <div className="grid sm:grid-cols-3 gap-6">
-                {[
-                  {
-                    title: "Backcountry Operations",
-                    desc: "Ski patrol, SAR teams, and guides rely on real-time terrain exposure data.",
-                    icon: "⛰️",
-                  },
-                  {
-                    title: "Wildfire Suppression",
-                    desc: "Terrain-driven fire behavior models for incident management teams.",
-                    icon: "🔥",
-                  },
-                  {
-                    title: "Infrastructure Planning",
-                    desc: "Slope stability, flood risk, and geological hazard mapping for civil engineering.",
-                    icon: "🏗️",
-                  },
-                ].map((item) => (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {useCases.map((item) => (
                   <div key={item.title} className="glass-card rounded-xl p-5">
                     <div className="text-2xl mb-3">{item.icon}</div>
                     <h3 className="font-display font-bold text-foreground mb-2">{item.title}</h3>

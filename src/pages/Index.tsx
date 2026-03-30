@@ -4,6 +4,7 @@ import ModulesSection from "@/components/ModulesSection";
 import SherpAISection from "@/components/SherpAISection";
 import TerrainVisualization from "@/components/TerrainVisualization";
 import FieldOpsSection from "@/components/FieldOpsSection";
+import OriginSection from "@/components/OriginSection";
 import DocumentsSection from "@/components/DocumentsSection";
 import Footer from "@/components/Footer";
 import AmbientParticles from "@/components/AmbientParticles";
@@ -22,6 +23,8 @@ const Index = () => {
       <TerrainVisualization />
       <div className="amber-line" />
       <FieldOpsSection />
+      <div className="amber-line" />
+      <OriginSection />
       <div className="amber-line" />
       <DocumentsSection />
       <Footer />

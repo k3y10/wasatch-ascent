@@ -1,5 +1,38 @@
 import topoTexture from "@/assets/topo-texture.jpg";
 
+const layers = [
+  {
+    label: "Signal Layer",
+    sublabel: "Alerts & Forecasts",
+    desc: "Custom alerts per zone, ridge, or route driven by incoming data and hazard logic.",
+  },
+  {
+    label: "Ops Layer",
+    sublabel: "Field Routes & Notes",
+    desc: "Guides, patrollers, and SAR teams log real-world observations and route conditions.",
+  },
+  {
+    label: "AvyTS Layer",
+    sublabel: "Avalanche & Snowpack",
+    desc: "Slabs, weak layers, terrain traps, and historical patterns with terrain-aware detail.",
+  },
+  {
+    label: "Data Fusion Engine",
+    sublabel: "Real-Time Ingestion",
+    desc: "Continuous drone, LiDAR, GPR, and IoT feeds into a single decision graph.",
+  },
+  {
+    label: "TerraGrid",
+    sublabel: "Base Terrain Model",
+    desc: "Unified terrain model from LiDAR, satellite DEMs, and drone orthomosaics.",
+  },
+  {
+    label: "Geological Substrate",
+    sublabel: "Bedrock & Soil",
+    desc: "GPR subsurface intelligence revealing layer density and buried structure changes.",
+  },
+];
+
 const TerrainVisualization = () => {
   return (
     <section className="relative py-32 overflow-hidden">
@@ -18,28 +51,21 @@ const TerrainVisualization = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <div className="signal-badge signal-badge-amber mx-auto mb-4 w-fit">
-            <span className="font-mono text-[10px]">3D TERRAIN ENGINE</span>
+            <span className="font-mono text-[10px]">LAYERED ARCHITECTURE</span>
           </div>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Multi-Layer <span className="text-primary">Terrain Analysis</span>
+            Layered <span className="text-primary">Intelligence</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Fuse elevation models, satellite imagery, weather data, and sensor networks
-            into a unified terrain intelligence surface.
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            A stack of interconnected layers, each adding critical context for
+            field decision-making — from bedrock to real-time alerts.
           </p>
         </div>
 
-        {/* Terrain layer stack visualization */}
+        {/* Terrain layer stack */}
         <div className="max-w-3xl mx-auto">
           <div className="relative">
-            {[
-              { label: "Sensor Network", sublabel: "IoT + Weather Stations", offset: 0, opacity: 1 },
-              { label: "Risk Modeling Layer", sublabel: "ML Predictions", offset: 1, opacity: 0.9 },
-              { label: "Vegetation & Land Cover", sublabel: "Satellite Derived", offset: 2, opacity: 0.8 },
-              { label: "Hydrological Network", sublabel: "Stream & Watershed", offset: 3, opacity: 0.7 },
-              { label: "Digital Elevation Model", sublabel: "LiDAR Resolution", offset: 4, opacity: 0.6 },
-              { label: "Geological Substrate", sublabel: "Bedrock & Soil", offset: 5, opacity: 0.5 },
-            ].map((layer, i) => (
+            {layers.map((layer, i) => (
               <div
                 key={layer.label}
                 className="relative group"
@@ -50,10 +76,13 @@ const TerrainVisualization = () => {
               >
                 <div
                   className="glass-card rounded-xl px-6 py-4 mb-2 flex items-center justify-between transition-all duration-500 group-hover:translate-y-[-4px] group-hover:shadow-[var(--shadow-glow)]"
-                  style={{ opacity: layer.opacity }}
+                  style={{ opacity: 1 - i * 0.08 }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-3 h-3 rounded-full bg-primary/60 animate-pulse-glow" style={{ animationDelay: `${i * 0.5}s` }} />
+                    <div
+                      className="w-3 h-3 rounded-full bg-primary/60 animate-pulse-glow"
+                      style={{ animationDelay: `${i * 0.5}s` }}
+                    />
                     <div>
                       <div className="font-display font-semibold text-sm text-foreground">
                         {layer.label}
@@ -63,8 +92,8 @@ const TerrainVisualization = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="font-mono text-[10px] text-primary/60">
-                    LAYER {String(6 - i).padStart(2, "0")}
+                  <div className="font-mono text-[10px] text-primary/60 hidden sm:block max-w-[220px] text-right">
+                    {layer.desc}
                   </div>
                 </div>
               </div>
