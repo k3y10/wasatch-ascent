@@ -11,88 +11,58 @@ const modules = [
     name: "AvyTS",
     full: "Avalanche Terrain Systems",
     logo: avytsLogo,
-    status: "ACTIVE",
-    color: "from-amber-400 to-orange-500",
-    borderColor: "border-amber/30",
+    status: "PILOT",
     desc: "Real-time avalanche terrain exposure analysis, snowpack modeling, and backcountry risk classification across the Wasatch and beyond.",
-    metrics: [
-      { label: "Zones Tracked", value: "2,847" },
-      { label: "Risk Models", value: "12" },
-      { label: "Update Freq", value: "15min" },
-    ],
   },
   {
     id: "pyrots",
     name: "PyroTS",
     full: "Wildfire Terrain Systems",
     logo: pyrotsLogo,
-    status: "ACTIVE",
-    color: "from-red-500 to-orange-600",
-    borderColor: "border-signal-red/30",
+    status: "RESEARCH",
     desc: "Wildfire behavior prediction, terrain-driven fire spread modeling, and suppression resource optimization for complex fire environments.",
-    metrics: [
-      { label: "Fire Zones", value: "1,203" },
-      { label: "Spread Models", value: "8" },
-      { label: "Sensors", value: "340" },
-    ],
   },
   {
     id: "hydrots",
     name: "HydroTS",
     full: "Water Terrain Systems",
     logo: hydrotsLogo,
-    status: "ACTIVE",
-    color: "from-cyan-400 to-blue-500",
-    borderColor: "border-frost/30",
+    status: "RESEARCH",
     desc: "Watershed hydrology, streamflow prediction, flood risk assessment, and water resource terrain analysis for mountain and valley systems.",
-    metrics: [
-      { label: "Watersheds", value: "489" },
-      { label: "Stream Gauges", value: "1,847" },
-      { label: "Forecast Range", value: "72h" },
-    ],
   },
   {
     id: "geots",
     name: "GeoTS",
     full: "Geological Terrain Systems",
     logo: geotsLogo,
-    status: "BETA",
-    color: "from-green-500 to-emerald-600",
-    borderColor: "border-forest/30",
+    status: "PLANNED",
     desc: "Subsurface geological modeling, landslide susceptibility mapping, and terrain stability analysis for construction and resource planning.",
-    metrics: [
-      { label: "Geological Layers", value: "24" },
-      { label: "Stability Index", value: "0.94" },
-      { label: "Coverage", value: "18K mi²" },
-    ],
   },
   {
     id: "infrats",
     name: "InfraTS",
     full: "Infrastructure Terrain Systems",
     logo: infratsLogo,
-    status: "BETA",
-    color: "from-amber-500 to-yellow-600",
-    borderColor: "border-amber-dim/40",
+    status: "PLANNED",
     desc: "Infrastructure vulnerability modeling against terrain hazards—roads, utilities, pipelines, and built assets in mountain and slope environments.",
-    metrics: [
-      { label: "Assets Tracked", value: "12,400" },
-      { label: "Risk Layers", value: "16" },
-      { label: "Alert Zones", value: "892" },
-    ],
   },
 ];
+
+const statusStyles: Record<string, string> = {
+  PILOT: "bg-signal-green/10 text-signal-green border-signal-green/30",
+  RESEARCH: "bg-primary/10 text-primary border-primary/30",
+  PLANNED: "bg-muted text-muted-foreground border-border",
+};
 
 const ModulesSection = () => {
   const [activeModule, setActiveModule] = useState(modules[0].id);
   const active = modules.find((m) => m.id === activeModule)!;
 
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section id="modules" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 topo-overlay" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section header */}
         <div className="text-center mb-16">
           <div className="signal-badge signal-badge-amber mx-auto mb-4 w-fit">
             <span className="font-mono text-[10px]">MODULAR ARCHITECTURE</span>
@@ -124,11 +94,7 @@ const ModulesSection = () => {
               }`}>
                 {mod.name}
               </span>
-              <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${
-                mod.status === "ACTIVE"
-                  ? "bg-signal-green/10 text-signal-green"
-                  : "bg-primary/10 text-primary"
-              }`}>
+              <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${statusStyles[mod.status]}`}>
                 {mod.status}
               </span>
             </button>
@@ -154,37 +120,16 @@ const ModulesSection = () => {
                       <h3 className="font-display text-3xl font-bold text-foreground">
                         {active.name}
                       </h3>
-                      <span className={`text-[10px] font-mono px-2 py-1 rounded-full ${
-                        active.status === "ACTIVE"
-                          ? "bg-signal-green/10 text-signal-green border border-signal-green/30"
-                          : "bg-primary/10 text-primary border border-primary/30"
-                      }`}>
+                      <span className={`text-[10px] font-mono px-2 py-1 rounded-full border ${statusStyles[active.status]}`}>
                         {active.status}
                       </span>
                     </div>
                     <p className="text-xs font-mono text-muted-foreground mb-4 tracking-wider uppercase">
                       {active.full}
                     </p>
-                    <p className="text-secondary-foreground/80 leading-relaxed mb-6">
+                    <p className="text-secondary-foreground/80 leading-relaxed">
                       {active.desc}
                     </p>
-
-                    {/* Metrics bar */}
-                    <div className="grid grid-cols-3 gap-4">
-                      {active.metrics.map((metric) => (
-                        <div
-                          key={metric.label}
-                          className="glass-card rounded-lg p-3 text-center"
-                        >
-                          <div className="font-display text-xl font-bold text-primary">
-                            {metric.value}
-                          </div>
-                          <div className="text-[10px] font-mono text-muted-foreground tracking-wider uppercase mt-1">
-                            {metric.label}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 </div>
               </div>

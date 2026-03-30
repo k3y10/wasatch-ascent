@@ -3,7 +3,6 @@ import topoTexture from "@/assets/topo-texture.jpg";
 const TerrainVisualization = () => {
   return (
     <section className="relative py-32 overflow-hidden">
-      {/* 3D terrain background */}
       <div className="absolute inset-0">
         <img
           src={topoTexture}
@@ -38,7 +37,7 @@ const TerrainVisualization = () => {
               { label: "Risk Modeling Layer", sublabel: "ML Predictions", offset: 1, opacity: 0.9 },
               { label: "Vegetation & Land Cover", sublabel: "Satellite Derived", offset: 2, opacity: 0.8 },
               { label: "Hydrological Network", sublabel: "Stream & Watershed", offset: 3, opacity: 0.7 },
-              { label: "Digital Elevation Model", sublabel: "LiDAR 1m Resolution", offset: 4, opacity: 0.6 },
+              { label: "Digital Elevation Model", sublabel: "LiDAR Resolution", offset: 4, opacity: 0.6 },
               { label: "Geological Substrate", sublabel: "Bedrock & Soil", offset: 5, opacity: 0.5 },
             ].map((layer, i) => (
               <div
@@ -71,25 +70,6 @@ const TerrainVisualization = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Platform stats */}
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-          {[
-            { value: "1m", label: "DEM Resolution" },
-            { value: "18K", label: "Square Miles" },
-            { value: "<15min", label: "Update Cycle" },
-            { value: "99.7%", label: "Uptime SLA" },
-          ].map((stat) => (
-            <div key={stat.label} className="glass-card rounded-xl p-5 text-center hud-frame">
-              <div className="font-display text-2xl md:text-3xl font-bold text-primary">
-                {stat.value}
-              </div>
-              <div className="font-mono text-[10px] text-muted-foreground tracking-wider uppercase mt-1">
-                {stat.label}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </section>
