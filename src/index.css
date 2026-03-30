@@ -65,6 +65,63 @@
     --sidebar-border: 220 10% 20%;
     --sidebar-ring: 36 90% 50%;
   }
+
+  .light {
+    --background: 40 20% 96%;
+    --foreground: 220 15% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 12%;
+    --primary: 36 90% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 10% 90%;
+    --secondary-foreground: 220 10% 30%;
+    --muted: 40 10% 92%;
+    --muted-foreground: 220 8% 45%;
+    --accent: 36 70% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 10% 85%;
+    --input: 40 10% 85%;
+    --ring: 36 90% 45%;
+
+    --terrain-deep: 40 15% 94%;
+    --terrain-surface: 40 12% 96%;
+    --terrain-elevated: 40 10% 92%;
+    --terrain-ridge: 40 8% 82%;
+    --amber-glow: 36 90% 45%;
+    --amber-warm: 30 85% 50%;
+    --amber-dim: 36 60% 55%;
+    --frost: 210 20% 35%;
+    --frost-dim: 210 15% 45%;
+    --snow: 210 20% 15%;
+    --forest: 150 30% 30%;
+    --forest-dim: 155 20% 40%;
+    --signal-green: 145 60% 35%;
+    --signal-amber: 36 90% 45%;
+    --signal-red: 0 70% 45%;
+
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 40 10% 75% / 0.4;
+    --glass-highlight: 36 90% 50% / 0.06;
+    --glass-blur: 20px;
+
+    --shadow-terrain: 0 8px 32px -8px hsl(220 20% 70% / 0.3);
+    --shadow-elevated: 0 16px 48px -12px hsl(220 20% 70% / 0.25);
+    --shadow-glow: 0 0 40px -10px hsl(36 90% 50% / 0.15);
+    --shadow-amber: 0 4px 20px -4px hsl(36 90% 50% / 0.2);
+
+    --sidebar-background: 40 20% 96%;
+    --sidebar-foreground: 220 15% 12%;
+    --sidebar-primary: 36 90% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 10% 90%;
+    --sidebar-accent-foreground: 220 15% 12%;
+    --sidebar-border: 40 10% 85%;
+    --sidebar-ring: 36 90% 45%;
+  }
 }
 
 @layer base {

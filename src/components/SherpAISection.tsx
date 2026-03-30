@@ -1,17 +1,15 @@
 import sherpaiAvatar from "@/assets/sherpai-avatar.png";
-import avyriskScale from "@/assets/avyrisk-scale.png";
 
 const SherpAISection = () => {
   return (
-    <section className="relative py-32 overflow-hidden">
-      {/* Ambient gradient */}
+    <section id="sherpai" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-terrain-surface/50 to-transparent" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <div className="signal-badge signal-badge-green mx-auto mb-4 w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse-glow" />
-            <span className="font-mono text-[10px]">AI COPILOT ACTIVE</span>
+            <span className="font-mono text-[10px]">AI COPILOT</span>
           </div>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
             Meet <span className="text-primary">SherpAI</span>
@@ -22,7 +20,7 @@ const SherpAISection = () => {
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+        <div className="max-w-3xl mx-auto">
           {/* SherpAI Chat HUD */}
           <div className="glass-card-elevated rounded-2xl overflow-hidden hud-frame">
             <div className="glass-highlight rounded-2xl p-6">
@@ -37,7 +35,7 @@ const SherpAISection = () => {
                   </div>
                 </div>
                 <div className="ml-auto font-mono text-[10px] text-muted-foreground">
-                  v3.2.1
+                  v1.0
                 </div>
               </div>
 
@@ -79,51 +77,6 @@ const SherpAISection = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Risk visualization */}
-          <div className="space-y-6">
-            <div className="glass-card-elevated rounded-2xl overflow-hidden hud-frame">
-              <div className="glass-highlight rounded-2xl p-6">
-                <h3 className="font-display text-lg font-bold text-foreground mb-4">
-                  Avalanche Danger Scale
-                </h3>
-                <img
-                  src={avyriskScale}
-                  alt="Avalanche Risk Scale - SherpAI"
-                  className="w-full rounded-lg"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-
-            {/* Signal field readout */}
-            <div className="glass-card rounded-xl p-5 hud-frame">
-              <div className="text-[10px] font-mono text-muted-foreground tracking-wider uppercase mb-3">
-                LIVE SIGNAL FIELD · WASATCH
-              </div>
-              <div className="space-y-3">
-                {[
-                  { label: "Snowpack Stability", value: 62, color: "bg-signal-amber" },
-                  { label: "Wind Loading Index", value: 78, color: "bg-signal-red" },
-                  { label: "Temperature Gradient", value: 45, color: "bg-signal-green" },
-                  { label: "Precipitation 24h", value: 34, color: "bg-frost" },
-                ].map((field) => (
-                  <div key={field.label}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="font-mono text-muted-foreground">{field.label}</span>
-                      <span className="font-mono text-foreground">{field.value}%</span>
-                    </div>
-                    <div className="h-1.5 rounded-full bg-terrain-elevated overflow-hidden">
-                      <div
-                        className={`h-full rounded-full ${field.color} transition-all duration-1000`}
-                        style={{ width: `${field.value}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
