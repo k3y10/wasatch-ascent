@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ModulesSection from "@/components/ModulesSection";
 import SherpAISection from "@/components/SherpAISection";
+import DataFusionSection from "@/components/DataFusionSection";
 import TerrainVisualization from "@/components/TerrainVisualization";
 import FieldOpsSection from "@/components/FieldOpsSection";
 import OriginSection from "@/components/OriginSection";
@@ -19,6 +20,8 @@ const Index = () => {
       <ModulesSection />
       <div className="amber-line" />
       <SherpAISection />
+      <div className="amber-line" />
+      <DataFusionSection />
       <div className="amber-line" />
       <TerrainVisualization />
       <div className="amber-line" />
