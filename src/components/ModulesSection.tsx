@@ -12,7 +12,8 @@ const modules = [
     full: "Avalanche Terrain Systems",
     logo: avytsLogo,
     status: "PILOT",
-    desc: "Real-time avalanche terrain exposure analysis, snowpack modeling, and backcountry risk classification across the Wasatch and beyond.",
+    desc: "Layer-aware snowpack modeling, weak-layer detection, and slope stability scoring. Originally built as Avalyze, now the flagship research pilot pushing the pace for every module in the stack.",
+    capabilities: ["Snowpit Reconstruction", "Storm-Cycle Timeline", "Weak-Layer Detection"],
   },
   {
     id: "pyrots",
@@ -20,7 +21,8 @@ const modules = [
     full: "Wildfire Terrain Systems",
     logo: pyrotsLogo,
     status: "RESEARCH",
-    desc: "Wildfire behavior prediction, terrain-driven fire spread modeling, and suppression resource optimization for complex fire environments.",
+    desc: "Fuel load assessment, burn-scar mapping, and live fire spread modeling using multispectral imaging fused with terrain-aware weather inputs.",
+    capabilities: ["Fire Risk Scoring", "Burn Mapping", "Fuel Analysis"],
   },
   {
     id: "hydrots",
@@ -28,7 +30,8 @@ const modules = [
     full: "Water Terrain Systems",
     logo: hydrotsLogo,
     status: "RESEARCH",
-    desc: "Watershed hydrology, streamflow prediction, flood risk assessment, and water resource terrain analysis for mountain and valley systems.",
+    desc: "Watershed modeling, flood forecasting, and streamflow prediction built on synchronized elevation, precipitation, and groundwater telemetry.",
+    capabilities: ["Watershed Analysis", "Flood Modeling", "Water Resources"],
   },
   {
     id: "geots",
@@ -36,7 +39,8 @@ const modules = [
     full: "Geological Terrain Systems",
     logo: geotsLogo,
     status: "PLANNED",
-    desc: "Subsurface geological modeling, landslide susceptibility mapping, and terrain stability analysis for construction and resource planning.",
+    desc: "Geological mapping, rock anchoring intelligence, and rockfall path modeling combining morphology, subsurface data, and historical activity.",
+    capabilities: ["Slope Stability", "Rockfall Paths", "Geological Mapping"],
   },
   {
     id: "infrats",
@@ -44,7 +48,8 @@ const modules = [
     full: "Infrastructure Terrain Systems",
     logo: infratsLogo,
     status: "PLANNED",
-    desc: "Infrastructure vulnerability modeling against terrain hazards—roads, utilities, pipelines, and built assets in mountain and slope environments.",
+    desc: "Asset monitoring, inspection automation, and environmental compliance scoring for roads, utilities, and sensitive sites in mountain environments.",
+    capabilities: ["Asset Monitoring", "Infrastructure Inspection", "Environmental Compliance"],
   },
 ];
 
@@ -63,21 +68,21 @@ const ModulesSection = () => {
       <div className="absolute inset-0 topo-overlay" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-4">
           <div className="signal-badge signal-badge-amber mx-auto mb-4 w-fit">
             <span className="font-mono text-[10px]">MODULAR ARCHITECTURE</span>
           </div>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
             Terrain System <span className="text-primary">Modules</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Five specialized terrain intelligence engines. Each independently deployable,
-            collectively powerful.
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Each module shares the same drone, LiDAR, GPR, and GIS foundation while delivering
+            targeted analysis for specific hazards. AvyTS remains the flagship research pilot.
           </p>
         </div>
 
         {/* Module selector pills */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className="flex flex-wrap justify-center gap-3 mb-12 mt-12">
           {modules.map((mod) => (
             <button
               key={mod.id}
@@ -127,9 +132,21 @@ const ModulesSection = () => {
                     <p className="text-xs font-mono text-muted-foreground mb-4 tracking-wider uppercase">
                       {active.full}
                     </p>
-                    <p className="text-secondary-foreground/80 leading-relaxed">
+                    <p className="text-secondary-foreground/80 leading-relaxed mb-5">
                       {active.desc}
                     </p>
+
+                    {/* Capabilities */}
+                    <div className="flex flex-wrap gap-2">
+                      {active.capabilities.map((cap) => (
+                        <span
+                          key={cap}
+                          className="signal-badge text-[9px] text-muted-foreground"
+                        >
+                          {cap}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
