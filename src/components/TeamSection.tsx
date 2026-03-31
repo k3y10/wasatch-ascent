@@ -7,23 +7,23 @@ import { ScrollReveal } from "@/hooks/use-scroll-animation";
 const team = [
   {
     name: "Keaton M.",
-    role: "Founder & Field Engineer",
+    role: "Founder, Field Engineer & Mountain Operator",
     image: keatonImg,
-    bio: "Wasatch-born entrepreneur, backcountry guide, ski & board instructor, and wilderness medicine associate. Builds terrain intelligence tools from years of real field experience across Utah's mountains.",
+    bio: "Wasatch-born founder building TerraSatch at the intersection of mountain operations, field intelligence, and applied technology. His background spans backcountry guiding, ski and snowboard instruction, wilderness medicine, and real operational decision making in Utah's mountain environments.",
     linkedin: "https://www.linkedin.com/in/keaton-m/",
   },
   {
     name: "Ericka Downs",
     role: "Operations & Business Development",
     image: erickaImg,
-    bio: "Operations executive with expertise in project management, process optimization, and scalable business solutions. Drives TerraSatch partnerships and pilot program strategy.",
+    bio: "Geoengineering student at the University of Utah with strong field instincts and a broad outdoor background. Originally from California, she grew up surfing, now rides double black terrain, skis and snowboards, and brings direct field data collection experience into TerraSatch operations and partnerships.",
     linkedin: "https://www.linkedin.com/in/ericka-downs-3195921a3/",
   },
   {
     name: "SherpAI",
     role: "AI Terrain Agent",
     image: sherpaiTeam,
-    bio: "TerraSatch's AI copilot — trained on terrain science, avalanche forecasting, and field operations. Summarizes conditions, generates briefings, and reviews observations on demand.",
+    bio: "TerraSatch's AI terrain copilot trained on terrain science, avalanche forecasting, and field operations. It summarizes conditions, generates briefings, reviews observations, and helps teams move from raw inputs to faster operational understanding.",
     linkedin: null,
   },
 ];
@@ -91,7 +91,7 @@ const TeamSection = () => {
                     <div className="font-mono text-[10px] text-primary tracking-widest mb-3">
                       {member.role.toUpperCase()}
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                    <p className="team-bio-balance text-sm text-muted-foreground leading-relaxed flex-1">
                       {member.bio}
                     </p>
                   </div>

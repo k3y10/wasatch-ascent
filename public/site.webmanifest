@@ -1,0 +1,30 @@
+{
+  "name": "TerraSatch Intelligence",
+  "short_name": "TerraSatch",
+  "description": "Terrain intelligence for field teams, partners, and mountain operations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#11161d",
+  "theme_color": "#d98a18",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 32x32 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

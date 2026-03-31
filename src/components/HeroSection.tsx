@@ -73,14 +73,20 @@ const HeroSection = () => {
           style={{ animationDelay: "1s", opacity: 0 }}
         >
           <a
-            href="#documents"
+            href="#partners"
             className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-display font-semibold text-lg tracking-wide hover:shadow-[var(--shadow-amber)] transition-all duration-300 hover:scale-[1.02]"
+          >
+            Partner Access
+          </a>
+          <a
+            href="#documents"
+            className="px-8 py-3.5 rounded-lg glass-card text-foreground font-display font-semibold text-lg tracking-wide hover:border-primary/40 transition-all duration-300"
           >
             Explore the Tech
           </a>
           <a
             href="#modules"
-            className="px-8 py-3.5 rounded-lg glass-card text-foreground font-display font-semibold text-lg tracking-wide hover:border-primary/40 transition-all duration-300"
+            className="px-8 py-3.5 rounded-lg border border-border/60 bg-background/30 text-foreground font-display font-semibold text-lg tracking-wide hover:border-primary/40 transition-all duration-300"
           >
             View Modules
           </a>

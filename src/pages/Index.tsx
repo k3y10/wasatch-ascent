@@ -10,6 +10,7 @@ import FieldOpsSection from "@/components/FieldOpsSection";
 import OriginSection from "@/components/OriginSection";
 import TeamSection from "@/components/TeamSection";
 import DocumentsSection from "@/components/DocumentsSection";
+import PartnersSection from "@/components/PartnersSection";
 import Footer from "@/components/Footer";
 import AmbientParticles from "@/components/AmbientParticles";
 
@@ -37,6 +38,8 @@ const Index = () => {
       <OriginSection />
       <div className="amber-line" />
       <TeamSection />
+      <div className="amber-line" />
+      <PartnersSection />
       <div className="amber-line" />
       <DocumentsSection />
       <Footer />

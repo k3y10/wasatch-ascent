@@ -125,12 +125,18 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
     font-family: 'Barlow', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Rajdhani', system-ui, sans-serif;
@@ -268,6 +274,10 @@
     animation: shimmer 3s linear infinite;
   }
 
+  .team-bio-balance {
+    min-height: 9rem;
+  }
+
   /* Cinematic section transition */
   .section-fade {
     @apply transition-all duration-700 ease-out;
@@ -288,6 +298,12 @@
         transparent 1px,
         transparent 60px
       );
+  }
+}
+
+@media (min-width: 768px) {
+  .team-bio-balance {
+    min-height: 11rem;
   }
 }
 
