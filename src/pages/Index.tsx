@@ -18,15 +18,13 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <div className="amber-line" />
-      <div id="platform">
-        <ModulesSection />
-        <div className="amber-line" />
-        <SherpAISection />
-        <div className="amber-line" />
-        <DataFusionSection />
-        <div className="amber-line" />
-        <TerrainVisualization />
-      </div>
+      <ModulesSection />
+      <div className="amber-line" />
+      <SherpAISection />
+      <div className="amber-line" />
+      <DataFusionSection />
+      <div className="amber-line" />
+      <TerrainVisualization />
       <div className="amber-line" />
       <FieldOpsSection />
       <div className="amber-line" />
