@@ -24,6 +24,7 @@ const Navbar = () => {
             { label: "Platform", href: "#platform" },
             { label: "Modules", href: "#modules" },
             { label: "SherpAI", href: "#sherpai" },
+            { label: "Tech", href: "#tech" },
             { label: "Team", href: "#team" },
             { label: "Documents", href: "#documents" },
           ].map((item) => (
