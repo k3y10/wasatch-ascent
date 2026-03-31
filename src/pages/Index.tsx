@@ -4,6 +4,8 @@ import ModulesSection from "@/components/ModulesSection";
 import SherpAISection from "@/components/SherpAISection";
 import DataFusionSection from "@/components/DataFusionSection";
 import TerrainVisualization from "@/components/TerrainVisualization";
+import TechStackSection from "@/components/TechStackSection";
+import ARVisionSection from "@/components/ARVisionSection";
 import FieldOpsSection from "@/components/FieldOpsSection";
 import OriginSection from "@/components/OriginSection";
 import TeamSection from "@/components/TeamSection";
@@ -25,6 +27,10 @@ const Index = () => {
       <DataFusionSection />
       <div className="amber-line" />
       <TerrainVisualization />
+      <div className="amber-line" />
+      <TechStackSection />
+      <div className="amber-line" />
+      <ARVisionSection />
       <div className="amber-line" />
       <FieldOpsSection />
       <div className="amber-line" />
