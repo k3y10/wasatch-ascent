@@ -1,5 +1,6 @@
 import { Linkedin } from "lucide-react";
-import brightonImg from "@/assets/brighton.jpg";
+import keatonImg from "@/assets/keaton-Img.png";
+import erickaImg from "@/assets/erick-Img.png";
 import sherpaiTeam from "@/assets/sherpai-team.png";
 import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
@@ -7,14 +8,14 @@ const team = [
   {
     name: "Keaton M.",
     role: "Founder & Field Engineer",
-    image: brightonImg,
+    image: keatonImg,
     bio: "Wasatch-born entrepreneur, backcountry guide, ski & board instructor, and wilderness medicine associate. Builds terrain intelligence tools from years of real field experience across Utah's mountains.",
     linkedin: "https://www.linkedin.com/in/keaton-m/",
   },
   {
     name: "Ericka Downs",
     role: "Operations & Business Development",
-    image: null,
+    image: erickaImg,
     bio: "Operations executive with expertise in project management, process optimization, and scalable business solutions. Drives TerraSatch partnerships and pilot program strategy.",
     linkedin: "https://www.linkedin.com/in/ericka-downs-3195921a3/",
   },
