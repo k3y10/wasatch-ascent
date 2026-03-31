@@ -1,40 +1,80 @@
+import { useState, useEffect, useCallback } from "react";
 import fieldOpsBanner from "@/assets/field-ops-banner.jpg";
+import envWildfire from "@/assets/env-wildfire.jpg";
+import envWater from "@/assets/env-water.jpg";
+import envGeology from "@/assets/env-geology.jpg";
+import envInfrastructure from "@/assets/env-infrastructure.jpg";
 import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
-const useCases = [
+const environments = [
   {
-    title: "Ski Resorts & Patrol",
-    desc: "Hazard mapping and daily briefings with AvyTS overlays for controlled slope management.",
-    icon: "⛰️",
+    key: "avalanche",
+    label: "Avalanche",
+    module: "AvyTS",
+    image: fieldOpsBanner,
+    headline: "Snowpack & Avalanche Intelligence",
+    desc: "Layer-aware views to understand instability, slabs, and avalanche paths. Real-time snowpack modeling and weak-layer detection for patrol and backcountry teams.",
+    tags: ["Snowpit Reconstruction", "Storm-Cycle Timeline", "Weak-Layer Detection"],
+    color: "from-sky-500/20",
   },
   {
-    title: "Backcountry Guides",
-    desc: "Education, route planning, and field operations with terrain-aware decision support.",
-    icon: "🎿",
+    key: "wildfire",
+    label: "Wildfire",
+    module: "PyroTS",
+    image: envWildfire,
+    headline: "Wildfire Risk & Burn Analysis",
+    desc: "Fuel load assessment, burn-scar mapping, and live spread modeling using multispectral imaging fused with terrain-aware weather inputs.",
+    tags: ["Fire Risk Scoring", "Burn Mapping", "Fuel Analysis"],
+    color: "from-orange-500/20",
   },
   {
-    title: "Search & Rescue",
-    desc: "Rapid terrain analysis and operational planning for mountain rescue teams.",
-    icon: "🚁",
+    key: "water",
+    label: "Water",
+    module: "HydroTS",
+    image: envWater,
+    headline: "Hydrology & Watershed Modeling",
+    desc: "Watershed modeling, flood forecasting, and streamflow prediction built on synchronized elevation, precipitation, and groundwater telemetry.",
+    tags: ["Watershed Analysis", "Flood Modeling", "Water Resources"],
+    color: "from-cyan-500/20",
   },
   {
-    title: "Avalanche Centers",
-    desc: "Leveraging AvyTS analytics and forecast integration for regional warnings.",
-    icon: "⛷️",
+    key: "geology",
+    label: "Geology",
+    module: "GeoTS",
+    image: envGeology,
+    headline: "Geological Mapping & Rockfall",
+    desc: "Geological mapping, rock anchoring intelligence, and rockfall path modeling combining morphology, subsurface data, and historical activity.",
+    tags: ["Slope Stability", "Rockfall Paths", "Geological Mapping"],
+    color: "from-red-500/20",
   },
   {
-    title: "Land Managers",
-    desc: "Comprehensive terrain tracking, ecosystem insights, and environmental compliance.",
-    icon: "🏔️",
-  },
-  {
-    title: "Wildfire Response",
-    desc: "Real-time hazard assessment, fuel analysis, and evacuation planning.",
-    icon: "🔥",
+    key: "infrastructure",
+    label: "Infrastructure",
+    module: "InfraTS",
+    image: envInfrastructure,
+    headline: "Infrastructure & Environmental",
+    desc: "Asset monitoring, inspection automation, and environmental compliance scoring for roads, utilities, and sensitive sites.",
+    tags: ["Asset Monitoring", "Inspection", "Environmental Compliance"],
+    color: "from-amber-500/20",
   },
 ];
 
 const FieldOpsSection = () => {
+  const [active, setActive] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const next = useCallback(() => {
+    setActive((prev) => (prev + 1) % environments.length);
+  }, []);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [isPaused, next]);
+
+  const env = environments[active];
+
   return (
     <section className="relative py-32 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
@@ -52,33 +92,95 @@ const FieldOpsSection = () => {
         </ScrollReveal>
 
         <ScrollReveal>
-          <div className="max-w-5xl mx-auto glass-card-elevated rounded-2xl overflow-hidden hud-frame">
+          <div
+            className="max-w-5xl mx-auto glass-card-elevated rounded-2xl overflow-hidden hud-frame"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             <div className="glass-highlight rounded-2xl">
-              <div className="relative h-64 md:h-80 overflow-hidden">
-                <img
-                  src={fieldOpsBanner}
-                  alt="Field operations team on a snowy ridge in the Wasatch Range"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  width={1920}
-                  height={768}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-                <div className="absolute bottom-6 left-8">
-                  <div className="font-mono text-[10px] text-primary/70 tracking-widest">FIELD OPERATIONS</div>
-                  <div className="font-display text-2xl font-bold text-foreground">Wasatch Range — Active Patrol</div>
+              {/* Image slideshow */}
+              <div className="relative h-72 md:h-96 overflow-hidden">
+                {environments.map((e, i) => (
+                  <img
+                    key={e.key}
+                    src={e.image}
+                    alt={e.headline}
+                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+                    style={{ opacity: i === active ? 1 : 0 }}
+                    loading="lazy"
+                    width={1920}
+                    height={768}
+                  />
+                ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                <div className={`absolute inset-0 bg-gradient-to-r ${env.color} to-transparent transition-colors duration-1000`} />
+
+                {/* HUD overlay text */}
+                <div className="absolute bottom-6 left-8 right-8">
+                  <div className="font-mono text-[10px] text-primary/70 tracking-widest mb-1">
+                    {env.module} — ACTIVE MODULE
+                  </div>
+                  <div
+                    className="font-display text-2xl md:text-3xl font-bold text-foreground transition-opacity duration-500"
+                    key={env.key + "-headline"}
+                  >
+                    {env.headline}
+                  </div>
                 </div>
               </div>
+
+              {/* Content area */}
               <div className="p-8">
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {useCases.map((item, i) => (
-                    <ScrollReveal key={item.title} delay={i * 0.08}>
-                      <div className="glass-card rounded-xl p-5 h-full hover:shadow-[var(--shadow-glow)] transition-all duration-300">
-                        <div className="text-2xl mb-3">{item.icon}</div>
-                        <h3 className="font-display font-bold text-foreground mb-2">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                      </div>
-                    </ScrollReveal>
+                {/* Environment tabs */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {environments.map((e, i) => (
+                    <button
+                      key={e.key}
+                      onClick={() => setActive(i)}
+                      className={`
+                        font-mono text-[11px] tracking-wider px-4 py-2 rounded-lg transition-all duration-300 border
+                        ${i === active
+                          ? "bg-primary/15 text-primary border-primary/30 shadow-[var(--shadow-glow)]"
+                          : "glass-card text-muted-foreground border-border/50 hover:text-foreground hover:border-border"
+                        }
+                      `}
+                    >
+                      {e.label.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Description */}
+                <p className="text-muted-foreground leading-relaxed mb-4 max-w-2xl">
+                  {env.desc}
+                </p>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2">
+                  {env.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="font-mono text-[9px] text-primary/70 bg-primary/5 rounded px-3 py-1 border border-primary/10"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Progress dots */}
+                <div className="flex gap-1.5 mt-6">
+                  {environments.map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-1 rounded-full transition-all duration-500 cursor-pointer"
+                      style={{
+                        width: i === active ? 32 : 8,
+                        backgroundColor: i === active
+                          ? "hsl(var(--primary))"
+                          : "hsl(var(--muted-foreground) / 0.2)",
+                      }}
+                      onClick={() => setActive(i)}
+                    />
                   ))}
                 </div>
               </div>
