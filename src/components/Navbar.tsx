@@ -20,13 +20,19 @@ const Navbar = () => {
           </div>
         </div>
         <div className="hidden md:flex items-center gap-8">
-          {["Platform", "Modules", "SherpAI", "Documents"].map((item) => (
+          {[
+            { label: "Platform", href: "#platform" },
+            { label: "Modules", href: "#modules" },
+            { label: "SherpAI", href: "#sherpai" },
+            { label: "Team", href: "#team" },
+            { label: "Documents", href: "#documents" },
+          ].map((item) => (
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300 tracking-wide"
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </div>

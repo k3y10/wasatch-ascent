@@ -6,6 +6,7 @@ import DataFusionSection from "@/components/DataFusionSection";
 import TerrainVisualization from "@/components/TerrainVisualization";
 import FieldOpsSection from "@/components/FieldOpsSection";
 import OriginSection from "@/components/OriginSection";
+import TeamSection from "@/components/TeamSection";
 import DocumentsSection from "@/components/DocumentsSection";
 import Footer from "@/components/Footer";
 import AmbientParticles from "@/components/AmbientParticles";
@@ -17,17 +18,21 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <div className="amber-line" />
-      <ModulesSection />
-      <div className="amber-line" />
-      <SherpAISection />
-      <div className="amber-line" />
-      <DataFusionSection />
-      <div className="amber-line" />
-      <TerrainVisualization />
+      <div id="platform">
+        <ModulesSection />
+        <div className="amber-line" />
+        <SherpAISection />
+        <div className="amber-line" />
+        <DataFusionSection />
+        <div className="amber-line" />
+        <TerrainVisualization />
+      </div>
       <div className="amber-line" />
       <FieldOpsSection />
       <div className="amber-line" />
       <OriginSection />
+      <div className="amber-line" />
+      <TeamSection />
       <div className="amber-line" />
       <DocumentsSection />
       <Footer />
