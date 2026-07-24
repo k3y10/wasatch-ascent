@@ -10,6 +10,7 @@ type BeforeInstallPromptEvent = Event & {
 
 const navItems = [
   { label: "Platform", href: "#platform" },
+  { label: "Demos", href: "#demos" },
   { label: "Modules", href: "#modules" },
   { label: "SherpAI", href: "#sherpai" },
   { label: "Tech", href: "#tech" },
