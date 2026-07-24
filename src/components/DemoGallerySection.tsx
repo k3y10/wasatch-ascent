@@ -15,7 +15,7 @@ const demos: DemoItem[] = [
     name: "Wasatch Relay",
     eyebrow: "FLAGSHIP PRODUCT · RADIO INTELLIGENCE",
     description: "See how a field call becomes a structured, reviewable operational record with SherpAI in the loop.",
-    url: import.meta.env.VITE_WASATCH_RELAY_DEMO_URL || "http://localhost:3001",
+    url: import.meta.env.VITE_WASATCH_RELAY_DEMO_URL || "https://radio-demo.vercel.app",
     status: "Local preview · port 3001",
     accent: "primary",
     capabilities: ["Radio intake", "SherpAI extraction", "Human review"],
