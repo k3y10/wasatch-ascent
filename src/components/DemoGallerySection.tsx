@@ -13,17 +13,17 @@ type DemoItem = {
 const demos: DemoItem[] = [
   {
     name: "Wasatch Relay",
-    eyebrow: "FLAGSHIP PRODUCT · RADIO INTELLIGENCE",
-    description: "See how a field call becomes a structured, reviewable operational record with SherpAI in the loop.",
+    eyebrow: "FIRST CORE PRODUCT · RADIO + FIELD COMMUNICATIONS",
+    description: "Wasatch Relay is TerraSatch's first core product: a demo and training-capable radio workflow for preserving, transcribing, structuring, reviewing, and routing field communications with SherpAI.",
     url: import.meta.env.VITE_WASATCH_RELAY_DEMO_URL || "https://ai-radio-demo.vercel.app/",
-    status: "Local preview · port 3001",
+    status: "Featured product preview",
     accent: "primary",
-    capabilities: ["Radio intake", "SherpAI extraction", "Human review"],
+    capabilities: ["Radio intake + transcription", "Structured SherpAI context", "Review and routing"],
   },
   {
     name: "AvyTS",
-    eyebrow: "TERRAIN SYSTEM · SNOW OPERATIONS",
-    description: "Explore the avalanche terrain intelligence workflow that anchors TerraSatch field decision support.",
+    eyebrow: "INDUSTRY MODULE PREVIEW · SNOW OPERATIONS",
+    description: "See how the core communications workflow can support avalanche terrain intelligence, snowpack context, and field decision support.",
     url: import.meta.env.VITE_AVYTS_DEMO_URL || "https://avy.terrasatch.com",
     status: "Public preview",
     accent: "green",
@@ -31,8 +31,8 @@ const demos: DemoItem[] = [
   },
   {
     name: "PyroTS",
-    eyebrow: "TERRAIN SYSTEM · FIRE OPERATIONS",
-    description: "Review the wildfire intelligence surface for incident context, fuels, smoke, and evidence-linked operations.",
+    eyebrow: "INDUSTRY MODULE PREVIEW · FIRE OPERATIONS",
+    description: "See how the same TerraSatch foundation can extend to wildfire incident context, fuels, smoke, and evidence-linked operations.",
     url: import.meta.env.VITE_PYROTS_DEMO_URL || "https://pyro.terrasatch.com",
     status: "Public preview",
     accent: "blue",
@@ -52,10 +52,10 @@ const DemoGallerySection = () => {
             <span className="font-mono text-[10px]">INTERACTIVE PRODUCT PREVIEWS</span>
           </div>
           <h2 className="font-display mb-4 text-4xl font-bold text-foreground md:text-5xl">
-            Step inside the <span className="text-primary">workflows</span>
+            Start with the core. <span className="text-primary">Explore the modules.</span>
           </h2>
           <p className="mx-auto max-w-2xl text-muted-foreground">
-            Scroll through live product surfaces and test how TerraSatch turns field signals into useful terrain intelligence.
+            Wasatch Relay is our first core product and communications foundation. Scroll through the previews to see how it supports different industries, terrain systems, and operational workflows.
           </p>
         </div>
 
@@ -65,10 +65,10 @@ const DemoGallerySection = () => {
           </div>
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex flex-wrap items-center gap-3">
-              <span className="font-display text-lg font-bold text-foreground">Wasatch Relay leads the stack</span>
-              <span className="signal-badge signal-badge-amber text-[9px]">FIRST PRODUCT</span>
+              <span className="font-display text-lg font-bold text-foreground">Wasatch Relay is the TerraSatch starting point</span>
+              <span className="signal-badge signal-badge-amber text-[9px]">CORE PRODUCT</span>
             </div>
-            <p className="text-sm text-muted-foreground">Start with the AI radio workflow, then move through the terrain systems it can enrich.</p>
+            <p className="text-sm text-muted-foreground">Begin with AI-assisted radio and field communications, then explore the industry and module previews built around that foundation.</p>
           </div>
           <a href="#wasatch-relay-demo" className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:text-foreground">
             Start here <ArrowUpRight className="h-4 w-4" />
@@ -106,7 +106,7 @@ const DemoFrame = ({ demo, index }: { demo: DemoItem; index: number }) => {
           <div>
             <div className="mb-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Workflow checkpoints
+              Product capabilities
             </div>
             <div className="grid gap-2">
               {demo.capabilities.map((capability) => (
