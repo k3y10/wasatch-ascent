@@ -114,7 +114,7 @@ const DemoAccess = () => {
               Enter the secure <span className="text-primary">demo workspace.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Review Wasatch Relay, AvyTS, and PyroTS product previews in one protected operator channel.
+              Review five Wasatch Relay industry workflows in one protected operator channel: remote field support, avalanche safety, resort operations, forecasting, and radio-to-operations.
               Credentials are issued by the TerraSatch team.
             </p>
             <div className="mt-8 grid max-w-xl gap-3 sm:grid-cols-2">
