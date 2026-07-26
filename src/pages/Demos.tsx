@@ -44,9 +44,10 @@ const Demos = () => {
                 <Badge variant="secondary" className="mb-2">
                   Authorized demo workspace
                 </Badge>
-                <h1 className="font-display text-2xl font-bold">TerraSatch product operations</h1>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Protected previews for Wasatch Relay and TerraSatch industry modules.
+                <h1 className="font-display text-2xl font-bold">Wasatch Relay industry operations</h1>
+                <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                  Five protected workflows for field services, avalanche safety, resort operations,
+                  forecasting teams, and cross-industry radio communications.
                 </p>
               </div>
             </div>
