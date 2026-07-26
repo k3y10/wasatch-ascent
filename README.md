@@ -1,4 +1,4 @@
-# TerraSatch â€” Wasatch Ascent
+# TerraSatch Wasatch Ascent
 
 TerraSatch terrain-intelligence marketing site and protected product demo workspace.
 
@@ -15,7 +15,7 @@ Create a local `.env` from `.env.example` and replace every placeholder before s
 
 - `TERRASATCH_DEMO_USERNAME`
 - `TERRASATCH_DEMO_PASSWORD`
-- `TERRASATCH_DEMO_SESSION_SECRET` â€” use at least 32 random characters
+- `TERRASATCH_DEMO_SESSION_SECRET` use at least 32 random characters
 
 Do not rename these credentials with a `VITE_` prefix. Vite exposes `VITE_` values to the browser bundle.
 
