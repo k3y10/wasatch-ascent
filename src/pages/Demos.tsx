@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { LoaderCircle, LockKeyhole, LogOut } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
 import DemoGallerySection from "@/components/DemoGallerySection";
@@ -12,7 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { signOutOfDemos } from "@/lib/demo-auth";
 
 const Demos = () => {
-  const navigate = useNavigate();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
 
@@ -22,7 +20,7 @@ const Demos = () => {
 
     try {
       await signOutOfDemos();
-      navigate("/demo-access", { replace: true });
+      window.location.replace("/demo-access");
     } catch (error) {
       setSignOutError(error instanceof Error ? error.message : "Unable to close the demo session.");
       setIsSigningOut(false);

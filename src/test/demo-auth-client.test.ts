@@ -18,7 +18,11 @@ describe("demo auth client", () => {
     await expect(getDemoSession()).resolves.toBeNull();
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/demo-auth",
-      expect.objectContaining({ method: "GET", credentials: "same-origin" }),
+      expect.objectContaining({
+        method: "GET",
+        credentials: "same-origin",
+        cache: "no-store",
+      }),
     );
   });
 
@@ -57,19 +61,61 @@ describe("demo auth client", () => {
     );
   });
 
-  it("closes the server session", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify({ authenticated: false }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
+  it("closes the server session and confirms it is gone", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ authenticated: false }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ authenticated: false }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     vi.stubGlobal("fetch", fetchMock);
 
     await expect(signOutOfDemos()).resolves.toBeUndefined();
-    expect(fetchMock).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      1,
       "/api/demo-auth",
-      expect.objectContaining({ method: "DELETE", credentials: "same-origin" }),
+      expect.objectContaining({
+        method: "DELETE",
+        credentials: "same-origin",
+        cache: "no-store",
+      }),
+    );
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      "/api/demo-auth",
+      expect.objectContaining({ method: "GET", cache: "no-store" }),
+    );
+  });
+
+  it("fails sign-out when the session cookie is still accepted", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ authenticated: false }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ authenticated: true, user: { username: "terrain-operator" } }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(signOutOfDemos()).rejects.toEqual(
+      expect.objectContaining<Partial<DemoAuthError>>({
+        status: 409,
+      }),
     );
   });
 });

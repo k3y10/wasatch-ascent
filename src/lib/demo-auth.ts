@@ -28,11 +28,18 @@ const readResponse = async (response: Response): Promise<DemoAuthResponse> => {
   }
 };
 
+const noCacheHeaders = {
+  Accept: "application/json",
+  "Cache-Control": "no-cache, no-store, max-age=0",
+  Pragma: "no-cache",
+};
+
 export const getDemoSession = async (signal?: AbortSignal): Promise<DemoUser | null> => {
   const response = await fetch(DEMO_AUTH_ENDPOINT, {
     method: "GET",
     credentials: "same-origin",
-    headers: { Accept: "application/json" },
+    cache: "no-store",
+    headers: noCacheHeaders,
     signal,
   });
 
@@ -52,8 +59,9 @@ export const signInToDemos = async (username: string, password: string): Promise
   const response = await fetch(DEMO_AUTH_ENDPOINT, {
     method: "POST",
     credentials: "same-origin",
+    cache: "no-store",
     headers: {
-      Accept: "application/json",
+      ...noCacheHeaders,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ username, password }),
@@ -75,11 +83,17 @@ export const signOutOfDemos = async (): Promise<void> => {
   const response = await fetch(DEMO_AUTH_ENDPOINT, {
     method: "DELETE",
     credentials: "same-origin",
-    headers: { Accept: "application/json" },
+    cache: "no-store",
+    headers: noCacheHeaders,
   });
 
   if (!response.ok) {
     const payload = await readResponse(response);
     throw new DemoAuthError(payload.error || "Unable to close the demo session.", response.status);
+  }
+
+  const remainingSession = await getDemoSession();
+  if (remainingSession) {
+    throw new DemoAuthError("The demo session could not be cleared. Refresh the page and try again.", 409);
   }
 };
