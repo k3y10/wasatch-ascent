@@ -130,11 +130,18 @@ const isSameOrigin = (request: ApiRequest): boolean => {
 
 const sessionCookie = (token: string, maxAge: number): string => {
   const secure = process.env.VERCEL || process.env.NODE_ENV === "production" ? "; Secure" : "";
-  return `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${secure}`;
+  const expires =
+    maxAge === 0
+      ? "; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      : `; Expires=${new Date(Date.now() + maxAge * 1000).toUTCString()}`;
+
+  return `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${expires}${secure}`;
 };
 
 const setCommonHeaders = (response: ApiResponse) => {
-  response.setHeader("Cache-Control", "no-store");
+  response.setHeader("Cache-Control", "private, no-store, no-cache, max-age=0, must-revalidate");
+  response.setHeader("Pragma", "no-cache");
+  response.setHeader("Expires", "0");
   response.setHeader("Vary", "Cookie");
   response.setHeader("X-Content-Type-Options", "nosniff");
 };
@@ -203,6 +210,7 @@ export default function handler(request: ApiRequest, response: ApiResponse) {
       return response.status(403).json({ authenticated: false, error: "Request origin was not accepted." });
     }
 
+    response.setHeader("Clear-Site-Data", '"cache"');
     response.setHeader("Set-Cookie", sessionCookie("", 0));
     return response.status(200).json({ authenticated: false });
   }
