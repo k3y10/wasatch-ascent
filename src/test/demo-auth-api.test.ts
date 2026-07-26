@@ -87,6 +87,7 @@ describe("demo auth API", () => {
     expect(loginResponse.statusCode).toBe(200);
     expect(setCookie).toContain("HttpOnly");
     expect(setCookie).toContain("SameSite=Strict");
+    expect(setCookie).toContain("Expires=");
     expect(setCookie).not.toContain("ridge-line-access");
 
     const sessionResponse = createResponse();
@@ -109,8 +110,12 @@ describe("demo auth API", () => {
     const response = createResponse();
     handler({ method: "DELETE", headers: requestHeaders }, response);
 
+    const setCookie = String(response.headers["Set-Cookie"]);
     expect(response.statusCode).toBe(200);
-    expect(String(response.headers["Set-Cookie"])).toContain("Max-Age=0");
+    expect(setCookie).toContain("Max-Age=0");
+    expect(setCookie).toContain("Expires=Thu, 01 Jan 1970 00:00:00 GMT");
+    expect(response.headers["Clear-Site-Data"]).toBe('"cache"');
+    expect(response.headers["Cache-Control"]).toContain("no-store");
   });
 
   it("fails closed when the environment is incomplete", () => {
