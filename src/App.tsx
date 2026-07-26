@@ -1,12 +1,28 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
+const Demos = lazy(() => import("./pages/Demos.tsx"));
+const ProtectedDemoRoute = lazy(() => import("./components/ProtectedDemoRoute.tsx"));
+
 const queryClient = new QueryClient();
+
+const RouteLoading = () => (
+  <div className="flex min-h-screen items-center justify-center bg-background px-6" role="status">
+    <div className="flex w-full max-w-md flex-col gap-4">
+      <Skeleton className="h-5 w-44" />
+      <Skeleton className="h-32 w-full" />
+      <span className="sr-only">Loading TerraSatch workspace</span>
+    </div>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -14,11 +30,22 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<RouteLoading />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/demo-access" element={<DemoAccess />} />
+            <Route
+              path="/demos"
+              element={
+                <ProtectedDemoRoute>
+                  <Demos />
+                </ProtectedDemoRoute>
+              }
+            />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

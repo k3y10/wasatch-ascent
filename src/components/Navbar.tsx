@@ -9,14 +9,14 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 const navItems = [
-  { label: "Platform", href: "#platform" },
-  { label: "Demos", href: "#demos" },
-  { label: "Modules", href: "#modules" },
-  { label: "SherpAI", href: "#sherpai" },
-  { label: "Tech", href: "#tech" },
-  { label: "Team", href: "#team" },
-  { label: "Partners", href: "#partners" },
-  { label: "Documents", href: "#documents" },
+  { label: "Platform", href: "/#platform" },
+  { label: "Demos", href: "/demos" },
+  { label: "Modules", href: "/#modules" },
+  { label: "SherpAI", href: "/#sherpai" },
+  { label: "Tech", href: "/#tech" },
+  { label: "Team", href: "/#team" },
+  { label: "Partners", href: "/#partners" },
+  { label: "Documents", href: "/#documents" },
 ];
 
 const Navbar = () => {
@@ -92,8 +92,8 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/50">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <img src={terrasatchLogo} alt="TerraSatch" className="w-10 h-10 rounded-lg" />
+        <a href="/" className="flex items-center gap-3 min-w-0" aria-label="TerraSatch home">
+          <img src={terrasatchLogo} alt="" className="w-10 h-10 rounded-lg" />
           <div className="min-w-0">
             <span className="font-display text-lg font-bold tracking-wide text-foreground whitespace-nowrap">
               TERRASATCH
@@ -102,7 +102,7 @@ const Navbar = () => {
               TERRAIN INTELLIGENCE
             </span>
           </div>
-        </div>
+        </a>
         <div className="hidden md:flex items-center gap-6 flex-1 justify-center min-w-0">
           {navItems.map((item) => (
             <a

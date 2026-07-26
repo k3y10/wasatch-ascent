@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ModulesSection from "@/components/ModulesSection";
-import DemoGallerySection from "@/components/DemoGallerySection";
 import SherpAISection from "@/components/SherpAISection";
 import DataFusionSection from "@/components/DataFusionSection";
 import TerrainVisualization from "@/components/TerrainVisualization";
@@ -23,8 +22,6 @@ const Index = () => {
       <HeroSection />
       <div className="amber-line" />
       <ModulesSection />
-      <div className="amber-line" />
-      <DemoGallerySection />
       <div className="amber-line" />
       <SherpAISection />
       <div className="amber-line" />

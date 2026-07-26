@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/demo-access",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/demos",
+      "destination": "/index.html"
+    }
+  ]
+}
