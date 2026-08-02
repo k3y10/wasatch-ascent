@@ -9,13 +9,13 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 const navItems = [
-  { label: "Platform", href: "/#platform" },
-  { label: "Demos", href: "/demos" },
+  { label: "Wasatch Relay", href: "/#relay" },
+  { label: "Use Cases", href: "/#field-ops" },
+  { label: "Pilot", href: "/#pilot" },
+  { label: "Roadmap", href: "/#roadmap" },
   { label: "Modules", href: "/#modules" },
-  { label: "SherpAI", href: "/#sherpai" },
-  { label: "Tech", href: "/#tech" },
+  { label: "Demos", href: "/demos" },
   { label: "Team", href: "/#team" },
-  { label: "Partners", href: "/#partners" },
   { label: "Documents", href: "/#documents" },
 ];
 
@@ -91,29 +91,31 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/50">
-      <div className="container mx-auto px-6 h-16 flex items-center justify-between gap-4">
+      <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         <a href="/" className="flex items-center gap-3 min-w-0" aria-label="TerraSatch home">
           <img src={terrasatchLogo} alt="" className="w-10 h-10 rounded-lg" />
           <div className="min-w-0">
             <span className="font-display text-lg font-bold tracking-wide text-foreground whitespace-nowrap">
               TERRASATCH
             </span>
-            <span className="hidden lg:inline ml-2 text-[11px] font-mono text-muted-foreground tracking-[0.22em] whitespace-nowrap">
-              TERRAIN INTELLIGENCE
+            <span className="hidden xl:inline ml-2 text-[10px] font-mono text-muted-foreground tracking-[0.18em] whitespace-nowrap">
+              WASATCH RELAY
             </span>
           </div>
         </a>
-        <div className="hidden md:flex items-center gap-6 flex-1 justify-center min-w-0">
+
+        <div className="hidden lg:flex items-center gap-4 xl:gap-5 flex-1 justify-center min-w-0">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300 tracking-wide whitespace-nowrap"
+              className="text-xs xl:text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-300 tracking-wide whitespace-nowrap"
             >
               {item.label}
             </a>
           ))}
         </div>
+
         <div className="flex items-center gap-2 shrink-0">
           <div className="hidden md:flex items-center gap-2">
             {installPrompt && (
@@ -136,6 +138,7 @@ const Navbar = () => {
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
+
           <a
             href="https://data.terrasatch.com"
             target="_blank"
@@ -145,14 +148,16 @@ const Navbar = () => {
           >
             <ArrowUpRight className="w-4 h-4" />
           </a>
+
           <button
             onClick={() => setIsMobileMenuOpen((open) => !open)}
-            className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg glass-card text-muted-foreground hover:text-primary transition-colors duration-300"
+            className="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg glass-card text-muted-foreground hover:text-primary transition-colors duration-300"
             aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
+
           <button
             onClick={toggleTheme}
             className="w-9 h-9 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors duration-300"
@@ -160,17 +165,18 @@ const Navbar = () => {
           >
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
-          <div className="signal-badge signal-badge-green hidden xl:inline-flex whitespace-nowrap">
+
+          <div className="signal-badge signal-badge-green hidden 2xl:inline-flex whitespace-nowrap">
             <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse-glow" />
-            <span className="font-mono text-[10px]">SYSTEMS ONLINE</span>
+            <span className="font-mono text-[10px]">PILOT MODE</span>
           </div>
         </div>
       </div>
 
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-border/40 bg-background/92 backdrop-blur-2xl">
-          <div className="container mx-auto px-6 py-5 space-y-3">
-            <div className="grid gap-2">
+        <div className="lg:hidden border-t border-border/40 bg-background/92 backdrop-blur-2xl">
+          <div className="container mx-auto px-6 py-5 space-y-3 max-h-[calc(100vh-4rem)] overflow-y-auto">
+            <div className="grid sm:grid-cols-2 gap-2">
               {navItems.map((item) => (
                 <a
                   key={item.label}
