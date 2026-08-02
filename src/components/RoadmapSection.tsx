@@ -2,8 +2,8 @@ import {
   Braces,
   CloudUpload,
   Database,
-  Drone,
   Layers3,
+  Plane,
   Radio,
   Satellite,
   ScanLine,
@@ -50,7 +50,7 @@ const snowpitFlow = [
     text: "SherpAI structures the pit, compares it with prior observations and weather context, and flags areas that require professional review.",
   },
   {
-    icon: Drone,
+    icon: Plane,
     step: "Terrain-cell survey",
     text: "A drone documents the surrounding cell for surface conditions, avalanche evidence, wind effects, terrain features, and access information.",
   },
@@ -132,7 +132,7 @@ const RoadmapSection = () => {
                   <div className="glass-card rounded-xl p-5 h-full relative overflow-hidden group hover:border-primary/30 transition-colors">
                     <div className="font-mono text-[9px] text-primary/50 mb-4">{String(index + 1).padStart(2, "0")}</div>
                     <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                      <Icon className="w-4.5 h-4.5 text-primary" />
+                      <Icon className="w-5 h-5 text-primary" />
                     </div>
                     <h4 className="font-display font-bold text-sm text-foreground mb-2">{item.step}</h4>
                     <p className="text-[11px] text-muted-foreground leading-relaxed">{item.text}</p>
