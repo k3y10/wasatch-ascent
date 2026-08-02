@@ -1,5 +1,5 @@
 import sherpaiAvatar from "@/assets/sherpai-avatar.png";
-import { CheckSquare, FileText, Eye, Radio } from "lucide-react";
+import { BellRing, CheckSquare, FileText, MapPin, Radio, Search, ShieldCheck, Waves } from "lucide-react";
 
 const SherpAISection = () => {
   return (
@@ -10,28 +10,26 @@ const SherpAISection = () => {
         <div className="text-center mb-16">
           <div className="signal-badge signal-badge-green mx-auto mb-4 w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse-glow" />
-            <span className="font-mono text-[10px]">AI COPILOT</span>
+            <span className="font-mono text-[10px]">AI RADIO AGENT</span>
           </div>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
             Meet <span className="text-primary">SherpAI</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Your terrain intelligence copilot. Contextual risk briefings,
-            natural language queries, and field-ready decision support.
+          <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            SherpAI listens to authorized operational traffic, applies organization-specific language and rules,
+            and prepares reviewable events for maps, timelines, alerts, reports, and shift handoffs.
           </p>
         </div>
 
         <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-6">
-          {/* Left panel - Client-Linked Outputs + TerraGrid */}
           <div className="md:col-span-2 space-y-4">
-            {/* Client-Linked Outputs */}
             <div className="glass-card rounded-xl p-5 hud-frame">
               <div className="flex items-center gap-2 mb-4">
-                <FileText className="w-4 h-4 text-primary" />
-                <span className="font-display font-bold text-sm text-foreground">Client-Linked Outputs</span>
+                <Radio className="w-4 h-4 text-primary" />
+                <span className="font-display font-bold text-sm text-foreground">Configured Inputs</span>
               </div>
               <div className="space-y-2.5">
-                {["UAC-Style Reports", "Briefings", "Splice Participant Metas", "Evidence-Derived Compliance"].map((item) => (
+                {["Authorized Channels", "Call Signs & Teams", "Operational Vocabulary", "Priority & Alert Rules"].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CheckSquare className="w-3.5 h-3.5 text-signal-green flex-shrink-0" />
                     <span>{item}</span>
@@ -40,16 +38,15 @@ const SherpAISection = () => {
               </div>
             </div>
 
-            {/* TerraGrid */}
             <div className="glass-card rounded-xl p-5 hud-frame">
               <div className="flex items-center gap-2 mb-1">
-                <Radio className="w-4 h-4 text-primary" />
-                <span className="font-display font-bold text-sm text-foreground">TerraGrid</span>
+                <FileText className="w-4 h-4 text-primary" />
+                <span className="font-display font-bold text-sm text-foreground">Reviewable Outputs</span>
                 <span className="text-[9px] font-mono text-primary/70 ml-auto">CONNECTED</span>
               </div>
-              <p className="text-[10px] font-mono text-muted-foreground mb-3">Terrain System Management</p>
+              <p className="text-[10px] font-mono text-muted-foreground mb-3">Wasatch Relay Workspace</p>
               <div className="grid grid-cols-2 gap-2">
-                {["LiDAR", "Drone", "Weather", "Persistent Tracking"].map((item) => (
+                {["Transcripts", "Mapped Events", "Timelines", "Shift Handoffs"].map((item) => (
                   <div key={item} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <span className="w-1.5 h-1.5 rounded-full bg-signal-green/60" />
                     {item}
@@ -57,25 +54,33 @@ const SherpAISection = () => {
                 ))}
               </div>
             </div>
+
+            <div className="glass-card rounded-xl p-5 hud-frame">
+              <div className="flex items-center gap-2 mb-3">
+                <ShieldCheck className="w-4 h-4 text-primary" />
+                <span className="font-display font-bold text-sm text-foreground">Human-in-the-Loop</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Teams can verify, correct, dismiss, or escalate extracted events before they become part of the operational record.
+              </p>
+            </div>
           </div>
 
-          {/* Right panel - SherpAI Chat HUD */}
           <div className="md:col-span-3">
             <div className="glass-card-elevated rounded-2xl overflow-hidden hud-frame">
               <div className="glass-highlight rounded-2xl p-5">
-                {/* HUD header */}
                 <div className="flex items-center gap-3 mb-5 pb-3 border-b border-border/50">
                   <img src={sherpaiAvatar} alt="SherpAI" className="w-10 h-10 rounded-full ring-2 ring-primary/30" />
                   <div>
                     <div className="font-display font-bold text-foreground text-sm">SherpAI</div>
                     <div className="text-[10px] font-mono text-muted-foreground">
-                      Terrain Intelligence Operator
+                      Wasatch Relay Operator
                     </div>
                   </div>
                   <div className="ml-auto flex items-center gap-2">
                     <span className="text-[9px] font-mono text-signal-green flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse-glow" />
-                      Direct
+                      Listening
                     </span>
                     <div className="w-7 h-4 rounded-full bg-signal-green/20 flex items-center justify-end px-0.5">
                       <div className="w-3 h-3 rounded-full bg-signal-green" />
@@ -83,13 +88,12 @@ const SherpAISection = () => {
                   </div>
                 </div>
 
-                {/* Tab bar */}
-                <div className="flex gap-1 mb-4 border-b border-border/30 pb-2">
-                  {["Projects", "Preparedness", "Explore", "Alerts"].map((tab, i) => (
+                <div className="flex gap-1 mb-4 border-b border-border/30 pb-2 overflow-x-auto">
+                  {["Channels", "Events", "Map", "Handoffs"].map((tab, i) => (
                     <button
                       key={tab}
-                      className={`px-3 py-1.5 rounded-md text-xs font-mono transition-colors ${
-                        i === 0
+                      className={`px-3 py-1.5 rounded-md text-xs font-mono transition-colors whitespace-nowrap ${
+                        i === 1
                           ? "bg-primary/15 text-primary font-semibold"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
@@ -99,12 +103,11 @@ const SherpAISection = () => {
                   ))}
                 </div>
 
-                {/* Action buttons */}
                 <div className="space-y-2 mb-5">
                   {[
-                    { icon: CheckSquare, label: "Summarize Conditions", color: "text-signal-green" },
-                    { icon: FileText, label: "Generate Briefing", color: "text-primary" },
-                    { icon: Eye, label: "Review Observations", color: "text-frost" },
+                    { icon: Waves, label: "Review Live Transcript", color: "text-signal-green" },
+                    { icon: MapPin, label: "Verify Extracted Event", color: "text-primary" },
+                    { icon: BellRing, label: "Escalate to Operations Lead", color: "text-frost" },
                   ].map(({ icon: Icon, label, color }) => (
                     <button
                       key={label}
@@ -119,35 +122,36 @@ const SherpAISection = () => {
                   ))}
                 </div>
 
-                {/* Chat preview */}
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full bg-terrain-elevated flex items-center justify-center text-[10px] font-mono text-muted-foreground flex-shrink-0 mt-1">
-                      U
+                    <div className="w-6 h-6 rounded-full bg-terrain-elevated flex items-center justify-center text-[9px] font-mono text-muted-foreground flex-shrink-0 mt-1">
+                      P3
                     </div>
                     <div className="glass-card rounded-lg rounded-tl-sm px-4 py-2.5 text-sm text-secondary-foreground">
-                      What's the avy risk in Little Cottonwood today?
+                      Wind loading on the upper ridge. Shooting cracks on the east aspect. Two riders exiting. No trigger.
                     </div>
                   </div>
 
                   <div className="flex gap-3">
                     <img src={sherpaiAvatar} alt="" className="w-6 h-6 rounded-full flex-shrink-0 mt-1" />
-                    <div className="glass-card rounded-lg rounded-tl-sm px-4 py-2.5 text-sm text-secondary-foreground border-l-2 border-primary/40 space-y-1.5">
+                    <div className="glass-card rounded-lg rounded-tl-sm px-4 py-2.5 text-sm text-secondary-foreground border-l-2 border-primary/40 space-y-2">
                       <p>
-                        <span className="text-primary font-semibold">CONSIDERABLE</span> risk on N-facing slopes above 9,000ft.
-                        Persistent slab from Dec 28 buried surface hoar.
+                        I identified an <span className="text-primary font-semibold">elevated wind-loading observation</span> with
+                        shooting cracks on an east aspect. No trigger was reported.
                       </p>
-                      <div className="flex gap-2">
-                        <span className="signal-badge signal-badge-amber text-[9px]">D2-D3</span>
-                        <span className="signal-badge text-[9px] text-frost-dim border-frost-dim/30">NW-N-NE</span>
+                      <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-muted-foreground">
+                        <span>LOCATION · UPPER RIDGE</span>
+                        <span>STATUS · REVIEW</span>
+                        <span>SOURCE · PATROL 3</span>
+                        <span>ACTION · MAP + HANDOFF</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Input bar */}
                 <div className="mt-4 glass-card rounded-lg flex items-center px-4 py-2.5 gap-3">
-                  <span className="text-muted-foreground text-sm">Ask SherpAI...</span>
+                  <Search className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span className="text-muted-foreground text-sm">Search calls, events, and handoffs...</span>
                   <div className="ml-auto w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
                     <svg className="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
