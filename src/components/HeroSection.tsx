@@ -114,10 +114,6 @@ const HeroSection = () => (
             width={1200}
             height={1200}
             fetchPriority="high"
-            style={{
-              WebkitMaskImage: "radial-gradient(ellipse at center, black 58%, transparent 78%)",
-              maskImage: "radial-gradient(ellipse at center, black 58%, transparent 78%)",
-            }}
           />
         </div>
       </div>
@@ -128,4 +124,3 @@ const HeroSection = () => (
 );
 
 export default HeroSection;
-
