@@ -1,13 +1,15 @@
 {
-  "name": "TerraSatch Intelligence",
+  "id": "/",
+  "name": "TerraSatch TerraListen",
   "short_name": "TerraSatch",
-  "description": "Terrain intelligence for field teams, partners, and mountain operations.",
-  "start_url": "/",
+  "description": "AI radio communications and terrain intelligence for authorized field operations.",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#11161d",
-  "theme_color": "#d98a18",
-  "orientation": "portrait-primary",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#02050a",
+  "theme_color": "#071521",
+  "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
       "src": "/pwa-icon.svg",
@@ -20,11 +22,18 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start a free pilot",
+      "short_name": "Free pilot",
+      "url": "/#pilot"
     },
     {
-      "src": "/favicon.ico",
-      "sizes": "48x48 32x32 16x16",
-      "type": "image/x-icon"
+      "name": "Estimate a deployment",
+      "short_name": "Cost estimate",
+      "url": "/#cost"
     }
   ]
 }

@@ -1,5 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import TerraListenSection from "@/components/TerraListenSection";
+import PricingEstimator from "@/components/PricingEstimator";
 import ModulesSection from "@/components/ModulesSection";
 import SherpAISection from "@/components/SherpAISection";
 import DataFusionSection from "@/components/DataFusionSection";
@@ -11,6 +13,7 @@ import OriginSection from "@/components/OriginSection";
 import TeamSection from "@/components/TeamSection";
 import DocumentsSection from "@/components/DocumentsSection";
 import PartnersSection from "@/components/PartnersSection";
+import EngagementSection from "@/components/EngagementSection";
 import Footer from "@/components/Footer";
 import AmbientParticles from "@/components/AmbientParticles";
 
@@ -20,6 +23,10 @@ const Index = () => {
       <AmbientParticles />
       <Navbar />
       <HeroSection />
+      <div className="amber-line" />
+      <TerraListenSection />
+      <div className="amber-line" />
+      <PricingEstimator />
       <div className="amber-line" />
       <ModulesSection />
       <div className="amber-line" />
@@ -38,6 +45,8 @@ const Index = () => {
       <OriginSection />
       <div className="amber-line" />
       <TeamSection />
+      <div className="amber-line" />
+      <EngagementSection />
       <div className="amber-line" />
       <PartnersSection />
       <div className="amber-line" />

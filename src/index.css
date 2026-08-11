@@ -14,6 +14,10 @@
     --popover-foreground: 40 15% 90%;
     --primary: 36 90% 50%;
     --primary-foreground: 220 15% 8%;
+    --radio: 36 90% 50%;
+    --radio-foreground: 220 18% 6%;
+    --radio-muted: 36 45% 16%;
+    --radio-border: 36 72% 42%;
     --secondary: 220 10% 18%;
     --secondary-foreground: 40 10% 80%;
     --muted: 220 10% 16%;
@@ -40,9 +44,9 @@
     --snow: 210 20% 95%;
     --forest: 150 30% 35%;
     --forest-dim: 155 20% 25%;
-    --signal-green: 145 60% 45%;
+    --signal-green: 36 90% 50%;
     --signal-amber: 36 90% 55%;
-    --signal-red: 0 70% 50%;
+    --signal-red: 36 90% 50%;
 
     /* Glass tokens */
     --glass-bg: 220 15% 12% / 0.6;
@@ -75,6 +79,10 @@
     --popover-foreground: 220 15% 12%;
     --primary: 36 90% 45%;
     --primary-foreground: 0 0% 100%;
+    --radio: 36 90% 45%;
+    --radio-foreground: 0 0% 100%;
+    --radio-muted: 36 35% 88%;
+    --radio-border: 36 58% 55%;
     --secondary: 40 10% 90%;
     --secondary-foreground: 220 10% 30%;
     --muted: 40 10% 92%;
@@ -99,9 +107,9 @@
     --snow: 210 20% 15%;
     --forest: 150 30% 30%;
     --forest-dim: 155 20% 40%;
-    --signal-green: 145 60% 35%;
+    --signal-green: 36 90% 45%;
     --signal-amber: 36 90% 45%;
-    --signal-red: 0 70% 45%;
+    --signal-red: 36 90% 45%;
 
     --glass-bg: 0 0% 100% / 0.7;
     --glass-border: 40 10% 75% / 0.4;
@@ -172,6 +180,29 @@
   .terrain-deep { background: hsl(var(--terrain-deep)); }
   .terrain-surface { background: hsl(var(--terrain-surface)); }
   .terrain-elevated { background: hsl(var(--terrain-elevated)); }
+
+  .radio-panel {
+    background: hsl(var(--terrain-surface) / 0.82);
+    border: 1px solid hsl(var(--radio-border) / 0.42);
+    box-shadow: var(--shadow-terrain);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .radio-grid {
+    background-image:
+      linear-gradient(hsl(var(--radio) / 0.028) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--radio) / 0.028) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .radio-text { color: hsl(var(--radio)); }
+  .radio-border { border-color: hsl(var(--radio-border) / 0.5); }
+
+  .radio-wave-bar {
+    transform-origin: center;
+    animation: radio-wave 1.35s ease-in-out infinite;
+  }
 
   /* Amber accent line */
   .amber-line {
@@ -256,6 +287,10 @@
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
   }
+  @keyframes radio-wave {
+    0%, 100% { transform: scaleY(0.45); opacity: 0.45; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
 
   .animate-float-up {
     animation: float-up linear infinite;
@@ -272,6 +307,11 @@
   .animate-shimmer {
     background-size: 200% 100%;
     animation: shimmer 3s linear infinite;
+  }
+
+  .content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 900px;
   }
 
   .team-bio-balance {
@@ -298,6 +338,16 @@
         transparent 1px,
         transparent 60px
       );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
