@@ -134,7 +134,7 @@ const HeroSection = () => (
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
               <a href="#pilot">
-                Start a free pilot
+                Start a limited pilot
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
@@ -159,3 +159,4 @@ const HeroSection = () => (
 );
 
 export default HeroSection;
+

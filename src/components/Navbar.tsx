@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Download, Menu, Moon, Sun, X } from "lucide-react";
+import { ArrowUpRight, Download, Menu, Moon, Sun, X } from "lucide-react";
 import terrasatchLogo from "@/assets/terrasatch-logo.png";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
@@ -16,6 +16,7 @@ const navItems = [
   { label: "Roadmap", href: "/#roadmap" },
   { label: "Investors", href: "/#investors" },
   { label: "Documents", href: "/#documents" },
+  { label: "Demo", href: "/demos" },
 ];
 
 const Navbar = () => {
@@ -94,9 +95,9 @@ const Navbar = () => {
             </Button>
           ) : null}
           <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
-            <a href="/demos">
-              Demo
-              <ArrowRight data-icon="inline-end" />
+            <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer">
+              Data room
+              <ArrowUpRight data-icon="inline-end" />
             </a>
           </Button>
           <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
@@ -123,8 +124,11 @@ const Navbar = () => {
                 <a href={item.href} onClick={() => setIsMobileMenuOpen(false)}>{item.label}</a>
               </Button>
             ))}
-            <Button asChild variant="ghost" className="w-full justify-start">
-              <a href="/demos" onClick={() => setIsMobileMenuOpen(false)}>Demo</a>
+            <Button asChild variant="outline" className="w-full justify-start">
+              <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
+                Data room
+                <ArrowUpRight data-icon="inline-end" />
+              </a>
             </Button>
             {installPrompt ? (
               <Button variant="outline" onClick={handleInstall} className="w-full">
@@ -140,3 +144,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

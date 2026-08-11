@@ -16,6 +16,7 @@ import PartnersSection from "@/components/PartnersSection";
 import EngagementSection from "@/components/EngagementSection";
 import Footer from "@/components/Footer";
 import AmbientParticles from "@/components/AmbientParticles";
+import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 const Index = () => {
   return (
@@ -24,17 +25,17 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <div className="amber-line" />
-      <TerraListenSection />
+      <ScrollReveal><TerraListenSection /></ScrollReveal>
       <div className="amber-line" />
-      <PricingEstimator />
+      <ScrollReveal><PricingEstimator /></ScrollReveal>
       <div className="amber-line" />
-      <ModulesSection />
+      <ScrollReveal><ModulesSection /></ScrollReveal>
       <div className="amber-line" />
-      <SherpAISection />
+      <ScrollReveal><SherpAISection /></ScrollReveal>
       <div className="amber-line" />
-      <DataFusionSection />
+      <ScrollReveal><DataFusionSection /></ScrollReveal>
       <div className="amber-line" />
-      <TerrainVisualization />
+      <ScrollReveal><TerrainVisualization /></ScrollReveal>
       <div className="amber-line" />
       <TechStackSection />
       <div className="amber-line" />
@@ -42,18 +43,19 @@ const Index = () => {
       <div className="amber-line" />
       <FieldOpsSection />
       <div className="amber-line" />
-      <OriginSection />
+      <ScrollReveal><OriginSection /></ScrollReveal>
       <div className="amber-line" />
       <TeamSection />
       <div className="amber-line" />
-      <EngagementSection />
+      <ScrollReveal><EngagementSection /></ScrollReveal>
       <div className="amber-line" />
-      <PartnersSection />
+      <ScrollReveal><PartnersSection /></ScrollReveal>
       <div className="amber-line" />
-      <DocumentsSection />
+      <ScrollReveal><DocumentsSection /></ScrollReveal>
       <Footer />
     </div>
   );
 };
 
 export default Index;
+

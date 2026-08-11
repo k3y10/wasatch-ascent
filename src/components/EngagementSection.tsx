@@ -140,12 +140,7 @@ const EngagementSection = () => {
     email: "",
     organization: "",
     industry: "",
-    radios: "25",
-    teams: "6",
-    channels: "12",
-    languages: "2",
-    workflows: "5",
-    notes: "",
+    workflow: "",
     website: "",
   });
 
@@ -185,7 +180,11 @@ const EngagementSection = () => {
     }
     setPilotPending(true);
     try {
-      const { result } = await submitInquiry({ mode: "pilot", ...pilot });
+      const { result } = await submitInquiry({
+        mode: "pilot",
+        scope: "30 days; one small team; one workflow; up to two hours of approved sample audio; no custom integration or production SLA",
+        ...pilot,
+      });
       if (handleResult(result, "pilot")) setPilotSent(true);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Unable to submit pilot request.");
@@ -311,16 +310,29 @@ const EngagementSection = () => {
         </div>
 
         <div id="pilot" className="mt-16 scroll-mt-24 rounded-lg border border-primary/30 bg-terrain-surface/55 p-5 sm:p-7">
-          <div className="grid gap-10 xl:grid-cols-[0.55fr_1.45fr]">
+          <div className="grid gap-10 xl:grid-cols-[0.78fr_1.22fr]">
             <div>
               <div className="flex size-12 items-center justify-center rounded-full border border-primary/45 bg-primary/10">
                 <Radio className="size-6 text-primary" aria-hidden="true" />
               </div>
-              <h2 className="mt-5 font-display text-4xl font-bold uppercase leading-none lg:text-5xl">Start a free pilot.</h2>
+              <h2 className="mt-5 font-display text-4xl font-bold uppercase leading-none lg:text-5xl">Start a limited pilot.</h2>
               <p className="mt-4 leading-relaxed text-frost-dim">
-                Start with one workflow, prove value with a focused team, and measure usage and time saved.
-                We’ll reach out to define a safe, authorized, no-cost 30-day discovery scope.
+                A no-cost, 30-day discovery for one useful workflow. We use approved sample data first, measure value,
+                and stop before custom engineering or production operations create cost.
               </p>
+              <ul className="mt-7 flex flex-col gap-3">
+                {[
+                  "One small team with up to five participants",
+                  "One authorized workflow and one primary language",
+                  "Up to two hours of approved sample radio audio",
+                  "No hardware, custom integration, or production SLA",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-foreground/80">
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {pilotSent ? (
@@ -332,7 +344,7 @@ const EngagementSection = () => {
             ) : (
               <form onSubmit={handlePilotSubmit}>
                 <FieldGroup>
-                  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                  <div className="grid gap-5 md:grid-cols-2">
                     <Field>
                       <FieldLabel htmlFor="pilot-name">Name *</FieldLabel>
                       <Input id="pilot-name" autoComplete="name" value={pilot.name} onChange={(event) => setPilot({ ...pilot, name: event.target.value })} required />
@@ -349,21 +361,15 @@ const EngagementSection = () => {
                       <FieldLabel htmlFor="pilot-industry">Industry / operation *</FieldLabel>
                       <Input id="pilot-industry" value={pilot.industry} onChange={(event) => setPilot({ ...pilot, industry: event.target.value })} placeholder="Resort, utility, field service..." required />
                     </Field>
-                    {(["radios", "teams", "channels", "languages", "workflows"] as const).map((key) => (
-                      <Field key={key}>
-                        <FieldLabel htmlFor={`pilot-${key}`}>{key[0].toUpperCase() + key.slice(1)}</FieldLabel>
-                        <Input id={`pilot-${key}`} type="number" min="1" value={pilot[key]} onChange={(event) => setPilot({ ...pilot, [key]: event.target.value })} />
-                      </Field>
-                    ))}
                   </div>
                   <Field>
-                    <FieldLabel htmlFor="pilot-notes">What should TerraListen connect or improve?</FieldLabel>
-                    <Textarea id="pilot-notes" value={pilot.notes} onChange={(event) => setPilot({ ...pilot, notes: event.target.value })} placeholder="Channels, languages, documents, workflows, response needs, and current tools..." />
+                    <FieldLabel htmlFor="pilot-workflow">What single workflow should TerraListen improve?</FieldLabel>
+                    <Textarea id="pilot-workflow" value={pilot.workflow} onChange={(event) => setPilot({ ...pilot, workflow: event.target.value })} placeholder="For example: turn recorded patrol calls into a searchable incident timeline." />
                   </Field>
                   <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={pilot.website} onChange={(event) => setPilot({ ...pilot, website: event.target.value })} />
                   <Button type="submit" size="lg" disabled={pilotPending}>
                     {pilotPending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                    {pilotPending ? "Sending request..." : "Submit pilot request"}
+                    {pilotPending ? "Sending request..." : "Apply for the limited pilot"}
                   </Button>
                 </FieldGroup>
               </form>
@@ -376,3 +382,4 @@ const EngagementSection = () => {
 };
 
 export default EngagementSection;
+
