@@ -73,15 +73,15 @@ const HeroSection = () => (
         height={1080}
         fetchPriority="high"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/78 to-terrain-deep/90" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-background/28" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#05080f]/95 via-[#05080f]/68 to-[#05080f]/18" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05080f]/82 via-transparent to-[#05080f]/24" />
 
       <div className="container relative mx-auto grid min-h-[680px] items-center gap-4 px-6 py-14 md:grid-cols-[0.95fr_1.05fr] lg:min-h-[720px] lg:py-16">
         <div className="relative z-10 max-w-2xl animate-fade-in" style={{ animationDelay: "0.1s", opacity: 0 }}>
-          <h1 className="max-w-[10ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-foreground sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
+          <h1 className="max-w-[10ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
             AI that hears the field<span className="text-primary">.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-frost sm:text-xl">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
             TerraListen turns authorized radio traffic into a multilingual, reviewable operational record&mdash;without
             interrupting the channel.
           </p>
@@ -93,7 +93,7 @@ const HeroSection = () => (
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
-            <Button asChild variant="outline" size="lg">
+            <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
               <a href="#how-it-works">
                 See how it works
                 <ArrowDown data-icon="inline-end" />
@@ -101,7 +101,7 @@ const HeroSection = () => (
             </Button>
           </div>
 
-          <p className="mt-7 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+          <p className="mt-7 font-mono text-[10px] uppercase tracking-[0.24em] text-slate-400">
             TerraListen <span className="text-primary">&middot;</span> A TerraSatch capability
           </p>
         </div>
