@@ -10,12 +10,11 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 const navItems = [
-  { label: "TerraListen", href: "/#terralisten" },
-  { label: "Platform", href: "/#how-it-works" },
+  { label: "How it works", href: "/#how-it-works" },
   { label: "Cost", href: "/#cost" },
+  { label: "Pilot", href: "/#pilot" },
   { label: "Roadmap", href: "/#roadmap" },
   { label: "Investors", href: "/#investors" },
-  { label: "Documents", href: "/#documents" },
   { label: "Demo", href: "/demos" },
 ];
 

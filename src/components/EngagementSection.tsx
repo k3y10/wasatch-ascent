@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   FileDown,
   LoaderCircle,
-  Radio,
   Send,
   ShieldCheck,
 } from "lucide-react";
@@ -22,6 +21,8 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { submitInquiry } from "@/lib/inquiry";
+import type { InquiryApiResult } from "@/lib/inquiry";
 
 const roadmap = [
   { stage: "Now", title: "TerraListen", detail: "AI radio agent + human-authorized routing" },
@@ -106,23 +107,9 @@ const SelectField = ({
   </Field>
 );
 
-type ApiResult = { ok?: boolean; error?: string; fallbackMailto?: string };
-
-const submitInquiry = async (payload: Record<string, string>) => {
-  const response = await fetch("/api/inquiry", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  const result = (await response.json()) as ApiResult;
-  return { response, result };
-};
-
 const EngagementSection = () => {
   const [investorPending, setInvestorPending] = useState(false);
-  const [pilotPending, setPilotPending] = useState(false);
   const [investorSent, setInvestorSent] = useState(false);
-  const [pilotSent, setPilotSent] = useState(false);
   const [investor, setInvestor] = useState({
     name: "",
     email: "",
@@ -135,23 +122,14 @@ const EngagementSection = () => {
     notes: "",
     website: "",
   });
-  const [pilot, setPilot] = useState({
-    name: "",
-    email: "",
-    organization: "",
-    industry: "",
-    workflow: "",
-    website: "",
-  });
-
-  const handleResult = (result: ApiResult, mode: "pilot" | "investor") => {
+  const handleResult = (result: InquiryApiResult) => {
     if (result.fallbackMailto) {
       toast("Opening your email app so the founder still receives the inquiry.");
       window.location.assign(result.fallbackMailto);
       return false;
     }
     if (!result.ok) throw new Error(result.error || "Unable to submit inquiry.");
-    toast.success(mode === "pilot" ? "Pilot request sent to Keaton." : "Investor interest sent to Keaton.");
+    toast.success("Investor interest sent to Keaton.");
     return true;
   };
 
@@ -164,32 +142,11 @@ const EngagementSection = () => {
     setInvestorPending(true);
     try {
       const { result } = await submitInquiry({ mode: "investor", request: "pitch-deck", ...investor });
-      if (handleResult(result, "investor")) setInvestorSent(true);
+      if (handleResult(result)) setInvestorSent(true);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Unable to submit investor interest.");
     } finally {
       setInvestorPending(false);
-    }
-  };
-
-  const handlePilotSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!pilot.name || !pilot.email || !pilot.organization || !pilot.industry) {
-      toast.error("Complete the required pilot fields.");
-      return;
-    }
-    setPilotPending(true);
-    try {
-      const { result } = await submitInquiry({
-        mode: "pilot",
-        scope: "30 days; one small team; one workflow; up to two hours of approved sample audio; no custom integration or production SLA",
-        ...pilot,
-      });
-      if (handleResult(result, "pilot")) setPilotSent(true);
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to submit pilot request.");
-    } finally {
-      setPilotPending(false);
     }
   };
 
@@ -309,73 +266,6 @@ const EngagementSection = () => {
           </form>
         </div>
 
-        <div id="pilot" className="mt-16 scroll-mt-24 rounded-lg border border-primary/30 bg-terrain-surface/55 p-5 sm:p-7">
-          <div className="grid gap-10 xl:grid-cols-[0.78fr_1.22fr]">
-            <div>
-              <div className="flex size-12 items-center justify-center rounded-full border border-primary/45 bg-primary/10">
-                <Radio className="size-6 text-primary" aria-hidden="true" />
-              </div>
-              <h2 className="mt-5 font-display text-4xl font-bold uppercase leading-none lg:text-5xl">Start a limited pilot.</h2>
-              <p className="mt-4 leading-relaxed text-frost-dim">
-                A no-cost, 30-day discovery for one useful workflow. We use approved sample data first, measure value,
-                and stop before custom engineering or production operations create cost.
-              </p>
-              <ul className="mt-7 flex flex-col gap-3">
-                {[
-                  "One small team with up to five participants",
-                  "One authorized workflow and one primary language",
-                  "Up to two hours of approved sample radio audio",
-                  "No hardware, custom integration, or production SLA",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-foreground/80">
-                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {pilotSent ? (
-              <div className="flex flex-col items-center justify-center gap-4 border-y border-primary/30 py-8 text-center" role="status">
-                <CheckCircle2 className="size-9 text-primary" aria-hidden="true" />
-                <h3 className="font-display text-2xl font-bold">Pilot request received</h3>
-                <p className="text-sm text-muted-foreground">Keaton will review the scope and follow up directly.</p>
-              </div>
-            ) : (
-              <form onSubmit={handlePilotSubmit}>
-                <FieldGroup>
-                  <div className="grid gap-5 md:grid-cols-2">
-                    <Field>
-                      <FieldLabel htmlFor="pilot-name">Name *</FieldLabel>
-                      <Input id="pilot-name" autoComplete="name" value={pilot.name} onChange={(event) => setPilot({ ...pilot, name: event.target.value })} required />
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="pilot-email">Work email *</FieldLabel>
-                      <Input id="pilot-email" type="email" autoComplete="email" value={pilot.email} onChange={(event) => setPilot({ ...pilot, email: event.target.value })} required />
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="pilot-org">Organization *</FieldLabel>
-                      <Input id="pilot-org" autoComplete="organization" value={pilot.organization} onChange={(event) => setPilot({ ...pilot, organization: event.target.value })} required />
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="pilot-industry">Industry / operation *</FieldLabel>
-                      <Input id="pilot-industry" value={pilot.industry} onChange={(event) => setPilot({ ...pilot, industry: event.target.value })} placeholder="Resort, utility, field service..." required />
-                    </Field>
-                  </div>
-                  <Field>
-                    <FieldLabel htmlFor="pilot-workflow">What single workflow should TerraListen improve?</FieldLabel>
-                    <Textarea id="pilot-workflow" value={pilot.workflow} onChange={(event) => setPilot({ ...pilot, workflow: event.target.value })} placeholder="For example: turn recorded patrol calls into a searchable incident timeline." />
-                  </Field>
-                  <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={pilot.website} onChange={(event) => setPilot({ ...pilot, website: event.target.value })} />
-                  <Button type="submit" size="lg" disabled={pilotPending}>
-                    {pilotPending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                    {pilotPending ? "Sending request..." : "Apply for the limited pilot"}
-                  </Button>
-                </FieldGroup>
-              </form>
-            )}
-          </div>
-        </div>
       </div>
     </section>
   );
