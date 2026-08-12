@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
+import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
 import PricingEstimator from "@/components/PricingEstimator";
 import PilotSection from "@/components/PilotSection";
 import DocumentsSection from "@/components/DocumentsSection";
@@ -18,6 +19,8 @@ const Index = () => {
       <HeroSection />
       <div className="amber-line" />
       <ScrollReveal><TerraListenSection /></ScrollReveal>
+      <div className="amber-line" />
+      <ScrollReveal><TerrainIntelligenceSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><PricingEstimator /></ScrollReveal>
       <div className="amber-line" />

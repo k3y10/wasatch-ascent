@@ -1,5 +1,6 @@
 import { ArrowRight, AudioLines, Building2, FileCheck2, LifeBuoy, Map, Mountain, Radio, Trees } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import TerraListenConsole from "@/components/TerraListenConsole";
 
 const workflow = [
   {
@@ -81,6 +82,23 @@ const TerraListenSection = () => (
             </div>
           </article>
         ))}
+      </div>
+
+      <div className="mt-20 border-t border-border/70 pt-10">
+        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Example operational record</p>
+            <h3 className="mt-3 font-display text-3xl font-bold uppercase leading-none sm:text-4xl">
+              See the signal take shape<span className="text-primary">.</span>
+            </h3>
+          </div>
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground lg:text-right">
+            Sample radio events become an accountable timeline, linked locations, and a review-ready report.
+          </p>
+        </div>
+        <div className="mt-8">
+          <TerraListenConsole />
+        </div>
       </div>
 
       <div id="use-cases" className="mt-24 scroll-mt-24 border-t border-border/70 pt-16">

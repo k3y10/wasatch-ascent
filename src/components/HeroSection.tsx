@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, Files, Mountain, Radio, ShieldCheck } from "lucide-react";
+import { ArrowDown, ArrowRight, Files, MapPinned, Radio, ShieldCheck } from "lucide-react";
 import heroImage from "@/assets/hero-wasatch.jpg";
 import topoTexture from "@/assets/topo-texture.jpg";
 import { Button } from "@/components/ui/button";
@@ -7,22 +7,22 @@ import { cn } from "@/lib/utils";
 const capabilities = [
   {
     label: "Listen",
-    description: "Capture authorized radio traffic in parallel without occupying the channel.",
+    description: "Capture authorized radio traffic and field observations without occupying the channel.",
     icon: Radio,
   },
   {
     label: "Watch",
-    description: "Place every call against time, location, terrain, and operating context.",
-    icon: Mountain,
+    description: "Resolve each report against terrain, weather, forecast zones, and the current operating picture.",
+    icon: MapPinned,
   },
   {
     label: "Learn",
-    description: "Build a searchable, multilingual record from conversations and documents.",
+    description: "Connect calls, snowpits, drone cells, documents, and shift records into durable operational memory.",
     icon: Files,
   },
   {
     label: "Adapt",
-    description: "Prepare alerts, handoffs, and reports for human review and approved action.",
+    description: "Prepare reviewable alerts, briefings, handoffs, and reports for approved human action.",
     icon: ShieldCheck,
   },
 ];
@@ -78,18 +78,22 @@ const HeroSection = () => (
 
       <div className="container relative mx-auto grid min-h-[680px] items-center gap-4 px-6 py-14 md:grid-cols-[0.95fr_1.05fr] lg:min-h-[720px] lg:py-16">
         <div className="relative z-10 max-w-2xl animate-fade-in" style={{ animationDelay: "0.1s", opacity: 0 }}>
-          <h1 className="max-w-[10ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
-            AI that hears the field<span className="text-primary">.</span>
+          <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.24em] text-primary sm:text-xs">
+            TerraSatch field intelligence platform
+          </p>
+          <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
+            AI for teams beyond the edge of coverage<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            TerraListen turns authorized radio traffic into a multilingual, reviewable operational record&mdash;without
+            TerraSatch connects field signal, terrain, and human judgment for backcountry teams and remote operations.
+            TerraListen is the first capability: radio traffic becomes a mapped, reviewable operational record without
             interrupting the channel.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
-              <a href="#pilot">
-                Start a limited pilot
+              <a href="#terralisten">
+                Explore TerraListen
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
@@ -102,7 +106,7 @@ const HeroSection = () => (
           </div>
 
           <p className="mt-7 font-mono text-[10px] uppercase tracking-[0.24em] text-slate-400">
-            TerraListen <span className="text-primary">&middot;</span> A TerraSatch capability
+            Listen <span className="text-primary">&middot;</span> Watch <span className="text-primary">&middot;</span> Learn <span className="text-primary">&middot;</span> Adapt
           </p>
         </div>
 
