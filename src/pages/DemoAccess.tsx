@@ -87,7 +87,7 @@ const DemoAccess = () => {
             <div>
               <span className="font-display block text-sm font-bold tracking-[0.18em]">TERRASATCH</span>
               <span className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground">
-                SECURE PREVIEW CHANNEL
+                SECURE DEMO CHANNEL
               </span>
             </div>
           </Link>
@@ -105,17 +105,18 @@ const DemoAccess = () => {
           <section className="mx-auto max-w-2xl lg:mx-0">
             <Badge variant="secondary" className="mb-6">
               <ShieldCheck className="mr-1 size-3.5" aria-hidden="true" />
-              Authorized TerraSatch operators
+              Authorized TerraSatch demo access
             </Badge>
             <p className="font-mono mb-4 text-xs uppercase tracking-[0.2em] text-primary">
-              Controlled terrain intelligence access
+              Terrain + field intelligence demonstrations
             </p>
             <h1 className="font-display text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
               Enter the secure <span className="text-primary">demo workspace.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Review five Wasatch Relay industry workflows in one protected operator channel: remote field support, avalanche safety, resort operations, forecasting, and radio-to-operations.
-              Credentials are issued by the TerraSatch team.
+              Explore TerraSatch across avalanche forecasting, terrain intelligence, snow operations,
+              wildfire, wilderness programs, and high-altitude expedition workflows. The most complete
+              demonstrations are surfaced first so evaluators can quickly see the platform at its best.
             </p>
             <div className="mt-8 grid max-w-xl gap-3 sm:grid-cols-2">
               <div className="flex items-center gap-3 rounded-lg border border-border bg-card/60 p-4">
