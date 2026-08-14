@@ -42,10 +42,11 @@ const Demos = () => {
                 <Badge variant="secondary" className="mb-2">
                   Authorized demo workspace
                 </Badge>
-                <h1 className="font-display text-2xl font-bold">Wasatch Relay industry operations</h1>
-                <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Five protected workflows for field services, avalanche safety, resort operations,
-                  forecasting teams, and cross-industry radio communications.
+                <h1 className="font-display text-2xl font-bold">TerraSatch operational demonstrations</h1>
+                <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                  A curated portfolio across avalanche forecasting, terrain intelligence, snow operations,
+                  wildfire, wilderness programs, and expedition workflows. Featured demos are presented
+                  first, with each mission separated into its own operational section.
                 </p>
               </div>
             </div>
