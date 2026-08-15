@@ -1,116 +1,130 @@
+import { ArrowDown, ArrowRight, Files, MapPinned, Radio, ShieldCheck } from "lucide-react";
 import heroImage from "@/assets/hero-wasatch.jpg";
-import terrasatchLogo from "@/assets/terrasatch-logo.png";
+import topoTexture from "@/assets/topo-texture.jpg";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-const HeroSection = () => {
-  return (
-    <section id="platform" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Wasatch Range terrain"
-          className="w-full h-full object-cover"
-          width={1920}
-          height={1080}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
+const capabilities = [
+  {
+    label: "Listen",
+    description: "Capture authorized radio traffic and field observations without occupying the channel.",
+    icon: Radio,
+  },
+  {
+    label: "Watch",
+    description: "Resolve each report against terrain, weather, forecast zones, and the current operating picture.",
+    icon: MapPinned,
+  },
+  {
+    label: "Learn",
+    description: "Connect calls, snowpits, drone cells, documents, and shift records into durable operational memory.",
+    icon: Files,
+  },
+  {
+    label: "Adapt",
+    description: "Prepare reviewable alerts, briefings, handoffs, and reports for approved human action.",
+    icon: ShieldCheck,
+  },
+];
+
+const CapabilityRail = () => (
+  <div className="relative overflow-hidden border-y border-border/70 bg-terrain-deep py-16">
+    <img src={topoTexture} alt="" className="absolute inset-0 size-full object-cover opacity-25" aria-hidden="true" />
+    <div className="container relative mx-auto px-6">
+      <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+        <h2 className="max-w-4xl font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
+          Listen<span className="text-primary">.</span> Watch<span className="text-primary">.</span> Learn
+          <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
+        </h2>
+        <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
+          One operating loop from radio signal to reviewed field action.
+        </p>
       </div>
 
-      {/* Scan line effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-scan-line" />
+      <div className="mt-10 grid border-y border-border/70 md:grid-cols-2 xl:grid-cols-4">
+        {capabilities.map(({ label, description, icon: Icon }, index) => (
+          <article
+            key={label}
+            className="border-b border-border/70 py-7 md:px-7 md:odd:border-r xl:border-b-0 xl:border-r xl:odd:border-r xl:first:pl-0 xl:last:border-r-0 xl:last:pr-0"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <Icon className={cn("size-7", index === 0 ? "text-primary" : "text-foreground/55")} aria-hidden="true" />
+              <span className="font-mono text-[10px] tracking-[0.2em] text-primary/70">0{index + 1}</span>
+            </div>
+            <h3 className="mt-6 font-display text-3xl font-bold uppercase leading-none">
+              {label}<span className="text-primary">.</span>
+            </h3>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">{description}</p>
+          </article>
+        ))}
       </div>
+    </div>
+  </div>
+);
 
-      {/* Topographic grid overlay */}
-      <div className="absolute inset-0 topo-overlay pointer-events-none" />
+const HeroSection = () => (
+  <section id="terralisten" className="relative overflow-hidden pt-16">
+    <div className="relative overflow-hidden border-b border-primary/20">
+      <img
+        src={heroImage}
+        alt="Wasatch Range at sunset"
+        className="absolute inset-0 size-full object-cover"
+        width={1920}
+        height={1080}
+        fetchPriority="high"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#05080f]/95 via-[#05080f]/68 to-[#05080f]/18" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05080f]/82 via-transparent to-[#05080f]/24" />
 
-      {/* Content */}
-      <div className="relative z-20 container mx-auto px-6 text-center">
-        <div className="animate-fade-in" style={{ animationDelay: "0.2s", opacity: 0 }}>
+      <div className="container relative mx-auto grid min-h-[680px] items-center gap-4 px-6 py-14 md:grid-cols-[0.95fr_1.05fr] lg:min-h-[720px] lg:py-16">
+        <div className="relative z-10 max-w-2xl animate-fade-in" style={{ animationDelay: "0.1s", opacity: 0 }}>
+          <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.24em] text-primary sm:text-xs">
+            TerraSatch field intelligence platform
+          </p>
+          <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
+            AI for teams beyond the edge of coverage<span className="text-primary">.</span>
+          </h1>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
+            TerraSatch connects field signal, terrain, and human judgment for backcountry teams and remote operations.
+            TerraListen is the first capability: radio traffic becomes a mapped, reviewable operational record without
+            interrupting the channel.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button asChild size="lg">
+              <a href="#terralisten">
+                Explore TerraListen
+                <ArrowRight data-icon="inline-end" />
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
+              <a href="#how-it-works">
+                See how it works
+                <ArrowDown data-icon="inline-end" />
+              </a>
+            </Button>
+          </div>
+
+          <p className="mt-7 font-mono text-[10px] uppercase tracking-[0.24em] text-slate-400">
+            Listen <span className="text-primary">&middot;</span> Watch <span className="text-primary">&middot;</span> Learn <span className="text-primary">&middot;</span> Adapt
+          </p>
+        </div>
+
+        <div className="relative -mb-14 flex self-end justify-center md:-mr-10 lg:-mr-16">
           <img
-            src={terrasatchLogo}
-            alt="TerraSatch"
-            className="w-28 h-28 mx-auto mb-8 drop-shadow-2xl"
+            src="/terralisten-sasquatch-listening.webp"
+            alt="TerraListen Sasquatch listening to a field radio"
+            className="w-full max-w-[390px] object-contain md:max-w-[560px] lg:max-w-[650px]"
+            width={1200}
+            height={1200}
+            fetchPriority="high"
           />
         </div>
-
-        <div className="animate-fade-in" style={{ animationDelay: "0.4s", opacity: 0 }}>
-          <div className="signal-badge signal-badge-amber mx-auto mb-6 w-fit">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-glow" />
-            <span className="font-mono text-[10px]">WASATCH FRONT · UTAH</span>
-          </div>
-        </div>
-
-        <h1
-          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 animate-fade-in tracking-tight"
-          style={{ animationDelay: "0.6s", opacity: 0 }}
-        >
-          <span className="text-foreground">TERRAIN</span>
-          <br />
-          <span className="bg-gradient-to-r from-primary via-amber-warm to-primary bg-clip-text text-transparent">
-            INTELLIGENCE
-          </span>
-        </h1>
-
-        <p
-          className="max-w-2xl mx-auto text-lg md:text-xl text-frost-dim font-light leading-relaxed mb-4 animate-fade-in"
-          style={{ animationDelay: "0.8s", opacity: 0 }}
-        >
-          Born in the Wasatch. Fusing drone flights, LiDAR, weather forecasts,
-          and snowpack science into actionable terrain intelligence.
-        </p>
-
-        <p
-          className="max-w-xl mx-auto text-sm text-muted-foreground font-mono tracking-wide mb-10 animate-fade-in"
-          style={{ animationDelay: "0.9s", opacity: 0 }}
-        >
-          AI-Powered · Field-Grade · Decision Support
-        </p>
-
-        <div
-          className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in"
-          style={{ animationDelay: "1s", opacity: 0 }}
-        >
-          <a
-            href="#partners"
-            className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-display font-semibold text-lg tracking-wide hover:shadow-[var(--shadow-amber)] transition-all duration-300 hover:scale-[1.02]"
-          >
-            Partner Access
-          </a>
-          <a
-            href="#documents"
-            className="px-8 py-3.5 rounded-lg glass-card text-foreground font-display font-semibold text-lg tracking-wide hover:border-primary/40 transition-all duration-300"
-          >
-            Explore the Tech
-          </a>
-          <a
-            href="#modules"
-            className="px-8 py-3.5 rounded-lg border border-border/60 bg-background/30 text-foreground font-display font-semibold text-lg tracking-wide hover:border-primary/40 transition-all duration-300"
-          >
-            View Modules
-          </a>
-        </div>
-
-        {/* HUD coordinates */}
-        <div
-          className="mt-16 flex justify-center gap-8 font-mono text-xs text-muted-foreground animate-fade-in"
-          style={{ animationDelay: "1.2s", opacity: 0 }}
-        >
-          <span>40.7608° N</span>
-          <span className="text-primary/40">|</span>
-          <span>111.8910° W</span>
-          <span className="text-primary/40">|</span>
-          <span>ELV 4,226 ft</span>
-          <span className="text-primary/40">|</span>
-          <span>GRID UTM 12T</span>
-        </div>
       </div>
+    </div>
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
-    </section>
-  );
-};
+    <CapabilityRail />
+  </section>
+);
 
 export default HeroSection;

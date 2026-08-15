@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -25,6 +26,12 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+        },
+        radio: {
+          DEFAULT: "hsl(var(--radio))",
+          foreground: "hsl(var(--radio-foreground))",
+          muted: "hsl(var(--radio-muted))",
+          border: "hsl(var(--radio-border))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -127,5 +134,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;

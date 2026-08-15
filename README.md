@@ -25,6 +25,19 @@ The public site links to `/demos`. Visitors without a valid session are sent to 
 
 The protected page gates the TerraSatch gallery. Each embedded demo should also enforce its own authorization if its underlying URL or data must not be publicly reachable.
 
+## Pilot and investor inquiries
+
+The public pilot and investor forms post to `/api/inquiry`. Configure these server-only variables in Vercel so inquiries are delivered to `mccunekeaton@gmail.com`:
+
+- `RESEND_API_KEY`
+- `TERRASATCH_INQUIRY_FROM` using a sender on a domain verified in Resend
+
+When delivery is not configured or the provider is unavailable, the site opens a pre-addressed email draft so a visitor can still contact the founder. Never expose the Resend key with a `VITE_` prefix.
+
+## PWA behavior
+
+The installable app includes real standard and maskable icons, a versioned service worker, and responsive standalone display. The worker caches only the public marketing shell and static assets; it explicitly excludes `/api/*`, `/demo-access`, and `/demos` so authentication and inquiry responses are never stored offline.
+
 ## Deployment
 
 Add the three `TERRASATCH_DEMO_*` variables to the Vercel project's Production and Preview environments before deploying. Demo destination URLs can be overridden with the optional `VITE_*_DEMO_URL` variables shown in `.env.example`.

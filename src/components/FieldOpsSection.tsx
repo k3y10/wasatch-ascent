@@ -15,7 +15,7 @@ const environments = [
     headline: "Snowpack & Avalanche Intelligence",
     desc: "Layer-aware views to understand instability, slabs, and avalanche paths. Real-time snowpack modeling and weak-layer detection for patrol and backcountry teams.",
     tags: ["Snowpit Reconstruction", "Storm-Cycle Timeline", "Weak-Layer Detection"],
-    color: "from-sky-500/20",
+    color: "from-primary/15",
   },
   {
     key: "wildfire",
@@ -25,7 +25,7 @@ const environments = [
     headline: "Wildfire Risk & Burn Analysis",
     desc: "Fuel load assessment, burn-scar mapping, and live spread modeling using multispectral imaging fused with terrain-aware weather inputs.",
     tags: ["Fire Risk Scoring", "Burn Mapping", "Fuel Analysis"],
-    color: "from-orange-500/20",
+    color: "from-primary/15",
   },
   {
     key: "water",
@@ -35,7 +35,7 @@ const environments = [
     headline: "Hydrology & Watershed Modeling",
     desc: "Watershed modeling, flood forecasting, and streamflow prediction built on synchronized elevation, precipitation, and groundwater telemetry.",
     tags: ["Watershed Analysis", "Flood Modeling", "Water Resources"],
-    color: "from-cyan-500/20",
+    color: "from-primary/15",
   },
   {
     key: "geology",
@@ -45,7 +45,7 @@ const environments = [
     headline: "Geological Mapping & Rockfall",
     desc: "Geological mapping, rock anchoring intelligence, and rockfall path modeling combining morphology, subsurface data, and historical activity.",
     tags: ["Slope Stability", "Rockfall Paths", "Geological Mapping"],
-    color: "from-red-500/20",
+    color: "from-primary/15",
   },
   {
     key: "infrastructure",

@@ -22,8 +22,8 @@ const Footer = () => {
             <span className="text-border">|</span>
             <span>Born in the Wasatch</span>
             <span className="text-border">|</span>
-            <a href="mailto:hello@terrasatch.com" className="hover:text-primary transition-colors">
-              hello@terrasatch.com
+            <a href="mailto:mccunekeaton@gmail.com" className="hover:text-primary transition-colors">
+              Founder inquiries
             </a>
           </div>
         </div>
