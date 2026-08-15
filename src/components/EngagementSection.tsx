@@ -188,7 +188,7 @@ const EngagementSection = () => {
               angels, operators, funds, strategic partners, and qualified supporters.
             </p>
             <p className="mt-5 border-l border-primary pl-4 font-mono text-[10px] uppercase leading-relaxed tracking-[0.16em] text-muted-foreground">
-              Pre-seed planning · $150K target · $250K hard cap
+              Pre-seed SAFE · $750K target · $1M hard cap · $8M post-money SAFE cap · 0% discount
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row xl:flex-col">
               <Button asChild variant="outline" size="lg">
