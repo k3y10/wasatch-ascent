@@ -4,12 +4,18 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
+const EDGE_VERSION = "0.2.1";
+
 const releaseUrls = {
   windowsX64: import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined,
   macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined,
   macosX64: import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined,
   linuxAmd64: import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined,
   linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_URL as string | undefined,
+};
+
+const releaseChecksums = {
+  windowsX64: import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined,
 };
 
 type Platform = "windows" | "macos" | "linux" | "unknown";
@@ -82,7 +88,7 @@ const Downloads = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Edge v0.2 pilot runtime
+                Edge v{EDGE_VERSION} pilot runtime
               </p>
             </div>
 
@@ -91,11 +97,21 @@ const Downloads = () => {
                 <Laptop className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">Windows</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Windows 10/11 x64. Standalone installer with the TerraSatch Edge runtime and service wrapper.
+                  Windows 10/11 x64. Standalone installer with the TerraSatch Edge runtime, Satchy branding, RTL-SDR tools, and background service.
                 </p>
                 <div className="mt-7">
-                  <DownloadAction href={releaseUrls.windowsX64} label="Download .EXE" />
+                  <DownloadAction href={releaseUrls.windowsX64} label={`Download v${EDGE_VERSION} .EXE`} />
                 </div>
+                {releaseUrls.windowsX64 ? (
+                  <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
+                    <p className="uppercase tracking-[0.14em] text-primary">Windows x64 · v{EDGE_VERSION}</p>
+                    {releaseChecksums.windowsX64 ? (
+                      <p className="break-all">SHA-256 {releaseChecksums.windowsX64}</p>
+                    ) : (
+                      <p>Checksum pending publication.</p>
+                    )}
+                  </div>
+                ) : null}
                 {platform === "windows" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
               </article>
 
@@ -152,7 +168,7 @@ const Downloads = () => {
 
             <div className="mt-14 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Download buttons activate when a signed pilot build is published and its release URL is configured in the production Vercel environment. No separate downloads subdomain is required for the first pilot release.
+                Windows v{EDGE_VERSION} is a pilot build. Download buttons activate only after the exact validated installer and its checksum are published to the TerraSatch release CDN. Windows may show a SmartScreen warning until production code signing is added.
               </p>
             </div>
           </div>
