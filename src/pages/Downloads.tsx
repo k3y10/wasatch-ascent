@@ -5,9 +5,12 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
 const EDGE_VERSION = "0.2.1";
+const WINDOWS_X64_RELEASE_URL =
+  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.1/TerraSatch-Edge-Setup-x64.exe";
+const WINDOWS_X64_SHA256 = "1369FC168892C29DCC850228D5ABCD8180132E7305BE46293B87A543C8F871E0";
 
 const releaseUrls = {
-  windowsX64: import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined,
+  windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) || WINDOWS_X64_RELEASE_URL,
   macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined,
   macosX64: import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined,
   linuxAmd64: import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined,
@@ -15,7 +18,7 @@ const releaseUrls = {
 };
 
 const releaseChecksums = {
-  windowsX64: import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined,
+  windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) || WINDOWS_X64_SHA256,
 };
 
 type Platform = "windows" | "macos" | "linux" | "unknown";
@@ -168,7 +171,7 @@ const Downloads = () => {
 
             <div className="mt-14 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Windows v{EDGE_VERSION} is a pilot build. Download buttons activate only after the exact validated installer and its checksum are published to the TerraSatch release CDN. Windows may show a SmartScreen warning until production code signing is added.
+                Windows v{EDGE_VERSION} is the current public pilot build. The published SHA-256 above identifies the exact validated installer. Windows may show a SmartScreen warning until production code signing is added.
               </p>
             </div>
           </div>
