@@ -91,7 +91,7 @@ const Downloads = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Edge v{EDGE_VERSION} pilot runtime
+                Windows v{EDGE_VERSION} available
               </p>
             </div>
 
