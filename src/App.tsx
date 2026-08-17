@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound.tsx";
 
 const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
 const Demos = lazy(() => import("./pages/Demos.tsx"));
+const Downloads = lazy(() => import("./pages/Downloads.tsx"));
 const ProtectedDemoRoute = lazy(() => import("./components/ProtectedDemoRoute.tsx"));
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
         <Suspense fallback={<RouteLoading />}>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/downloads" element={<Downloads />} />
             <Route path="/demo-access" element={<DemoAccess />} />
             <Route
               path="/demos"
