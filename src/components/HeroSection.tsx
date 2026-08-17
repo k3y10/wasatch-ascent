@@ -86,8 +86,8 @@ const HeroSection = () => (
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
             TerraSatch connects field signal, terrain, and human judgment for backcountry teams and remote operations.
-            TerraListen is the first capability: radio traffic becomes a mapped, reviewable operational record without
-            interrupting the channel.
+            Satchy is our Sasquatch AI agent, working through TerraListen to turn authorized radio traffic into a mapped,
+            reviewable operational record without interrupting the channel.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -113,7 +113,7 @@ const HeroSection = () => (
         <div className="relative -mb-14 flex self-end justify-center md:-mr-10 lg:-mr-16">
           <img
             src="/terralisten-sasquatch-listening.webp"
-            alt="TerraListen Sasquatch listening to a field radio"
+            alt="Satchy, TerraSatch's Sasquatch AI agent, listening to a field radio"
             className="w-full max-w-[390px] object-contain md:max-w-[560px] lg:max-w-[650px]"
             width={1200}
             height={1200}
