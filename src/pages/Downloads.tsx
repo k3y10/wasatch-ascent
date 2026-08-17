@@ -35,7 +35,7 @@ const DownloadAction = ({ href, label }: { href?: string; label: string }) => {
   if (!href) {
     return (
       <Button disabled variant="outline" className="w-full justify-center">
-        Pilot build pending
+        Build in testing
       </Button>
     );
   }
@@ -69,11 +69,11 @@ const Downloads = () => {
                   TerraSatch Edge<span className="text-primary">.</span>
                 </h1>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                  Install the local field runtime that connects authorized radios, SDRs, GPS, sensors, and other edge hardware to TerraSatch.
+                  Install TerraSatch Edge on the field computer that connects radios, SDRs, GPS, sensors, and other hardware to TerraSatch.
                 </p>
               </div>
               <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-right">
-                Edge pairs this machine to <span className="text-foreground">api.terrasatch.com</span>, reports hardware health, and receives approved configuration without changing how crews communicate.
+                Once paired, Edge stays connected to <span className="text-foreground">api.terrasatch.com</span>, reports device health, and pulls the site&apos;s approved configuration.
               </p>
             </div>
           </div>
@@ -87,7 +87,7 @@ const Downloads = () => {
                   Choose your environment<span className="text-primary">.</span>
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  We highlight the platform detected in this browser, but you can download any build for a separate field machine.
+                  The detected platform is highlighted. Choose another build when preparing a different field computer.
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
@@ -100,7 +100,7 @@ const Downloads = () => {
                 <Laptop className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">Windows</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Windows 10/11 x64. Standalone installer with the TerraSatch Edge runtime, Satchy branding, RTL-SDR tools, and background service.
+                  Windows 10/11 x64. Installs TerraSatch Edge, the background service, and RTL-SDR support for compatible field hardware.
                 </p>
                 <div className="mt-7">
                   <DownloadAction href={releaseUrls.windowsX64} label={`Download v${EDGE_VERSION} .EXE`} />
@@ -122,7 +122,7 @@ const Downloads = () => {
                 <Apple className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">macOS</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Native package builds for Apple Silicon and Intel Macs using the same Edge core.
+                  Native package for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
                 </p>
                 <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                   <DownloadAction href={releaseUrls.macosArm64} label="Apple Silicon" />
@@ -135,7 +135,7 @@ const Downloads = () => {
                 <Terminal className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">Linux</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Debian/Ubuntu packages for rugged PCs, embedded field nodes, and ARM64 hardware.
+                  Debian/Ubuntu packages for AMD64 and ARM64 field computers, rugged PCs, and small edge nodes.
                 </p>
                 <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                   <DownloadAction href={releaseUrls.linuxAmd64} label="AMD64 .deb" />
@@ -150,21 +150,21 @@ const Downloads = () => {
                 <Radio className="size-6 text-primary" aria-hidden="true" />
                 <h3 className="mt-4 font-display text-2xl font-bold uppercase">TerraListen</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  The radio-intelligence capability that turns authorized field traffic into a mapped, reviewable operational record.
+                  Turns authorized radio traffic into a mapped, reviewable operational record for the team.
                 </p>
               </div>
               <div>
                 <CheckCircle2 className="size-6 text-primary" aria-hidden="true" />
                 <h3 className="mt-4 font-display text-2xl font-bold uppercase">Satchy</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  TerraSatch&apos;s Sasquatch AI agent. Satchy is the agent layer that works with reviewed field context from TerraListen and the wider platform.
+                  The TerraSatch field assistant, working from reviewed TerraListen observations and other approved operational context.
                 </p>
               </div>
               <div>
                 <ShieldCheck className="size-6 text-primary" aria-hidden="true" />
                 <h3 className="mt-4 font-display text-2xl font-bold uppercase">Edge</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  The local runtime on the field computer. It handles pairing, hardware inventory, heartbeat, configuration, and future radio adapters.
+                  Runs on the field computer and handles pairing, hardware status, heartbeat, configuration, and radio adapters.
                 </p>
               </div>
             </div>
