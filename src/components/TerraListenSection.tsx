@@ -60,7 +60,7 @@ const TerraListenSection = () => (
         </h2>
         <p className="max-w-xl text-lg leading-relaxed text-frost-dim lg:pb-1">
           Critical field information gets lost between radio, maps, and reports. TerraListen preserves the signal and
-          turns it into one searchable, reviewable record.
+          gives Satchy one searchable, reviewable operational record to work from.
         </p>
       </div>
 
@@ -112,7 +112,7 @@ const TerraListenSection = () => (
             </p>
           </div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">
-            Easy enough for Sasquatch<br />Built for real field crews
+            Satchy · TerraSatch AI agent<br />Built for real field crews
           </p>
         </div>
 
@@ -146,4 +146,3 @@ const TerraListenSection = () => (
 );
 
 export default TerraListenSection;
-

@@ -14,6 +14,7 @@ const navItems = [
   { label: "Terrain", href: "/#terrain-intelligence" },
   { label: "Teams", href: "/#use-cases" },
   { label: "Pilot", href: "/#pilot" },
+  { label: "Downloads", href: "/downloads" },
   { label: "Demo", href: "/demos" },
 ];
 
@@ -87,9 +88,9 @@ const Navbar = () => {
 
         <div className="flex shrink-0 items-center gap-1.5">
           {installPrompt ? (
-            <Button variant="outline" size="sm" onClick={handleInstall} className="hidden md:inline-flex">
+            <Button variant="outline" size="sm" onClick={handleInstall} className="hidden xl:inline-flex">
               <Download data-icon="inline-start" />
-              Install
+              Install web app
             </Button>
           ) : null}
           <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
@@ -131,7 +132,7 @@ const Navbar = () => {
             {installPrompt ? (
               <Button variant="outline" onClick={handleInstall} className="w-full">
                 <Download data-icon="inline-start" />
-                Install TerraSatch
+                Install website app
               </Button>
             ) : null}
           </div>
@@ -142,4 +143,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
