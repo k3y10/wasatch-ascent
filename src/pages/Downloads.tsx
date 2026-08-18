@@ -11,12 +11,15 @@ const NATIVE_TEST_VERSION = "0.2.2";
 const WINDOWS_X64_RELEASE_URL =
   "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.1/TerraSatch-Edge-Setup-x64.exe";
 const WINDOWS_X64_SHA256 = "1369FC168892C29DCC850228D5ABCD8180132E7305BE46293B87A543C8F871E0";
+const LINUX_AMD64_RELEASE_URL =
+  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/linux/v0.2.2/terrasatch-edge_0.2.2_amd64.deb";
+const LINUX_AMD64_SHA256 = "f63d407d87a3caeb85f2dccef6cda3033e10dbdd34c08f413f577205356c520a";
 
 const releaseUrls = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) || WINDOWS_X64_RELEASE_URL,
   macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined,
   macosX64: import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined,
-  linuxAmd64: import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined,
+  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) || LINUX_AMD64_RELEASE_URL,
   linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_URL as string | undefined,
 };
 
@@ -24,7 +27,7 @@ const releaseChecksums = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) || WINDOWS_X64_SHA256,
   macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_SHA256 as string | undefined,
   macosX64: import.meta.env.VITE_EDGE_MACOS_X64_SHA256 as string | undefined,
-  linuxAmd64: import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined,
+  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) || LINUX_AMD64_SHA256,
   linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_SHA256 as string | undefined,
 };
 
