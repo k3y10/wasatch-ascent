@@ -14,6 +14,7 @@ const navItems = [
   { label: "Terrain", href: "/#terrain-intelligence" },
   { label: "Teams", href: "/#use-cases" },
   { label: "Pilot", href: "/#pilot" },
+  { label: "API", href: "/api" },
   { label: "Downloads", href: "/downloads" },
   { label: "Demo", href: "/demos" },
 ];
@@ -78,7 +79,7 @@ const Navbar = () => {
           </div>
         </a>
 
-        <div className="hidden min-w-0 flex-1 items-center justify-center gap-5 lg:flex">
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-4 lg:flex xl:gap-5">
           {navItems.map((item) => (
             <a key={item.label} href={item.href} className="whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               {item.label}
