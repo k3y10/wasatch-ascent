@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
 import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
+import APISection from "@/components/APISection";
 import PricingEstimator from "@/components/PricingEstimator";
 import PilotSection from "@/components/PilotSection";
 import DocumentsSection from "@/components/DocumentsSection";
@@ -22,6 +23,8 @@ const Index = () => {
       <div className="amber-line" />
       <ScrollReveal><TerrainIntelligenceSection /></ScrollReveal>
       <div className="amber-line" />
+      <ScrollReveal><APISection /></ScrollReveal>
+      <div className="amber-line" />
       <ScrollReveal><PricingEstimator /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><PilotSection /></ScrollReveal>
@@ -37,4 +40,3 @@ const Index = () => {
 };
 
 export default Index;
-
