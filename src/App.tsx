@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+const API = lazy(() => import("./pages/API.tsx"));
 const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
 const Demos = lazy(() => import("./pages/Demos.tsx"));
 const Downloads = lazy(() => import("./pages/Downloads.tsx"));
@@ -34,6 +35,7 @@ const App = () => (
         <Suspense fallback={<RouteLoading />}>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/api" element={<API />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/demo-access" element={<DemoAccess />} />
             <Route
