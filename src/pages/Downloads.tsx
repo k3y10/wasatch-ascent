@@ -4,21 +4,31 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const EDGE_VERSION = "0.2.1";
+const WINDOWS_VERSION = "0.2.1";
+const LINUX_AMD64_VERSION = "0.2.2";
+const NATIVE_TEST_VERSION = "0.2.2";
+
 const WINDOWS_X64_RELEASE_URL =
   "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.1/TerraSatch-Edge-Setup-x64.exe";
 const WINDOWS_X64_SHA256 = "1369FC168892C29DCC850228D5ABCD8180132E7305BE46293B87A543C8F871E0";
+const LINUX_AMD64_RELEASE_URL =
+  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/linux/v0.2.2/terrasatch-edge_0.2.2_amd64.deb";
+const LINUX_AMD64_SHA256 = "f63d407d87a3caeb85f2dccef6cda3033e10dbdd34c08f413f577205356c520a";
 
 const releaseUrls = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) || WINDOWS_X64_RELEASE_URL,
   macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined,
   macosX64: import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined,
-  linuxAmd64: import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined,
+  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) || LINUX_AMD64_RELEASE_URL,
   linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_URL as string | undefined,
 };
 
 const releaseChecksums = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) || WINDOWS_X64_SHA256,
+  macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_SHA256 as string | undefined,
+  macosX64: import.meta.env.VITE_EDGE_MACOS_X64_SHA256 as string | undefined,
+  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) || LINUX_AMD64_SHA256,
+  linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_SHA256 as string | undefined,
 };
 
 type Platform = "windows" | "macos" | "linux" | "unknown";
@@ -31,11 +41,19 @@ const detectPlatform = (): Platform => {
   return "unknown";
 };
 
-const DownloadAction = ({ href, label }: { href?: string; label: string }) => {
+const DownloadAction = ({
+  href,
+  label,
+  pendingLabel = "Build in testing",
+}: {
+  href?: string;
+  label: string;
+  pendingLabel?: string;
+}) => {
   if (!href) {
     return (
       <Button disabled variant="outline" className="w-full justify-center">
-        Build in testing
+        {pendingLabel}
       </Button>
     );
   }
@@ -91,7 +109,7 @@ const Downloads = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Windows v{EDGE_VERSION} available
+                Windows v{WINDOWS_VERSION} · Linux AMD64 v{LINUX_AMD64_VERSION}
               </p>
             </div>
 
@@ -103,16 +121,12 @@ const Downloads = () => {
                   Windows 10/11 x64. Installs TerraSatch Edge, the background service, and RTL-SDR support for compatible field hardware.
                 </p>
                 <div className="mt-7">
-                  <DownloadAction href={releaseUrls.windowsX64} label={`Download v${EDGE_VERSION} .EXE`} />
+                  <DownloadAction href={releaseUrls.windowsX64} label={`Download v${WINDOWS_VERSION} .EXE`} />
                 </div>
                 {releaseUrls.windowsX64 ? (
                   <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
-                    <p className="uppercase tracking-[0.14em] text-primary">Windows x64 · v{EDGE_VERSION}</p>
-                    {releaseChecksums.windowsX64 ? (
-                      <p className="break-all">SHA-256 {releaseChecksums.windowsX64}</p>
-                    ) : (
-                      <p>Checksum pending publication.</p>
-                    )}
+                    <p className="uppercase tracking-[0.14em] text-primary">Windows x64 · v{WINDOWS_VERSION}</p>
+                    {releaseChecksums.windowsX64 ? <p className="break-all">SHA-256 {releaseChecksums.windowsX64}</p> : null}
                   </div>
                 ) : null}
                 {platform === "windows" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
@@ -122,11 +136,11 @@ const Downloads = () => {
                 <Apple className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">macOS</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Native package for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
+                  Native packages for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
                 </p>
                 <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction href={releaseUrls.macosArm64} label="Apple Silicon" />
-                  <DownloadAction href={releaseUrls.macosX64} label="Intel" />
+                  <DownloadAction href={releaseUrls.macosArm64} label={`v${NATIVE_TEST_VERSION} Apple Silicon`} />
+                  <DownloadAction href={releaseUrls.macosX64} label={`v${NATIVE_TEST_VERSION} Intel`} />
                 </div>
                 {platform === "macos" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
               </article>
@@ -138,8 +152,20 @@ const Downloads = () => {
                   Debian/Ubuntu packages for AMD64 and ARM64 field computers, rugged PCs, and small edge nodes.
                 </p>
                 <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction href={releaseUrls.linuxAmd64} label="AMD64 .deb" />
-                  <DownloadAction href={releaseUrls.linuxArm64} label="ARM64 .deb" />
+                  <DownloadAction
+                    href={releaseUrls.linuxAmd64}
+                    label={`Download v${LINUX_AMD64_VERSION} .deb`}
+                    pendingLabel="Validated · upload pending"
+                  />
+                  <DownloadAction href={releaseUrls.linuxArm64} label={`v${NATIVE_TEST_VERSION} ARM64 .deb`} />
+                </div>
+                <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
+                  <p className="uppercase tracking-[0.14em] text-primary">AMD64 · v{LINUX_AMD64_VERSION} · validated</p>
+                  {releaseUrls.linuxAmd64 && releaseChecksums.linuxAmd64 ? (
+                    <p className="break-all">SHA-256 {releaseChecksums.linuxAmd64}</p>
+                  ) : (
+                    <p>Public artifact and checksum pending publication.</p>
+                  )}
                 </div>
                 {platform === "linux" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
               </article>
@@ -171,7 +197,7 @@ const Downloads = () => {
 
             <div className="mt-14 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Windows v{EDGE_VERSION} is the current public pilot build. The published SHA-256 above identifies the exact validated installer. Windows may show a SmartScreen warning until production code signing is added.
+                Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} have completed platform validation. Published checksums identify the exact downloadable artifacts. macOS and Linux ARM64 remain in native testing.
               </p>
             </div>
           </div>
