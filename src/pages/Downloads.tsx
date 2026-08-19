@@ -6,28 +6,35 @@ import { Button } from "@/components/ui/button";
 
 const WINDOWS_VERSION = "0.2.1";
 const LINUX_AMD64_VERSION = "0.2.2";
+const MACOS_ARM64_VERSION = "0.2.2";
 const MACOS_X64_VERSION = "0.2.2";
 const NATIVE_TEST_VERSION = "0.2.2";
 
 const WINDOWS_X64_RELEASE_URL =
   "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.1/TerraSatch-Edge-Setup-x64.exe";
 const WINDOWS_X64_SHA256 = "1369FC168892C29DCC850228D5ABCD8180132E7305BE46293B87A543C8F871E0";
+const MACOS_ARM64_RELEASE_URL =
+  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-arm64.pkg";
+const MACOS_ARM64_SHA256 = "15C2461CAA7D18D4A91ADD773541C4357880DBEE03FEC7C8B360BA1BC598DF87";
+const MACOS_X64_RELEASE_URL =
+  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-x64.pkg";
+const MACOS_X64_SHA256 = "ADAFC801978A6319A5BADF0117D8F9312807B9EE5977D8F3ECEE33FBE2F8DCAF";
 const LINUX_AMD64_RELEASE_URL =
   "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/linux/v0.2.2/terrasatch-edge_0.2.2_amd64.deb";
 const LINUX_AMD64_SHA256 = "f63d407d87a3caeb85f2dccef6cda3033e10dbdd34c08f413f577205356c520a";
 
 const releaseUrls = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) || WINDOWS_X64_RELEASE_URL,
-  macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined,
-  macosX64: import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined,
+  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined) || MACOS_ARM64_RELEASE_URL,
+  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined) || MACOS_X64_RELEASE_URL,
   linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) || LINUX_AMD64_RELEASE_URL,
   linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_URL as string | undefined,
 };
 
 const releaseChecksums = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) || WINDOWS_X64_SHA256,
-  macosArm64: import.meta.env.VITE_EDGE_MACOS_ARM64_SHA256 as string | undefined,
-  macosX64: import.meta.env.VITE_EDGE_MACOS_X64_SHA256 as string | undefined,
+  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_SHA256 as string | undefined) || MACOS_ARM64_SHA256,
+  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_SHA256 as string | undefined) || MACOS_X64_SHA256,
   linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) || LINUX_AMD64_SHA256,
   linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_SHA256 as string | undefined,
 };
@@ -110,7 +117,7 @@ const Downloads = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Windows v{WINDOWS_VERSION} · Linux AMD64 v{LINUX_AMD64_VERSION} · macOS Intel pilot v{MACOS_X64_VERSION}
+                Windows v{WINDOWS_VERSION} · Linux AMD64 v{LINUX_AMD64_VERSION} · macOS ARM64 / Intel pilot v{MACOS_ARM64_VERSION}
               </p>
             </div>
 
@@ -137,35 +144,27 @@ const Downloads = () => {
                 <Apple className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">macOS</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Native pilot packages for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
+                  Controlled pilot packages for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
                 </p>
                 <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                   <DownloadAction
                     href={releaseUrls.macosArm64}
-                    label={`v${NATIVE_TEST_VERSION} Apple Silicon`}
-                    pendingLabel="Apple Silicon · native testing"
+                    label={`Download v${MACOS_ARM64_VERSION} Apple Silicon .pkg`}
+                    pendingLabel="Apple Silicon · package unavailable"
                   />
                   <DownloadAction
                     href={releaseUrls.macosX64}
                     label={`Download v${MACOS_X64_VERSION} Intel .pkg`}
-                    pendingLabel="Intel pilot · package upload pending"
+                    pendingLabel="Intel · package unavailable"
                   />
                 </div>
                 <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
-                  <p className="uppercase tracking-[0.14em] text-primary">
-                    Intel x64 · v{MACOS_X64_VERSION} · {releaseUrls.macosX64 ? "controlled pilot" : "release slot ready"}
-                  </p>
-                  {releaseUrls.macosX64 ? (
-                    releaseChecksums.macosX64 ? (
-                      <p className="break-all">SHA-256 {releaseChecksums.macosX64}</p>
-                    ) : (
-                      <p>Checksum publication pending for this pilot package.</p>
-                    )
-                  ) : (
-                    <p>The download activates when the exact .pkg URL and SHA-256 are published.</p>
-                  )}
+                  <p className="uppercase tracking-[0.14em] text-primary">Apple Silicon ARM64 · v{MACOS_ARM64_VERSION} · controlled pilot</p>
+                  {releaseChecksums.macosArm64 ? <p className="break-all">SHA-256 {releaseChecksums.macosArm64}</p> : null}
+                  <p className="uppercase tracking-[0.14em] text-primary">Intel x64 · v{MACOS_X64_VERSION} · controlled pilot</p>
+                  {releaseChecksums.macosX64 ? <p className="break-all">SHA-256 {releaseChecksums.macosX64}</p> : null}
                   <p>
-                    Controlled pilot builds may require manual approval in macOS until Developer ID signing and notarization are completed.
+                    These pilot packages are unsigned and may require manual approval in macOS until Developer ID signing and notarization are completed.
                   </p>
                 </div>
                 {platform === "macos" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
@@ -223,7 +222,7 @@ const Downloads = () => {
 
             <div className="mt-14 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} have completed platform validation. Published checksums identify the exact downloadable artifacts. macOS Intel v{MACOS_X64_VERSION} is prepared for controlled pilot publication once its exact package URL and SHA-256 are available. Apple Silicon and Linux ARM64 remain in native testing.
+                Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} have completed platform validation. macOS Apple Silicon and Intel v{MACOS_ARM64_VERSION} have completed automated native package build and verification and are available as controlled pilot packages. Published checksums identify the exact downloadable artifacts. Linux ARM64 remains in native testing.
               </p>
             </div>
           </div>
