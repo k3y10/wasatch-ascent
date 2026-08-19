@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const WINDOWS_VERSION = "0.2.1";
 const LINUX_AMD64_VERSION = "0.2.2";
+const MACOS_X64_VERSION = "0.2.2";
 const NATIVE_TEST_VERSION = "0.2.2";
 
 const WINDOWS_X64_RELEASE_URL =
@@ -109,7 +110,7 @@ const Downloads = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Windows v{WINDOWS_VERSION} · Linux AMD64 v{LINUX_AMD64_VERSION}
+                Windows v{WINDOWS_VERSION} · Linux AMD64 v{LINUX_AMD64_VERSION} · macOS Intel pilot v{MACOS_X64_VERSION}
               </p>
             </div>
 
@@ -136,11 +137,36 @@ const Downloads = () => {
                 <Apple className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">macOS</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Native packages for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
+                  Native pilot packages for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
                 </p>
                 <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction href={releaseUrls.macosArm64} label={`v${NATIVE_TEST_VERSION} Apple Silicon`} />
-                  <DownloadAction href={releaseUrls.macosX64} label={`v${NATIVE_TEST_VERSION} Intel`} />
+                  <DownloadAction
+                    href={releaseUrls.macosArm64}
+                    label={`v${NATIVE_TEST_VERSION} Apple Silicon`}
+                    pendingLabel="Apple Silicon · native testing"
+                  />
+                  <DownloadAction
+                    href={releaseUrls.macosX64}
+                    label={`Download v${MACOS_X64_VERSION} Intel .pkg`}
+                    pendingLabel="Intel pilot · package upload pending"
+                  />
+                </div>
+                <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
+                  <p className="uppercase tracking-[0.14em] text-primary">
+                    Intel x64 · v{MACOS_X64_VERSION} · {releaseUrls.macosX64 ? "controlled pilot" : "release slot ready"}
+                  </p>
+                  {releaseUrls.macosX64 ? (
+                    releaseChecksums.macosX64 ? (
+                      <p className="break-all">SHA-256 {releaseChecksums.macosX64}</p>
+                    ) : (
+                      <p>Checksum publication pending for this pilot package.</p>
+                    )
+                  ) : (
+                    <p>The download activates when the exact .pkg URL and SHA-256 are published.</p>
+                  )}
+                  <p>
+                    Controlled pilot builds may require manual approval in macOS until Developer ID signing and notarization are completed.
+                  </p>
                 </div>
                 {platform === "macos" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
               </article>
@@ -197,7 +223,7 @@ const Downloads = () => {
 
             <div className="mt-14 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} have completed platform validation. Published checksums identify the exact downloadable artifacts. macOS and Linux ARM64 remain in native testing.
+                Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} have completed platform validation. Published checksums identify the exact downloadable artifacts. macOS Intel v{MACOS_X64_VERSION} is prepared for controlled pilot publication once its exact package URL and SHA-256 are available. Apple Silicon and Linux ARM64 remain in native testing.
               </p>
             </div>
           </div>
