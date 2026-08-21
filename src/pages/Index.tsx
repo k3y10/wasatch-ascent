@@ -44,11 +44,11 @@ const Index = () => {
       <div className="amber-line" />
       <ScrollReveal><LearnAdaptSection /></ScrollReveal>
       <div className="amber-line" />
-      <ScrollReveal><APISection /></ScrollReveal>
-      <div className="amber-line" />
       <ScrollReveal><PricingEstimator /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><PilotSection /></ScrollReveal>
+      <div className="amber-line" />
+      <ScrollReveal><APISection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><EngagementSection /></ScrollReveal>
       <div className="amber-line" />
