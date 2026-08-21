@@ -10,13 +10,15 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 const navItems = [
-  { label: "TerraListen", href: "/#how-it-works" },
-  { label: "Terrain", href: "/#terrain-intelligence" },
+  { label: "Listen", href: "/#listen" },
+  { label: "Watch", href: "/#watch" },
+  { label: "Learn", href: "/#learn" },
+  { label: "Adapt", href: "/#adapt" },
   { label: "Teams", href: "/#use-cases" },
   { label: "Pilot", href: "/#pilot" },
   { label: "API", href: "/api" },
-  { label: "Downloads", href: "/downloads" },
-  { label: "Demo", href: "/demos" },
+  { label: "Edge", href: "/edge" },
+  { label: "Demo access", href: "/demo-access" },
 ];
 
 const Navbar = () => {
@@ -42,7 +44,7 @@ const Navbar = () => {
   useEffect(() => {
     const closeMenu = () => setIsMobileMenuOpen(false);
     const handleResize = () => {
-      if (window.innerWidth >= 1024) closeMenu();
+      if (window.innerWidth >= 1280) closeMenu();
     };
     window.addEventListener("hashchange", closeMenu);
     window.addEventListener("resize", handleResize);
@@ -74,14 +76,18 @@ const Navbar = () => {
           <div className="min-w-0 leading-none">
             <span className="block whitespace-nowrap font-display text-lg font-bold tracking-wide">TERRASATCH</span>
             <span className="hidden whitespace-nowrap font-mono text-[9px] tracking-[0.2em] text-muted-foreground sm:block">
-              TERRAIN INTELLIGENCE
+              FIELD INTELLIGENCE
             </span>
           </div>
         </a>
 
-        <div className="hidden min-w-0 flex-1 items-center justify-center gap-4 lg:flex xl:gap-5">
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-3 xl:flex 2xl:gap-4">
           {navItems.map((item) => (
-            <a key={item.label} href={item.href} className="whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+            <a
+              key={item.label}
+              href={item.href}
+              className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-primary 2xl:text-sm"
+            >
               {item.label}
             </a>
           ))}
@@ -89,12 +95,12 @@ const Navbar = () => {
 
         <div className="flex shrink-0 items-center gap-1.5">
           {installPrompt ? (
-            <Button variant="outline" size="sm" onClick={handleInstall} className="hidden xl:inline-flex">
+            <Button variant="outline" size="sm" onClick={handleInstall} className="hidden 2xl:inline-flex">
               <Download data-icon="inline-start" />
               Install web app
             </Button>
           ) : null}
-          <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
+          <Button asChild variant="outline" size="sm" className="hidden 2xl:inline-flex">
             <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer">
               Data room
               <ArrowUpRight data-icon="inline-end" />
@@ -106,7 +112,7 @@ const Navbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="xl:hidden"
             onClick={() => setIsMobileMenuOpen((open) => !open)}
             aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMobileMenuOpen}
@@ -117,8 +123,8 @@ const Navbar = () => {
       </div>
 
       {isMobileMenuOpen ? (
-        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-border/50 bg-background/96 p-4 lg:hidden">
-          <div className="container mx-auto flex flex-col gap-2 px-0 sm:px-2">
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-border/50 bg-background/96 p-4 xl:hidden">
+          <div className="container mx-auto grid gap-2 px-0 sm:grid-cols-2 sm:px-2">
             {navItems.map((item) => (
               <Button key={item.label} asChild variant="ghost" className="w-full justify-start">
                 <a href={item.href} onClick={() => setIsMobileMenuOpen(false)}>{item.label}</a>
@@ -131,7 +137,7 @@ const Navbar = () => {
               </a>
             </Button>
             {installPrompt ? (
-              <Button variant="outline" onClick={handleInstall} className="w-full">
+              <Button variant="outline" onClick={handleInstall} className="w-full justify-start">
                 <Download data-icon="inline-start" />
                 Install website app
               </Button>
