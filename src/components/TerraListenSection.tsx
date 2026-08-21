@@ -49,7 +49,7 @@ const useCases = [
 ];
 
 const TerraListenSection = () => (
-  <section id="how-it-works" className="content-auto relative overflow-hidden py-28">
+  <section id="listen" className="content-auto scroll-mt-20 relative overflow-hidden py-28">
     <div className="absolute inset-0 bg-terrain-deep" />
     <div className="absolute inset-0 topo-overlay opacity-35" />
 
