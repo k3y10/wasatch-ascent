@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
 import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
+import LearnAdaptSection from "@/components/LearnAdaptSection";
 import APISection from "@/components/APISection";
 import PricingEstimator from "@/components/PricingEstimator";
 import PilotSection from "@/components/PilotSection";
@@ -14,7 +15,7 @@ import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <AmbientParticles />
       <Navbar />
       <HeroSection />
@@ -22,6 +23,8 @@ const Index = () => {
       <ScrollReveal><TerraListenSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><TerrainIntelligenceSection /></ScrollReveal>
+      <div className="amber-line" />
+      <ScrollReveal><LearnAdaptSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><APISection /></ScrollReveal>
       <div className="amber-line" />
