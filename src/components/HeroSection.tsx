@@ -45,8 +45,7 @@ const CapabilityRail = () => (
         {capabilities.map(({ label, description, icon: Icon }, index) => (
           <article
             key={label}
-            id={label.toLowerCase()}
-            className="scroll-mt-24 border-b border-border/70 py-7 md:px-7 md:odd:border-r xl:border-b-0 xl:border-r xl:odd:border-r xl:first:pl-0 xl:last:border-r-0 xl:last:pr-0"
+            className="border-b border-border/70 py-7 md:px-7 md:odd:border-r xl:border-b-0 xl:border-r xl:odd:border-r xl:first:pl-0 xl:last:border-r-0 xl:last:pr-0"
           >
             <div className="flex items-center justify-between gap-4">
               <Icon className={cn("size-7", index === 0 ? "text-primary" : "text-foreground/55")} aria-hidden="true" />
@@ -93,13 +92,13 @@ const HeroSection = () => (
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
-              <a href="#how-it-works">
+              <a href="#listen">
                 Explore TerraListen
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
-              <a href="#how-it-works">
+              <a href="#listen">
                 See how it works
                 <ArrowDown data-icon="inline-end" />
               </a>
