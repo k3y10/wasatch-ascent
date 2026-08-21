@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { ArrowUpRight, Download, Menu, Moon, Sun, X } from "lucide-react";
 import terrasatchLogo from "@/assets/terrasatch-logo.png";
 import { Button } from "@/components/ui/button";
@@ -9,13 +9,17 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 };
 
-const navItems = [
-  { label: "Listen", href: "/#listen" },
-  { label: "Watch", href: "/#watch" },
-  { label: "Learn", href: "/#learn" },
-  { label: "Adapt", href: "/#adapt" },
-  { label: "Teams", href: "/#use-cases" },
-  { label: "Pilot", href: "/#pilot" },
+type NavItem =
+  | { label: string; section: string; href?: never }
+  | { label: string; href: string; section?: never };
+
+const navItems: NavItem[] = [
+  { label: "Listen", section: "listen" },
+  { label: "Watch", section: "watch" },
+  { label: "Learn", section: "learn" },
+  { label: "Adapt", section: "adapt" },
+  { label: "Teams", section: "use-cases" },
+  { label: "Pilot", section: "pilot" },
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
   { label: "Demo access", href: "/demo-access" },
@@ -68,6 +72,47 @@ const Navbar = () => {
     setInstallPrompt(null);
   };
 
+  const handleSectionNavigation = (event: MouseEvent<HTMLAnchorElement>, section: string) => {
+    setIsMobileMenuOpen(false);
+
+    if (window.location.pathname !== "/") {
+      return;
+    }
+
+    const target = document.getElementById(section);
+    if (!target) return;
+
+    event.preventDefault();
+    window.history.pushState(null, "", `/#${section}`);
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const renderNavLink = (item: NavItem, mobile = false) => {
+    const href = item.section ? `/#${item.section}` : item.href;
+    const onClick = item.section
+      ? (event: MouseEvent<HTMLAnchorElement>) => handleSectionNavigation(event, item.section)
+      : () => setIsMobileMenuOpen(false);
+
+    if (mobile) {
+      return (
+        <Button key={item.label} asChild variant="ghost" className="w-full justify-start">
+          <a href={href} onClick={onClick}>{item.label}</a>
+        </Button>
+      );
+    }
+
+    return (
+      <a
+        key={item.label}
+        href={href}
+        onClick={onClick}
+        className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-primary 2xl:text-sm"
+      >
+        {item.label}
+      </a>
+    );
+  };
+
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/82 backdrop-blur-2xl">
       <div className="container mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
@@ -82,15 +127,7 @@ const Navbar = () => {
         </a>
 
         <div className="hidden min-w-0 flex-1 items-center justify-center gap-3 xl:flex 2xl:gap-4">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-primary 2xl:text-sm"
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) => renderNavLink(item))}
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
@@ -125,11 +162,7 @@ const Navbar = () => {
       {isMobileMenuOpen ? (
         <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-border/50 bg-background/96 p-4 xl:hidden">
           <div className="container mx-auto grid gap-2 px-0 sm:grid-cols-2 sm:px-2">
-            {navItems.map((item) => (
-              <Button key={item.label} asChild variant="ghost" className="w-full justify-start">
-                <a href={item.href} onClick={() => setIsMobileMenuOpen(false)}>{item.label}</a>
-              </Button>
-            ))}
+            {navItems.map((item) => renderNavLink(item, true))}
             <Button asChild variant="outline" className="w-full justify-start">
               <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
                 Data room
