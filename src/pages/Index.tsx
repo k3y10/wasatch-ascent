@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
@@ -14,6 +15,23 @@ import AmbientParticles from "@/components/AmbientParticles";
 import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 const Index = () => {
+  useEffect(() => {
+    const scrollToHash = () => {
+      const section = window.location.hash.replace("#", "");
+      if (!section) return;
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          document.getElementById(section)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    };
+
+    scrollToHash();
+    window.addEventListener("hashchange", scrollToHash);
+    return () => window.removeEventListener("hashchange", scrollToHash);
+  }, []);
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <AmbientParticles />
