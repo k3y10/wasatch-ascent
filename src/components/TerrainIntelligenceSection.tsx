@@ -21,7 +21,7 @@ const terrainInputs = [
 ];
 
 const TerrainIntelligenceSection = () => (
-  <section id="terrain-intelligence" className="content-auto relative overflow-hidden bg-terrain-deep py-28">
+  <section id="watch" className="content-auto scroll-mt-20 relative overflow-hidden bg-terrain-deep py-28">
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
       <div className="grid gap-12 xl:grid-cols-[0.85fr_1.15fr] xl:items-end">
