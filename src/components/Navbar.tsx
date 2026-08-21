@@ -25,6 +25,22 @@ const navItems: NavItem[] = [
   { label: "Demo access", href: "/demo-access" },
 ];
 
+const scrollToSection = (section: string, behavior: ScrollBehavior = "smooth") => {
+  const target = document.getElementById(section);
+  if (!target) return false;
+
+  const nav = document.querySelector("nav");
+  const navHeight = nav?.getBoundingClientRect().height ?? 64;
+  const targetTop = window.scrollY + target.getBoundingClientRect().top - navHeight - 12;
+
+  window.scrollTo({
+    top: Math.max(0, targetTop),
+    behavior,
+  });
+
+  return true;
+};
+
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -50,10 +66,41 @@ const Navbar = () => {
     const handleResize = () => {
       if (window.innerWidth >= 1280) closeMenu();
     };
-    window.addEventListener("hashchange", closeMenu);
+
+    const handleHashNavigation = () => {
+      closeMenu();
+      if (window.location.pathname !== "/" || !window.location.hash) return;
+
+      const section = decodeURIComponent(window.location.hash.slice(1));
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scrollToSection(section, "smooth");
+        });
+      });
+    };
+
+    window.addEventListener("hashchange", handleHashNavigation);
     window.addEventListener("resize", handleResize);
+
+    if (window.location.pathname === "/" && window.location.hash) {
+      const section = decodeURIComponent(window.location.hash.slice(1));
+      const firstFrame = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!scrollToSection(section, "auto")) {
+            window.setTimeout(() => scrollToSection(section, "auto"), 120);
+          }
+        });
+      });
+
+      return () => {
+        cancelAnimationFrame(firstFrame);
+        window.removeEventListener("hashchange", handleHashNavigation);
+        window.removeEventListener("resize", handleResize);
+      };
+    }
+
     return () => {
-      window.removeEventListener("hashchange", closeMenu);
+      window.removeEventListener("hashchange", handleHashNavigation);
       window.removeEventListener("resize", handleResize);
     };
   }, []);
@@ -73,18 +120,25 @@ const Navbar = () => {
   };
 
   const handleSectionNavigation = (event: MouseEvent<HTMLAnchorElement>, section: string) => {
+    event.preventDefault();
     setIsMobileMenuOpen(false);
 
+    const destination = `/#${section}`;
+
     if (window.location.pathname !== "/") {
+      window.location.assign(destination);
       return;
     }
 
-    const target = document.getElementById(section);
-    if (!target) return;
+    if (window.location.hash !== `#${section}`) {
+      window.history.pushState(null, "", destination);
+    } else {
+      window.history.replaceState(null, "", destination);
+    }
 
-    event.preventDefault();
-    window.history.pushState(null, "", `/#${section}`);
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    requestAnimationFrame(() => {
+      scrollToSection(section, "smooth");
+    });
   };
 
   const renderNavLink = (item: NavItem, mobile = false) => {
