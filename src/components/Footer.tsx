@@ -68,11 +68,18 @@ const Footer = () => {
   return (
     <>
       <div className="h-[118px] sm:h-[96px]" aria-hidden="true" />
-      <footer className="fixed inset-x-0 bottom-0 z-40 min-h-[118px] overflow-hidden border-t border-border/60 bg-background/94 shadow-[0_-12px_32px_-22px_hsl(var(--foreground)/0.35)] backdrop-blur-xl sm:min-h-[96px]">
+      <footer className="fixed inset-x-0 bottom-0 z-40 min-h-[118px] overflow-visible border-t border-border/60 bg-background/94 shadow-[0_-12px_32px_-22px_hsl(var(--foreground)/0.35)] backdrop-blur-xl sm:min-h-[96px]">
         <style>{`
-          @keyframes satchy-cross-footer {
-            from { transform: translateX(-72px); }
-            to { transform: translateX(calc(100vw + 72px)); }
+          @keyframes satchy-patrol-position {
+            0%, 2% { transform: translateX(12px); }
+            48%, 52% { transform: translateX(calc(100vw - 82px)); }
+            98%, 100% { transform: translateX(12px); }
+          }
+
+          @keyframes satchy-patrol-facing {
+            0%, 49.9% { transform: scaleX(1); }
+            50%, 99.9% { transform: scaleX(-1); }
+            100% { transform: scaleX(1); }
           }
 
           @keyframes satchy-frame-one {
@@ -95,8 +102,13 @@ const Footer = () => {
           }
 
           .satchy-pixel-runner {
-            animation: satchy-cross-footer 20s linear infinite;
+            animation: satchy-patrol-position 18s linear infinite;
             image-rendering: pixelated;
+            will-change: transform;
+          }
+          .satchy-pixel-facing {
+            animation: satchy-patrol-facing 18s steps(1, end) infinite;
+            transform-origin: center;
           }
           .satchy-pixel-sprite {
             position: relative;
@@ -116,25 +128,28 @@ const Footer = () => {
           .satchy-frame-4 { animation: satchy-frame-four 0.72s steps(1, end) infinite; }
 
           @media (prefers-reduced-motion: reduce) {
-            .satchy-pixel-runner { animation: none !important; transform: translateX(calc(100vw - 92px)); }
+            .satchy-pixel-runner { animation: none !important; transform: translateX(calc(100vw - 82px)); }
+            .satchy-pixel-facing { animation: none !important; transform: scaleX(-1); }
             .satchy-frame { animation: none !important; opacity: 0; }
             .satchy-frame-1 { opacity: 1; }
           }
         `}</style>
 
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-foreground/[0.035]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 overflow-hidden bg-foreground/[0.035]"
           style={{ clipPath: "polygon(0 80%, 9% 54%, 17% 72%, 28% 35%, 39% 70%, 52% 42%, 64% 74%, 78% 28%, 89% 63%, 100% 45%, 100% 100%, 0 100%)" }}
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-primary/[0.035]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-12 overflow-hidden bg-primary/[0.035]"
           style={{ clipPath: "polygon(0 70%, 12% 46%, 24% 74%, 37% 39%, 49% 77%, 62% 48%, 73% 70%, 86% 34%, 100% 62%, 100% 100%, 0 100%)" }}
           aria-hidden="true"
         />
 
-        <div className="satchy-pixel-runner pointer-events-none absolute bottom-0 left-0 z-0" aria-hidden="true">
-          <PixelSatchy />
+        <div className="satchy-pixel-runner pointer-events-none absolute -top-[56px] left-0 z-50" aria-hidden="true">
+          <div className="satchy-pixel-facing">
+            <PixelSatchy />
+          </div>
         </div>
 
         <div className="container relative z-10 mx-auto px-4 py-3 sm:px-6">
