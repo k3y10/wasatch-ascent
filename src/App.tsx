@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound.tsx";
 const API = lazy(() => import("./pages/API.tsx"));
 const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
 const Demos = lazy(() => import("./pages/Demos.tsx"));
-const Downloads = lazy(() => import("./pages/Downloads.tsx"));
+const Edge = lazy(() => import("./pages/Downloads.tsx"));
 const ProtectedDemoRoute = lazy(() => import("./components/ProtectedDemoRoute.tsx"));
 
 const queryClient = new QueryClient();
@@ -36,7 +36,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/api" element={<API />} />
-            <Route path="/downloads" element={<Downloads />} />
+            <Route path="/edge" element={<Edge />} />
+            <Route path="/downloads" element={<Navigate to="/edge" replace />} />
             <Route path="/demo-access" element={<DemoAccess />} />
             <Route
               path="/demos"
