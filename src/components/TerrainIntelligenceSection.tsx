@@ -85,7 +85,7 @@ const TerrainIntelligenceSection = () => (
             it is better evidence, better context, and a clearer handoff for the person accountable for the decision.
           </p>
           <Button asChild variant="outline" className="mt-7">
-            <a href="/demos">
+            <a href="/demo-access">
               View operational examples
               <ArrowRight data-icon="inline-end" />
             </a>
