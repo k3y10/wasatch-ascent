@@ -2,6 +2,7 @@ import { useState } from "react";
 import { LoaderCircle, LockKeyhole, LogOut } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
 import DemoGallerySection from "@/components/DemoGallerySection";
+import IntelligenceActions from "@/components/IntelligenceActions";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -39,27 +40,18 @@ const Demos = () => {
                 <LockKeyhole className="size-5" aria-hidden="true" />
               </div>
               <div>
-                <Badge variant="secondary" className="mb-2">
-                  Authorized demo workspace
-                </Badge>
+                <Badge variant="secondary" className="mb-2">Authorized demo workspace</Badge>
                 <h1 className="font-display text-2xl font-bold">TerraSatch operational demonstrations</h1>
                 <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                  A curated portfolio across avalanche forecasting, terrain intelligence, snow operations,
-                  wildfire, wilderness programs, and expedition workflows. Featured demos are presented
-                  first, with each mission separated into its own operational section.
+                  Curated demonstrations across avalanche forecasting, terrain intelligence, snow operations, wildfire, wilderness programs, and expedition workflows.
                 </p>
               </div>
             </div>
             <Button variant="outline" onClick={handleSignOut} disabled={isSigningOut}>
-              {isSigningOut ? (
-                <LoaderCircle data-icon="inline-start" className="animate-spin" aria-hidden="true" />
-              ) : (
-                <LogOut data-icon="inline-start" aria-hidden="true" />
-              )}
+              {isSigningOut ? <LoaderCircle data-icon="inline-start" className="animate-spin" aria-hidden="true" /> : <LogOut data-icon="inline-start" aria-hidden="true" />}
               {isSigningOut ? "Closing session" : "Sign out"}
             </Button>
           </div>
-
           {signOutError ? (
             <div className="container mx-auto px-6 pb-6">
               <Alert variant="destructive">
@@ -69,6 +61,8 @@ const Demos = () => {
             </div>
           ) : null}
         </section>
+        <Separator />
+        <IntelligenceActions />
         <Separator />
         <DemoGallerySection />
       </main>
