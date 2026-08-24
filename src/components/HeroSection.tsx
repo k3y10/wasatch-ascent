@@ -46,8 +46,8 @@ const HeroSection = () => (
           </div>
           <p className="mt-7 font-mono text-[10px] uppercase tracking-[0.24em] text-slate-400">Listen <span className="text-primary">·</span> Watch <span className="text-primary">·</span> Learn <span className="text-primary">·</span> Adapt</p>
         </div>
-        <div className="relative flex -translate-y-10 justify-center self-center md:-translate-y-16 md:-mr-8 lg:-mr-12">
-          <img src="/terralisten-sasquatch-listening.webp" alt="Satchy TerraSatch Sasquatch AI agent with radio" className="w-full max-w-[390px] object-contain md:max-w-[500px] lg:max-w-[560px]" fetchPriority="high" />
+        <div className="relative flex translate-y-0 justify-center self-center pt-8 md:translate-y-0 md:-mr-8 lg:-mr-12 lg:pt-0">
+          <img src="/terralisten-sasquatch-listening.webp" alt="Satchy TerraSatch Sasquatch AI agent with radio" className="w-full max-w-[360px] object-contain md:max-w-[500px] lg:max-w-[560px]" fetchPriority="high" />
         </div>
       </div>
     </div>
