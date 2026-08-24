@@ -1,6 +1,6 @@
-import { ArrowRight, Camera, Layers3, MapPinned, Radio, Snowflake, Wind } from "lucide-react";
-import fieldOpsBanner from "@/assets/field-ops-banner.jpg";
+import { ArrowRight, Camera, MapPinned, Radio, Snowflake, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import OperationalSnapshot from "@/components/OperationalSnapshot";
 
 const terrainInputs = [
   {
@@ -21,7 +21,7 @@ const terrainInputs = [
 ];
 
 const TerrainIntelligenceSection = () => (
-  <section id="watch" className="content-auto scroll-mt-20 relative overflow-hidden bg-terrain-deep py-28">
+  <section id="watch" className="scroll-mt-20 relative overflow-hidden bg-terrain-deep py-28">
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
       <div className="grid gap-12 xl:grid-cols-[0.85fr_1.15fr] xl:items-end">
@@ -37,41 +37,17 @@ const TerrainIntelligenceSection = () => (
           </p>
         </div>
 
-        <div className="relative min-h-[25rem] overflow-hidden border border-primary/30 bg-terrain-surface shadow-[var(--shadow-elevated)] sm:min-h-[31rem]">
-          <img
-            src={fieldOpsBanner}
-            alt="Backcountry team traveling through representative avalanche terrain"
-            className="absolute inset-0 size-full object-cover"
-            loading="lazy"
-            width={1920}
-            height={1080}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-terrain-deep via-terrain-deep/35 to-terrain-deep/10" />
-          <div className="absolute inset-0 radio-grid" />
-          <div className="absolute inset-x-[17%] bottom-[19%] top-[22%] border border-primary/60 bg-primary/10" aria-hidden="true" />
-          <div className="absolute left-[17%] top-[22%] size-2 -translate-x-1/2 -translate-y-1/2 bg-primary shadow-[0_0_0_5px_hsl(var(--primary)/0.2)]" aria-hidden="true" />
-
-          <div className="absolute left-4 top-4 flex items-center gap-2 border border-primary/40 bg-terrain-deep/90 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-primary">
-            <Layers3 className="size-3.5" aria-hidden="true" /> Example AvyTS terrain cell
-          </div>
-          <div className="absolute left-[22%] top-[28%] border border-border/70 bg-background/90 px-2 py-1 font-mono text-[10px] text-foreground">
-            Cell 12B · NE 38°
-          </div>
-          <div className="absolute bottom-4 left-4 right-4 grid gap-px border border-border/70 bg-border/70 sm:grid-cols-3">
-            <div className="bg-terrain-deep/95 p-3">
-              <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Field signal</p>
-              <p className="mt-1 text-xs text-foreground">Radio observation + snowpit</p>
-            </div>
-            <div className="bg-terrain-deep/95 p-3">
-              <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Terrain model</p>
-              <p className="mt-1 text-xs text-foreground">Slope · aspect · exposure</p>
-            </div>
-            <div className="bg-terrain-deep/95 p-3">
-              <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Regional context</p>
-              <p className="mt-1 text-xs text-foreground">Forecast · weather · observations</p>
-            </div>
-          </div>
-        </div>
+        <OperationalSnapshot
+          src="/showcase/avyts-regional-terrain.webp"
+          alt="AvyTS regional terrain demo showing mapped avalanche regions, a selected Wyoming forecast area, terrain cells, and evidence controls"
+          width={1587}
+          height={947}
+          label="AvyTS · Regional terrain"
+          title="Local evidence in regional context"
+          description="Reviewers can keep provider geometry, mapped observations, cell terrain, and the selected forecast region visible in one operating picture. Illustrative product preview."
+          mediaClassName="aspect-[4/3] sm:aspect-[1587/947]"
+          imageClassName="object-[57%_center] sm:object-center"
+        />
       </div>
 
       <div className="mt-16 grid border-y border-border/70 lg:grid-cols-[0.8fr_1.2fr]">
@@ -125,3 +101,4 @@ const TerrainIntelligenceSection = () => (
 );
 
 export default TerrainIntelligenceSection;
+

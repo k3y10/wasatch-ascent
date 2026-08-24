@@ -12,6 +12,7 @@ import {
   Trees,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import OperationalSnapshot from "@/components/OperationalSnapshot";
 
 const learnInputs = [
   { title: "Calls + observations", description: "Keep authorized radio calls, field notes, and structured observations connected to their source and location.", icon: History },
@@ -33,7 +34,7 @@ const useCases = [
 ];
 
 const LearnAdaptSection = () => (
-  <div className="content-auto">
+  <div>
     <section id="learn" className="scroll-mt-20 border-y border-border/60 bg-background py-24 sm:py-28">
       <div className="container mx-auto px-6">
         <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
@@ -56,6 +57,19 @@ const LearnAdaptSection = () => (
             </article>
           ))}
         </div>
+
+        <OperationalSnapshot
+          src="/showcase/terralisten-salt-lake.webp"
+          alt="TerraListen Salt Lake demo showing a selected cell observation, mapped evidence, terrain context, and source-linked event records"
+          width={1586}
+          height={874}
+          label="Operational memory · Salt Lake"
+          title="The record stays attached to place"
+          description="A selected observation remains connected to its cell, elevation, aspect, trigger, problem, source, and surrounding forecast context. This is an illustrative integration preview."
+          className="mt-14"
+          mediaClassName="aspect-[4/3] sm:aspect-[1586/874]"
+          imageClassName="object-[54%_center] sm:object-center"
+        />
       </div>
     </section>
 
@@ -73,6 +87,20 @@ const LearnAdaptSection = () => (
             TerraSatch prepares reviewable alerts, briefings, handoffs, and reports for approved human action. It supports the operator responsible for the decision; it does not replace them.
           </p>
         </div>
+
+        <OperationalSnapshot
+          src="/showcase/wildfire-incident-intelligence.webp"
+          alt="Wildfire incident intelligence demo showing incident context, weather, radio-linked hex cells, and UAS cell telemetry"
+          width={1486}
+          height={883}
+          label="Adapt · Wildfire operations"
+          title="The same field loop, beyond avalanche work"
+          description="Incident context, authorized radio input, weather, and local cells can be assembled into one reviewable operating picture before a team publishes or acts. Demo data is illustrative."
+          className="mt-14"
+          mediaClassName="aspect-[4/3] sm:aspect-[1486/883]"
+          imageClassName="object-[50%_center] sm:object-center"
+        />
+
         <div className="mt-14 grid border-y border-border/70 md:grid-cols-3">
           {adaptOutputs.map(({ title, description, icon: Icon }) => (
             <article key={title} className="border-b border-border/70 py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0">
@@ -126,3 +154,4 @@ const LearnAdaptSection = () => (
 );
 
 export default LearnAdaptSection;
+

@@ -1,5 +1,5 @@
 import { AudioLines, FileCheck2, Map, Radio } from "lucide-react";
-import TerraListenConsole from "@/components/TerraListenConsole";
+import OperationalSnapshot from "@/components/OperationalSnapshot";
 
 const workflow = [
   { label: "Listen", description: "Capture authorized radio and field input without changing how crews communicate.", icon: Radio },
@@ -9,7 +9,7 @@ const workflow = [
 ];
 
 const TerraListenSection = () => (
-  <section id="listen" className="content-auto scroll-mt-20 relative overflow-hidden py-28">
+  <section id="listen" className="scroll-mt-20 relative overflow-hidden py-28">
     <div className="absolute inset-0 bg-terrain-deep" />
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
@@ -52,10 +52,22 @@ const TerraListenSection = () => (
             Sample radio events become an accountable timeline, linked locations, and a review-ready report.
           </p>
         </div>
-        <div className="mt-8"><TerraListenConsole /></div>
+        <OperationalSnapshot
+          src="/showcase/terralisten-vail-radio.webp"
+          alt="TerraListen Vail Pass demo with a terrain-cell map, radio transcript, extracted wind-slab observation, and forecast review action"
+          width={1585}
+          height={843}
+          label="TerraListen + AvyTS · Vail Pass"
+          title="One call, mapped and reviewable"
+          description="A radio report becomes a source-linked transcript, a structured field observation, a terrain-cell signal, and a clear handoff to forecast review. This is an illustrative product preview."
+          className="mt-8"
+          mediaClassName="aspect-[4/3] sm:aspect-[1585/843]"
+          imageClassName="object-[61%_center] sm:object-center"
+        />
       </div>
     </div>
   </section>
 );
 
 export default TerraListenSection;
+

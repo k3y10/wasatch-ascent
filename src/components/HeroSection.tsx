@@ -110,7 +110,7 @@ const HeroSection = () => (
           </p>
         </div>
 
-        <div className="relative -mb-14 flex self-end justify-center md:-mr-10 lg:-mr-16">
+        <div className="relative -mb-14 flex -translate-y-2 self-end justify-center sm:-translate-y-4 md:-mr-10 md:-translate-y-8 lg:-mr-16 lg:-translate-y-10">
           <img
             src="/terralisten-sasquatch-listening.png"
             alt="Satchy, TerraSatch's Sasquatch AI agent, listening to a field radio"
@@ -128,3 +128,4 @@ const HeroSection = () => (
 );
 
 export default HeroSection;
+
