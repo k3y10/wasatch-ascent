@@ -11,7 +11,7 @@ const navItems = [
   { label: "Teams", href: "/#use-cases" },
   { label: "Pilot", href: "/#pilot" },
   { label: "API", href: "/api" },
-  { label: "Downloads", href: "/downloads" },
+  { label: "Edge", href: "/edge" },
   { label: "Demo", href: "/demos" },
 ];
 
