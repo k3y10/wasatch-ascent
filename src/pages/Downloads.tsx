@@ -4,15 +4,15 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const WINDOWS_VERSION = "0.2.1";
+const WINDOWS_VERSION = "0.2.2";
 const LINUX_AMD64_VERSION = "0.2.2";
 const MACOS_ARM64_VERSION = "0.2.2";
 const MACOS_X64_VERSION = "0.2.2";
 const NATIVE_TEST_VERSION = "0.2.2";
 
 const WINDOWS_X64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.1/TerraSatch-Edge-Setup-x64.exe";
-const WINDOWS_X64_SHA256 = "1369FC168892C29DCC850228D5ABCD8180132E7305BE46293B87A543C8F871E0";
+  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.2/TerraSatch-Edge-Setup-x64.exe";
+const WINDOWS_X64_SHA256 = "C5AACBA86EBFE7F69F64A094787DA785CC93CEB5FCE7D3A69B0A2FD28F3092DC";
 const MACOS_ARM64_RELEASE_URL =
   "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-arm64.pkg";
 const MACOS_ARM64_SHA256 = "15C2461CAA7D18D4A91ADD773541C4357880DBEE03FEC7C8B360BA1BC598DF87";
