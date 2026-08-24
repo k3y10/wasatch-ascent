@@ -48,10 +48,52 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           {installPrompt && <Button variant="outline" size="sm" onClick={handleInstall}><Download /> Install</Button>}
           <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex"><a href="https://data.terrasatch.com" target="_blank" rel="noreferrer">Data room <ArrowUpRight /></a></Button>
-          <Button variant="ghost" size="icon" onClick={toggleTheme}>{theme === "dark" ? <Sun /> : <Moon />}</Button>
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>{isMobileMenuOpen ? <X /> : <Menu />}</Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          >
+            {theme === "dark" ? <Sun /> : <Moon />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-controls="mobile-navigation"
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X /> : <Menu />}
+          </Button>
         </div>
       </div>
+      {isMobileMenuOpen ? (
+        <div id="mobile-navigation" className="border-t border-border/50 bg-background/96 backdrop-blur-2xl lg:hidden">
+          <div className="container mx-auto grid gap-1 px-4 py-3 sm:px-6">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="rounded-md px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+            <a
+              href="https://data.terrasatch.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary sm:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Data room <ArrowUpRight className="ml-1 inline size-3.5" />
+            </a>
+          </div>
+        </div>
+      ) : null}
     </nav>
   );
 };
