@@ -36,7 +36,7 @@ const Navbar = () => {
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/82 backdrop-blur-2xl">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         <a href="/" className="flex items-center gap-3" aria-label="TerraSatch home">
-          <img src="/terrasatch-logo.webp" alt="Satchy" className="size-10 object-contain" />
+          <img src="/terralisten-sasquatch.png" alt="Satchy" className="size-10 object-contain" />
           <div>
             <span className="block font-display text-lg font-bold tracking-wide">TERRASATCH</span>
             <span className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground">LISTEN · WATCH · LEARN · ADAPT</span>
