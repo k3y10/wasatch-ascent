@@ -1,6 +1,5 @@
 import { MouseEvent, useEffect, useState } from "react";
 import { ArrowUpRight, Download, Menu, Moon, Sun, X } from "lucide-react";
-import terrasatchLogo from "@/assets/terrasatch-logo.png";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/use-theme";
 
@@ -171,7 +170,7 @@ const Navbar = () => {
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/82 backdrop-blur-2xl">
       <div className="container mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
         <a href="/" className="flex min-w-0 items-center gap-3" aria-label="TerraSatch home">
-          <img src={terrasatchLogo} alt="" className="size-10 rounded-lg" />
+          <img src="/terrasatch-logo.png" alt="" className="size-10 rounded-lg" width={1254} height={1254} />
           <div className="min-w-0 leading-none">
             <span className="block whitespace-nowrap font-display text-lg font-bold tracking-wide">TERRASATCH</span>
             <span className="hidden whitespace-nowrap font-mono text-[9px] tracking-[0.2em] text-muted-foreground sm:block">

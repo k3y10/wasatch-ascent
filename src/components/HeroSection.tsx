@@ -112,11 +112,11 @@ const HeroSection = () => (
 
         <div className="relative -mb-14 flex self-end justify-center md:-mr-10 lg:-mr-16">
           <img
-            src="/terralisten-sasquatch-listening.webp"
+            src="/terralisten-sasquatch-listening.png"
             alt="Satchy, TerraSatch's Sasquatch AI agent, listening to a field radio"
             className="w-full max-w-[390px] object-contain md:max-w-[560px] lg:max-w-[650px]"
-            width={1200}
-            height={1200}
+            width={1254}
+            height={1254}
             fetchPriority="high"
           />
         </div>
