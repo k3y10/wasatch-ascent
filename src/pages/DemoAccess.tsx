@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, KeyRound, LoaderCircle, LockKeyhole, ShieldCheck } from "lucide-react";
-import terrasatchLogo from "@/assets/terrasatch-logo.png";
 import AmbientParticles from "@/components/AmbientParticles";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -83,7 +82,7 @@ const DemoAccess = () => {
       <header className="relative z-20">
         <div className="container mx-auto flex h-20 items-center justify-between px-6">
           <Link to="/" className="flex items-center gap-3" aria-label="TerraSatch home">
-            <img src={terrasatchLogo} alt="" className="size-10 rounded-lg" />
+            <img src="/terrasatch-logo.png" alt="" className="size-10 rounded-lg" width={1254} height={1254} />
             <div>
               <span className="font-display block text-sm font-bold tracking-[0.18em]">TERRASATCH</span>
               <span className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground">
