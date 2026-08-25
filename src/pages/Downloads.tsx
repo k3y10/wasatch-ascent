@@ -1,48 +1,7 @@
-import { Apple, CheckCircle2, Download, Github, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
+import { Apple, CheckCircle2, Laptop, LockKeyhole, Radio, ShieldCheck, Terminal } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
-
-const EDGE_CURRENT_VERSION = "0.2.3";
-const WINDOWS_PUBLISHED_VERSION = "0.2.2";
-const LINUX_AMD64_VERSION = "0.2.2";
-const MACOS_ARM64_VERSION = "0.2.2";
-const MACOS_X64_VERSION = "0.2.2";
-const NATIVE_TEST_VERSION = "0.2.2";
-
-const EDGE_SOURCE_URL = "https://github.com/k3y10/terrasatch-edge";
-const EDGE_RELEASE_CHECKLIST_URL =
-  "https://github.com/k3y10/terrasatch-edge/blob/main/docs/PUBLIC_RELEASE_CHECKLIST.md";
-
-const WINDOWS_X64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.2/TerraSatch-Edge-Setup-x64.exe";
-const WINDOWS_X64_SHA256 = "C5AACBA86EBFE7F69F64A094787DA785CC93CEB5FCE7D3A69B0A2FD28F3092DC";
-const MACOS_ARM64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-arm64.pkg";
-const MACOS_ARM64_SHA256 = "15C2461CAA7D18D4A91ADD773541C4357880DBEE03FEC7C8B360BA1BC598DF87";
-const MACOS_X64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-x64.pkg";
-const MACOS_X64_SHA256 = "ADAFC801978A6319A5BADF0117D8F9312807B9EE5977D8F3ECEE33FBE2F8DCAF";
-const LINUX_AMD64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/linux/v0.2.2/terrasatch-edge_0.2.2_amd64.deb";
-const LINUX_AMD64_SHA256 = "f63d407d87a3caeb85f2dccef6cda3033e10dbdd34c08f413f577205356c520a";
-
-const releaseUrls = {
-  windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) || WINDOWS_X64_RELEASE_URL,
-  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined) || MACOS_ARM64_RELEASE_URL,
-  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined) || MACOS_X64_RELEASE_URL,
-  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) || LINUX_AMD64_RELEASE_URL,
-  linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_URL as string | undefined,
-};
-
-const releaseChecksums = {
-  windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) || WINDOWS_X64_SHA256,
-  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_SHA256 as string | undefined) || MACOS_ARM64_SHA256,
-  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_SHA256 as string | undefined) || MACOS_X64_SHA256,
-  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) || LINUX_AMD64_SHA256,
-  linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_SHA256 as string | undefined,
-};
 
 type Platform = "windows" | "macos" | "linux" | "unknown";
 
@@ -54,43 +13,10 @@ const detectPlatform = (): Platform => {
   return "unknown";
 };
 
-const DownloadAction = ({
-  href,
-  label,
-  pendingLabel = "Coming soon",
-}: {
-  href?: string;
-  label: string;
-  pendingLabel?: string;
-}) => {
-  if (!href) {
-    return (
-      <Button disabled variant="outline" className="w-full justify-center">
-        {pendingLabel}
-      </Button>
-    );
-  }
-
-  return (
-    <Button asChild className="w-full justify-center">
-      <a href={href}>
-        <Download data-icon="inline-start" aria-hidden="true" />
-        {label}
-      </a>
-    </Button>
-  );
-};
-
-const Checksum = ({ label, value }: { label: string; value?: string }) => {
-  if (!value) return null;
-
-  return (
-    <p className="grid gap-1 sm:grid-cols-[110px_1fr]">
-      <span className="uppercase tracking-[0.14em] text-primary">{label}</span>
-      <span className="break-all">{value}</span>
-    </p>
-  );
-};
+const platformCardClass = (active: boolean) =>
+  `relative overflow-hidden rounded-xl border p-6 sm:p-7 ${
+    active ? "border-primary/70 bg-primary/[0.055]" : "border-border/70 bg-card/30"
+  }`;
 
 const Edge = () => {
   const platform = detectPlatform();
@@ -108,32 +34,24 @@ const Edge = () => {
             <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
-                  TerraSatch field runtime · v{EDGE_CURRENT_VERSION}
+                  TerraSatch field runtime · private pilot
                 </p>
                 <h1 className="mt-3 max-w-5xl font-display text-5xl font-bold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
                   Edge<span className="text-primary">.</span>
                 </h1>
                 <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                  Connect radios, SDRs, GPS, sensors, and field computers to TerraSatch without changing the tools crews already carry.
+                  Connect authorized radios, SDRs, GPS, sensors, and field computers to TerraSatch while keeping the field workflow reviewable and operator-led.
                 </p>
               </div>
-              <div className="space-y-4 lg:text-right">
-                <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:ml-auto">
-                  Pick the operating system, install Edge, pair the device, and let the site pull its approved configuration from <span className="text-foreground">api.terrasatch.com</span>.
-                </p>
-                <div className="flex flex-wrap gap-2 lg:justify-end">
-                  <Button asChild variant="outline" size="sm">
-                    <a href={EDGE_SOURCE_URL} target="_blank" rel="noreferrer">
-                      <Github aria-hidden="true" />
-                      Review Edge source
-                    </a>
-                  </Button>
-                  <Button asChild variant="ghost" size="sm">
-                    <a href={EDGE_RELEASE_CHECKLIST_URL} target="_blank" rel="noreferrer">
-                      Release verification
-                    </a>
-                  </Button>
+
+              <div className="rounded-xl border border-primary/25 bg-background/35 p-5 backdrop-blur-sm lg:text-right">
+                <div className="flex items-center gap-2 lg:justify-end">
+                  <LockKeyhole className="size-4 text-primary" aria-hidden="true" />
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">Private distribution</p>
                 </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Edge installers, release notes, source access, and build-specific verification details are distributed directly during approved pilot work rather than published publicly.
+                </p>
               </div>
             </div>
           </div>
@@ -144,127 +62,100 @@ const Edge = () => {
             <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
               <div>
                 <h2 className="font-display text-4xl font-bold uppercase leading-none sm:text-5xl">
-                  Choose your system<span className="text-primary">.</span>
+                  Private releases<span className="text-primary">.</span>
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Your detected platform is highlighted. Versions and checksums stay available under Technical details without crowding the download controls.
+                  Platform support stays visible here, but build numbers, direct download links, checksums, and source-review links remain inside the controlled pilot release process.
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Current Edge v{EDGE_CURRENT_VERSION} · Windows · macOS · Linux
+                Windows · macOS · Linux
               </p>
             </div>
 
             <div className="mt-10 grid gap-5 lg:grid-cols-3">
-              <article className={`relative overflow-hidden rounded-xl border p-6 sm:p-7 ${platform === "windows" ? "border-primary/70 bg-primary/[0.055]" : "border-border/70 bg-card/30"}`}>
+              <article className={platformCardClass(platform === "windows")}>
                 {platform === "windows" ? (
                   <span className="absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Detected</span>
                 ) : null}
                 <Laptop className="size-7 text-primary" aria-hidden="true" />
                 <div className="mt-5 flex items-end justify-between gap-4">
                   <h3 className="font-display text-3xl font-bold uppercase">Windows</h3>
-                  <span className="font-mono text-[10px] text-primary">v{EDGE_CURRENT_VERSION}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-primary">Primary pilot</span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Windows 10/11 x64 with the Edge service and RTL-SDR support for compatible field hardware. v{EDGE_CURRENT_VERSION} adds the current receive-only BCA/FRS radio workflow.
+                  Windows 10/11 x64 for the primary Edge service, compatible SDR hardware, pairing, diagnostics, and current radio-receive workflows.
                 </p>
-                <div className="mt-6">
-                  <DownloadAction href={releaseUrls.windowsX64} label="Download validated Windows installer" />
+                <div className="mt-6 border-t border-border/60 pt-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-foreground">Release access</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    Installer and verification details are issued directly to approved pilot operators.
+                  </p>
                 </div>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                  Current source is v{EDGE_CURRENT_VERSION}. The public signed Windows installer remains v{WINDOWS_PUBLISHED_VERSION} until the exact v{EDGE_CURRENT_VERSION} native build passes signing and clean-machine validation.
-                </p>
-                <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
-                  <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">Technical details</summary>
-                  <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>Current source · v{EDGE_CURRENT_VERSION} · public review</p>
-                    <p>Published installer · v{WINDOWS_PUBLISHED_VERSION} · .exe · validated release</p>
-                    <Checksum label="SHA-256" value={releaseChecksums.windowsX64} />
-                    <a
-                      href={EDGE_SOURCE_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-primary hover:underline"
-                    >
-                      github.com/k3y10/terrasatch-edge
-                    </a>
-                  </div>
-                </details>
               </article>
 
-              <article className={`relative overflow-hidden rounded-xl border p-6 sm:p-7 ${platform === "macos" ? "border-primary/70 bg-primary/[0.055]" : "border-border/70 bg-card/30"}`}>
+              <article className={platformCardClass(platform === "macos")}>
                 {platform === "macos" ? (
                   <span className="absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Detected</span>
                 ) : null}
                 <Apple className="size-7 text-primary" aria-hidden="true" />
                 <div className="mt-5 flex items-end justify-between gap-4">
                   <h3 className="font-display text-3xl font-bold uppercase">macOS</h3>
-                  <span className="font-mono text-[10px] text-muted-foreground">v{MACOS_ARM64_VERSION}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Controlled test</span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Controlled pilot packages for Apple Silicon and Intel Macs with the same pairing and device-health workflow.
+                  Apple Silicon and Intel builds remain part of controlled field testing with the same pairing and device-health model.
                 </p>
-                <div className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction href={releaseUrls.macosArm64} label="Apple Silicon" pendingLabel="Apple Silicon unavailable" />
-                  <DownloadAction href={releaseUrls.macosX64} label="Intel Mac" pendingLabel="Intel unavailable" />
+                <div className="mt-6 border-t border-border/60 pt-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-foreground">Release access</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    Packages are shared only when the pilot hardware and operating environment are confirmed.
+                  </p>
                 </div>
-                <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
-                  <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">Technical details</summary>
-                  <div className="mt-3 space-y-3 font-mono text-[10px] leading-relaxed">
-                    <p>Apple Silicon ARM64 · .pkg · controlled pilot</p>
-                    <Checksum label="ARM64 SHA" value={releaseChecksums.macosArm64} />
-                    <p>Intel x64 · .pkg · controlled pilot</p>
-                    <Checksum label="Intel SHA" value={releaseChecksums.macosX64} />
-                    <p className="font-sans text-xs">
-                      Pilot packages are unsigned and may require manual approval until Developer ID signing and notarization are completed.
-                    </p>
-                  </div>
-                </details>
               </article>
 
-              <article className={`relative overflow-hidden rounded-xl border p-6 sm:p-7 ${platform === "linux" ? "border-primary/70 bg-primary/[0.055]" : "border-border/70 bg-card/30"}`}>
+              <article className={platformCardClass(platform === "linux")}>
                 {platform === "linux" ? (
                   <span className="absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Detected</span>
                 ) : null}
                 <Terminal className="size-7 text-primary" aria-hidden="true" />
                 <div className="mt-5 flex items-end justify-between gap-4">
                   <h3 className="font-display text-3xl font-bold uppercase">Linux</h3>
-                  <span className="font-mono text-[10px] text-muted-foreground">v{LINUX_AMD64_VERSION}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Field test</span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Debian/Ubuntu packages for rugged PCs, field laptops, and small edge nodes.
+                  Debian and Ubuntu targets support rugged PCs, field laptops, and small edge nodes used in controlled validation.
                 </p>
-                <div className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction href={releaseUrls.linuxAmd64} label="AMD64" pendingLabel="AMD64 unavailable" />
-                  <DownloadAction href={releaseUrls.linuxArm64} label="ARM64" pendingLabel="ARM64 testing" />
+                <div className="mt-6 border-t border-border/60 pt-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-foreground">Release access</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    Architecture-specific packages and installation notes stay within the pilot release channel.
+                  </p>
                 </div>
-                <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
-                  <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">Technical details</summary>
-                  <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>AMD64 · .deb · validated release</p>
-                    <Checksum label="AMD64 SHA" value={releaseChecksums.linuxAmd64} />
-                    <p>ARM64 · v{NATIVE_TEST_VERSION} · native testing</p>
-                    <Checksum label="ARM64 SHA" value={releaseChecksums.linuxArm64} />
-                  </div>
-                </details>
               </article>
             </div>
 
-            <div className="mt-10 rounded-xl border border-border/70 bg-card/30 p-6 sm:p-7">
-              <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">Publicly reviewable Edge source</p>
-                  <h3 className="mt-2 font-display text-2xl font-bold uppercase">Review the code before installing.</h3>
-                  <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                    Review TerraSatch Edge v{EDGE_CURRENT_VERSION}, including device pairing, hardware discovery, the receive-only radio path, packaging scripts, tests, and public release controls directly on GitHub.
-                  </p>
-                </div>
-                <Button asChild variant="outline">
-                  <a href={EDGE_SOURCE_URL} target="_blank" rel="noreferrer">
-                    <Github aria-hidden="true" />
-                    github.com/k3y10/terrasatch-edge
-                  </a>
-                </Button>
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              <div className="rounded-xl border border-border/70 bg-card/30 p-6">
+                <ShieldCheck className="size-6 text-primary" aria-hidden="true" />
+                <h3 className="mt-4 font-display text-2xl font-bold uppercase">Validate</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Each pilot build is matched to the intended operating system, hardware profile, and field workflow before distribution.
+                </p>
+              </div>
+              <div className="rounded-xl border border-border/70 bg-card/30 p-6">
+                <CheckCircle2 className="size-6 text-primary" aria-hidden="true" />
+                <h3 className="mt-4 font-display text-2xl font-bold uppercase">Assign</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Access is coordinated directly with the team so the right installer and configuration reach the right field computer.
+                </p>
+              </div>
+              <div className="rounded-xl border border-border/70 bg-card/30 p-6">
+                <LockKeyhole className="size-6 text-primary" aria-hidden="true" />
+                <h3 className="mt-4 font-display text-2xl font-bold uppercase">Keep private</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Source access, binaries, checksums, and release notes remain private while Edge moves through controlled pilot validation.
+                </p>
               </div>
             </div>
 
@@ -280,14 +171,14 @@ const Edge = () => {
                 <CheckCircle2 className="size-6 text-primary" aria-hidden="true" />
                 <h3 className="mt-4 font-display text-2xl font-bold uppercase">Pair</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Register the field computer to the right organization, site, hardware profile, and approved configuration.
+                  Register the field computer to the correct organization, site, hardware profile, and approved configuration.
                 </p>
               </div>
               <div>
                 <ShieldCheck className="size-6 text-primary" aria-hidden="true" />
-                <h3 className="mt-4 font-display text-2xl font-bold uppercase">Stay reviewable</h3>
+                <h3 className="mt-4 font-display text-2xl font-bold uppercase">Review</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Device health, source context, and field records remain traceable for the people responsible for action.
+                  Device health, source context, and field records remain traceable for the people responsible for review and action.
                 </p>
               </div>
             </div>
