@@ -1,8 +1,15 @@
-import { Apple, CheckCircle2, Download, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
+import { Apple, CheckCircle2, Download, Github, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+
+const EDGE_SOURCE_VERSION = "0.2.3";
+const EDGE_SOURCE_REPOSITORY = "https://github.com/k3y10/terrasatch-edge";
+const EDGE_SOURCE_COMMIT =
+  "https://github.com/k3y10/terrasatch-edge/commit/87961cea7d2cdd8ad57b8d48b0732f0c694b0c97";
+const EDGE_RELEASE_CHECKLIST =
+  "https://github.com/k3y10/terrasatch-edge/blob/main/docs/PUBLIC_RELEASE_CHECKLIST.md";
 
 const WINDOWS_VERSION = "0.2.2";
 const LINUX_AMD64_VERSION = "0.2.2";
@@ -98,9 +105,14 @@ const Downloads = () => {
                   Install TerraSatch Edge on the field computer that connects radios, SDRs, GPS, sensors, and other hardware to TerraSatch.
                 </p>
               </div>
-              <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-right">
-                Once paired, Edge stays connected to <span className="text-foreground">api.terrasatch.com</span>, reports device health, and pulls the site&apos;s approved configuration.
-              </p>
+              <div className="space-y-4 lg:text-right">
+                <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:ml-auto">
+                  Once paired, Edge stays connected to <span className="text-foreground">api.terrasatch.com</span>, reports device health, and pulls the site&apos;s approved configuration.
+                </p>
+                <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:ml-auto">
+                  Edge v{EDGE_SOURCE_VERSION} source is public on GitHub so operators and technical reviewers can inspect the runtime, radio receive path, packaging scripts, tests, and release controls before installation.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -135,6 +147,9 @@ const Downloads = () => {
                   <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
                     <p className="uppercase tracking-[0.14em] text-primary">Windows x64 · v{WINDOWS_VERSION}</p>
                     {releaseChecksums.windowsX64 ? <p className="break-all">SHA-256 {releaseChecksums.windowsX64}</p> : null}
+                    <p>
+                      v{EDGE_SOURCE_VERSION} source is published for review. Its Windows binary will replace this package only after the exact signed installer passes clean-machine validation and receives a new immutable Blob URL and SHA-256.
+                    </p>
                   </div>
                 ) : null}
                 {platform === "windows" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
@@ -196,6 +211,41 @@ const Downloads = () => {
               </article>
             </div>
 
+            <div className="mt-16 border-y border-border/70 py-10">
+              <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+                <div>
+                  <Github className="size-7 text-primary" aria-hidden="true" />
+                  <h2 className="mt-5 font-display text-3xl font-bold uppercase sm:text-4xl">
+                    Review Edge before you install<span className="text-primary">.</span>
+                  </h2>
+                  <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                    TerraSatch Edge v{EDGE_SOURCE_VERSION} is publicly reviewable. The repository exposes the device runtime, API bridge, Operator Console, BCA/FRS receive-only adapter, packaging scripts, tests, and the release checklist used before a native artifact is published.
+                  </p>
+                  <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                    Public binaries are versioned rather than silently overwritten, and this page publishes the SHA-256 for each exact artifact so a downloaded file can be checked independently.
+                  </p>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                  <Button asChild variant="outline" className="justify-center">
+                    <a href={EDGE_SOURCE_REPOSITORY} target="_blank" rel="noreferrer">
+                      <Github data-icon="inline-start" />
+                      View public source
+                    </a>
+                  </Button>
+                  <Button asChild variant="outline" className="justify-center">
+                    <a href={EDGE_SOURCE_COMMIT} target="_blank" rel="noreferrer">
+                      Review v{EDGE_SOURCE_VERSION} source
+                    </a>
+                  </Button>
+                  <Button asChild variant="ghost" className="justify-center">
+                    <a href={EDGE_RELEASE_CHECKLIST} target="_blank" rel="noreferrer">
+                      Read release verification checklist
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
             <div className="mt-16 grid gap-8 border-t border-border/70 pt-12 lg:grid-cols-3">
               <div>
                 <Radio className="size-6 text-primary" aria-hidden="true" />
@@ -222,7 +272,7 @@ const Downloads = () => {
 
             <div className="mt-14 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} have completed platform validation. macOS Apple Silicon and Intel v{MACOS_ARM64_VERSION} have completed automated native package build and verification and are available as controlled pilot packages. Published checksums identify the exact downloadable artifacts. Linux ARM64 remains in native testing.
+                Public Edge source is currently v{EDGE_SOURCE_VERSION}. Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} are the currently published validated downloads. macOS Apple Silicon and Intel v{MACOS_ARM64_VERSION} remain controlled pilot packages. The Windows v{EDGE_SOURCE_VERSION} download will be enabled only after the exact signed installer completes native validation, is uploaded to a new immutable Blob path, and its SHA-256 is verified after re-download.
               </p>
             </div>
           </div>
