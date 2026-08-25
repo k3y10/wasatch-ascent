@@ -50,7 +50,7 @@ const Edge = () => {
                   <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">Private distribution</p>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Edge installers, release notes, source access, and build-specific verification details are distributed directly during approved pilot work rather than published publicly.
+                  Edge installers, release notes, and build-specific verification details are distributed directly during approved pilot work. Public source and download links are not advertised from this page.
                 </p>
               </div>
             </div>
@@ -65,7 +65,7 @@ const Edge = () => {
                   Private releases<span className="text-primary">.</span>
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Platform support stays visible here, but build numbers, direct download links, checksums, and source-review links remain inside the controlled pilot release process.
+                  Platform support stays visible here, while build numbers, direct download links, checksums, and source-review links stay out of the public release page.
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
@@ -154,7 +154,7 @@ const Edge = () => {
                 <LockKeyhole className="size-6 text-primary" aria-hidden="true" />
                 <h3 className="mt-4 font-display text-2xl font-bold uppercase">Keep private</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Source access, binaries, checksums, and release notes remain private while Edge moves through controlled pilot validation.
+                  Public binary, checksum, and source-review links are withheld while Edge moves through controlled pilot validation.
                 </p>
               </div>
             </div>
