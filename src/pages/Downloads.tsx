@@ -1,14 +1,19 @@
-import { Apple, CheckCircle2, Download, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
+import { Apple, CheckCircle2, Download, Github, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const WINDOWS_VERSION = "0.2.2";
+const EDGE_CURRENT_VERSION = "0.2.3";
+const WINDOWS_PUBLISHED_VERSION = "0.2.2";
 const LINUX_AMD64_VERSION = "0.2.2";
 const MACOS_ARM64_VERSION = "0.2.2";
 const MACOS_X64_VERSION = "0.2.2";
 const NATIVE_TEST_VERSION = "0.2.2";
+
+const EDGE_SOURCE_URL = "https://github.com/k3y10/terrasatch-edge";
+const EDGE_RELEASE_CHECKLIST_URL =
+  "https://github.com/k3y10/terrasatch-edge/blob/main/docs/PUBLIC_RELEASE_CHECKLIST.md";
 
 const WINDOWS_X64_RELEASE_URL =
   "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.2/TerraSatch-Edge-Setup-x64.exe";
@@ -102,7 +107,9 @@ const Edge = () => {
           <div className="container relative mx-auto px-6">
             <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">TerraSatch field runtime</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+                  TerraSatch field runtime · v{EDGE_CURRENT_VERSION}
+                </p>
                 <h1 className="mt-3 max-w-5xl font-display text-5xl font-bold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
                   Edge<span className="text-primary">.</span>
                 </h1>
@@ -110,9 +117,24 @@ const Edge = () => {
                   Connect radios, SDRs, GPS, sensors, and field computers to TerraSatch without changing the tools crews already carry.
                 </p>
               </div>
-              <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-right">
-                Pick the operating system, install Edge, pair the device, and let the site pull its approved configuration from <span className="text-foreground">api.terrasatch.com</span>.
-              </p>
+              <div className="space-y-4 lg:text-right">
+                <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:ml-auto">
+                  Pick the operating system, install Edge, pair the device, and let the site pull its approved configuration from <span className="text-foreground">api.terrasatch.com</span>.
+                </p>
+                <div className="flex flex-wrap gap-2 lg:justify-end">
+                  <Button asChild variant="outline" size="sm">
+                    <a href={EDGE_SOURCE_URL} target="_blank" rel="noreferrer">
+                      <Github aria-hidden="true" />
+                      Review Edge source
+                    </a>
+                  </Button>
+                  <Button asChild variant="ghost" size="sm">
+                    <a href={EDGE_RELEASE_CHECKLIST_URL} target="_blank" rel="noreferrer">
+                      Release verification
+                    </a>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -129,7 +151,7 @@ const Edge = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Windows · macOS · Linux
+                Current Edge v{EDGE_CURRENT_VERSION} · Windows · macOS · Linux
               </p>
             </div>
 
@@ -141,19 +163,31 @@ const Edge = () => {
                 <Laptop className="size-7 text-primary" aria-hidden="true" />
                 <div className="mt-5 flex items-end justify-between gap-4">
                   <h3 className="font-display text-3xl font-bold uppercase">Windows</h3>
-                  <span className="font-mono text-[10px] text-muted-foreground">v{WINDOWS_VERSION}</span>
+                  <span className="font-mono text-[10px] text-primary">v{EDGE_CURRENT_VERSION}</span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Windows 10/11 x64 with the Edge service and RTL-SDR support for compatible field hardware.
+                  Windows 10/11 x64 with the Edge service and RTL-SDR support for compatible field hardware. v{EDGE_CURRENT_VERSION} adds the current receive-only BCA/FRS radio workflow.
                 </p>
                 <div className="mt-6">
-                  <DownloadAction href={releaseUrls.windowsX64} label="Windows x64" />
+                  <DownloadAction href={releaseUrls.windowsX64} label="Download validated Windows installer" />
                 </div>
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                  Current source is v{EDGE_CURRENT_VERSION}. The public signed Windows installer remains v{WINDOWS_PUBLISHED_VERSION} until the exact v{EDGE_CURRENT_VERSION} native build passes signing and clean-machine validation.
+                </p>
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">Technical details</summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>Installer · .exe · validated release</p>
+                    <p>Current source · v{EDGE_CURRENT_VERSION} · public review</p>
+                    <p>Published installer · v{WINDOWS_PUBLISHED_VERSION} · .exe · validated release</p>
                     <Checksum label="SHA-256" value={releaseChecksums.windowsX64} />
+                    <a
+                      href={EDGE_SOURCE_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-primary hover:underline"
+                    >
+                      github.com/k3y10/terrasatch-edge
+                    </a>
                   </div>
                 </details>
               </article>
@@ -214,6 +248,24 @@ const Edge = () => {
                   </div>
                 </details>
               </article>
+            </div>
+
+            <div className="mt-10 rounded-xl border border-border/70 bg-card/30 p-6 sm:p-7">
+              <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">Publicly reviewable Edge source</p>
+                  <h3 className="mt-2 font-display text-2xl font-bold uppercase">Review the code before installing.</h3>
+                  <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                    Review TerraSatch Edge v{EDGE_CURRENT_VERSION}, including device pairing, hardware discovery, the receive-only radio path, packaging scripts, tests, and public release controls directly on GitHub.
+                  </p>
+                </div>
+                <Button asChild variant="outline">
+                  <a href={EDGE_SOURCE_URL} target="_blank" rel="noreferrer">
+                    <Github aria-hidden="true" />
+                    github.com/k3y10/terrasatch-edge
+                  </a>
+                </Button>
+              </div>
             </div>
 
             <div className="mt-14 grid gap-7 border-y border-border/70 py-10 lg:grid-cols-3">
