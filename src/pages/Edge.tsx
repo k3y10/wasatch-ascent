@@ -216,6 +216,9 @@ const Edge = () => {
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                 v{TESTING_VERSION} contains newer Edge functionality, but a testing button is enabled only after the exact native artifact has been built, installed, tested, and matched to a published SHA-256. Source readiness alone does not activate a download.
               </p>
+              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                Current radio-monitoring work is still being finalized before native packaging. TerraSatch will publish the testing artifacts from the exact approved release commit rather than package an intermediate build.
+              </p>
             </div>
 
             <div className="mt-10 grid gap-6 lg:grid-cols-2">
@@ -246,7 +249,7 @@ const Edge = () => {
                   </Button>
                 ) : (
                   <Button disabled variant="outline" className="mt-7 w-full justify-center">
-                    Windows v{TESTING_VERSION} · native QA pending
+                    Windows v{TESTING_VERSION} · final native QA pending
                   </Button>
                 )}
 
@@ -288,7 +291,7 @@ const Edge = () => {
                   </Button>
                 ) : (
                   <Button disabled variant="outline" className="mt-7 w-full justify-center">
-                    Linux v{TESTING_VERSION} · native QA pending
+                    Linux v{TESTING_VERSION} · final native QA pending
                   </Button>
                 )}
 
