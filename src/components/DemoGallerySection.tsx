@@ -4,7 +4,6 @@ import {
   Building2,
   ExternalLink,
   Flame,
-  KeyRound,
   MonitorPlay,
   Mountain,
   MountainSnow,
@@ -32,10 +31,6 @@ type DemoItem = {
   comingSoon?: boolean;
   useCases: string[];
   workflow: string[];
-  credentials?: {
-    username: string;
-    password: string;
-  };
 };
 
 type DemoSection = {
@@ -113,7 +108,7 @@ const demos: DemoItem[] = [
     id: "uac-demo",
     name: "Utah Avalanche Center Operations",
     industry: "Public avalanche forecasting & observation operations",
-    audience: "Forecasters, field observers, review desks, and approved partner teams",
+    audience: "Forecasters, field observers, review desks, and approved field teams",
     eyebrow: "UTAH · FORECASTER REVIEW + TERRAIN CONTEXT",
     overview:
       "A detailed avalanche-center workflow that turns field and radio reports into reviewable structured observations, connects approved records to a terrain-aware Wasatch map, and preserves source history, workspace scope, audit records, realtime updates, and offline synchronization.",
@@ -143,9 +138,9 @@ const demos: DemoItem[] = [
     audience: "Avalanche forecasters, field observers, highway teams, patrol, SAR, and reviewers",
     eyebrow: "COLORADO · RADIO → OBSERVATION → REVIEW → REPORT",
     overview:
-      "A focused Colorado avalanche workflow showing a complete operational loop: playable radio audio, transcription, avalanche-term extraction, structured observations, map placement, human correction and approval, shift reporting, and exportable records.",
+      "A focused Colorado avalanche workflow showing a complete review loop: playable radio audio, transcription, avalanche-term extraction, structured observations, map placement, human correction and approval, shift reporting, and exportable records.",
     platformRole:
-      "The demo separates public community radio concepts from public avalanche data and from internal systems that would require authorized partner integration. TerraListen structures the incoming source; TerraSatch keeps the map, observation, review state, and report connected.",
+      "The demo separates public community radio concepts from public avalanche data and from internal systems that would require authorized integration. TerraListen structures the incoming source; TerraSatch keeps the map, observation, review state, and report connected.",
     section: "avalanche",
     url: "https://colorado-avalanche-demo.vercel.app/",
     status: "Featured · end-to-end demo",
@@ -167,7 +162,7 @@ const demos: DemoItem[] = [
     id: "avyts-demo",
     name: "AvyTS Terrain Intelligence",
     industry: "Avalanche safety, forecasting & mountain travel",
-    audience: "Forecasters, patrol, guides, SAR teams, transportation partners, and field observers",
+    audience: "Forecasters, patrol, guides, SAR teams, transportation teams, and field observers",
     eyebrow: "AVYTS · REGIONAL FORECAST → TERRAIN CELL",
     overview:
       "AvyTS extends regional avalanche guidance into a terrain-aware workspace that combines forecast zones with slope, aspect, elevation, wind loading, terrain traps, weather stations, observations, and high-resolution terrain cells.",
@@ -178,10 +173,6 @@ const demos: DemoItem[] = [
     status: "Featured · terrain intelligence",
     accent: "green",
     featured: true,
-    credentials: {
-      username: "admin",
-      password: "k3y10",
-    },
     useCases: [
       "Regional forecast to slope- and cell-level terrain context",
       "Route, patrol, SAR, and field briefing support",
@@ -315,13 +306,13 @@ const DemoGallerySection = () => {
         <div className="mx-auto mb-10 max-w-4xl text-center">
           <div className="signal-badge signal-badge-amber mx-auto mb-4 w-fit">
             <MonitorPlay className="h-3.5 w-3.5" aria-hidden="true" />
-            <span className="font-mono text-[10px]">TERRASATCH OPERATIONAL DEMOS</span>
+            <span className="font-mono text-[10px]">TERRASATCH EVALUATION DEMOS</span>
           </div>
           <h2 className="font-display mb-5 text-4xl font-bold text-foreground md:text-5xl">
             Start with the <span className="text-primary">most complete workflows.</span>
           </h2>
           <p className="mx-auto max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            The portfolio is ordered by depth and operational clarity, then grouped by mission. Start
+            The portfolio is ordered by depth and workflow clarity, then grouped by mission. Start
             with UAC, Colorado, and AvyTS for the strongest avalanche-intelligence examples, then move
             into snow operations, wildfire, wilderness programs, and expedition intelligence.
           </p>
@@ -365,7 +356,7 @@ const DemoGallerySection = () => {
                   A common intelligence loop across different missions
                 </h3>
                 <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  The operational environment changes, but TerraSatch keeps the same discipline:
+                  The operating environment changes, but TerraSatch keeps the same discipline:
                   preserve the source, add terrain and mission context, keep people in control, and
                   carry reviewed information forward.
                 </p>
@@ -500,7 +491,7 @@ const DemoFrame = ({ demo, index }: { demo: DemoItem; index: number }) => {
             <div className="rounded-xl border border-border/50 bg-background/35 p-4">
               <div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.13em] text-primary">
                 <Users className="h-3.5 w-3.5" aria-hidden="true" />
-                Operational teams
+                Intended teams
               </div>
               <p className="text-sm leading-relaxed text-secondary-foreground">{demo.audience}</p>
             </div>
@@ -534,7 +525,7 @@ const DemoFrame = ({ demo, index }: { demo: DemoItem; index: number }) => {
 
           <div>
             <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-              Operational workflow
+              Example workflow
             </div>
             <ol className="grid gap-2">
               {demo.workflow.map((step, stepIndex) => (
@@ -550,23 +541,6 @@ const DemoFrame = ({ demo, index }: { demo: DemoItem; index: number }) => {
               ))}
             </ol>
           </div>
-
-          {demo.credentials ? (
-            <div className="rounded-xl border border-dashed border-primary/40 bg-primary/5 p-4">
-              <div className="mb-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-primary">
-                <KeyRound className="h-3.5 w-3.5" aria-hidden="true" />
-                Demo login
-              </div>
-              <div className="flex flex-wrap gap-2 font-mono text-xs">
-                <code className="rounded-md border border-border/50 bg-background/60 px-2.5 py-1.5 text-foreground">
-                  username: {demo.credentials.username}
-                </code>
-                <code className="rounded-md border border-border/50 bg-background/60 px-2.5 py-1.5 text-foreground">
-                  password: {demo.credentials.password}
-                </code>
-              </div>
-            </div>
-          ) : null}
 
           <a
             href={demo.url}

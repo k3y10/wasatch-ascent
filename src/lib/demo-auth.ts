@@ -1,5 +1,26 @@
 export type DemoUser = {
-  username: string;
+  access: "public-demo";
+};
+
+export type DemoInterest =
+  | "radio"
+  | "avalanche"
+  | "wildfire"
+  | "mapping"
+  | "edge"
+  | "integration"
+  | "pilot"
+  | "strategic"
+  | "other";
+
+export type DemoAccessRequest = {
+  name: string;
+  email: string;
+  organization: string;
+  interest: DemoInterest;
+  notes: string;
+  acknowledged: boolean;
+  website?: string;
 };
 
 type DemoAuthResponse = {
@@ -55,7 +76,7 @@ export const getDemoSession = async (signal?: AbortSignal): Promise<DemoUser | n
   return payload.authenticated && payload.user ? payload.user : null;
 };
 
-export const signInToDemos = async (username: string, password: string): Promise<DemoUser> => {
+export const requestDemoAccess = async (request: DemoAccessRequest): Promise<DemoUser> => {
   const response = await fetch(DEMO_AUTH_ENDPOINT, {
     method: "POST",
     credentials: "same-origin",
@@ -64,16 +85,15 @@ export const signInToDemos = async (username: string, password: string): Promise
       ...noCacheHeaders,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(request),
   });
 
   const payload = await readResponse(response);
   if (!response.ok || !payload.authenticated || !payload.user) {
-    const message =
-      response.status === 401
-        ? "Access denied. Check your TerraSatch demo credentials."
-        : payload.error || "Demo access is temporarily unavailable.";
-    throw new DemoAuthError(message, response.status);
+    throw new DemoAuthError(
+      payload.error || "Your demo access request could not be completed.",
+      response.status,
+    );
   }
 
   return payload.user;
