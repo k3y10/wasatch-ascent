@@ -14,13 +14,45 @@ type ApiResponse = {
   setHeader: (name: string, value: string | string[]) => void;
 };
 
-type Credentials = {
-  username: string;
-  password: string;
+type DemoAccessSubmission = {
+  name: string;
+  email: string;
+  organization: string;
+  interest: DemoInterest;
+  notes: string;
+  acknowledged: boolean;
+  website: string;
 };
 
+type DemoInterest =
+  | "radio"
+  | "avalanche"
+  | "wildfire"
+  | "mapping"
+  | "edge"
+  | "integration"
+  | "pilot"
+  | "strategic"
+  | "other";
+
 const SESSION_COOKIE = "terrasatch_demo_session";
+const SESSION_SUBJECT = "public-demo";
 const SESSION_TTL_SECONDS = 60 * 60 * 8;
+const MAX_BODY_LENGTH = 12000;
+const DEMO_INQUIRY_TO = process.env.TERRASATCH_INQUIRY_TO || "mccunekeaton@gmail.com";
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const interestLabels: Record<DemoInterest, string> = {
+  radio: "TerraListen / radio workflows",
+  avalanche: "Avalanche & snow operations",
+  wildfire: "Wildfire / incident operations",
+  mapping: "Terrain intelligence / mapping",
+  edge: "Edge / offline field systems",
+  integration: "API / data integration",
+  pilot: "Pilot / field evaluation",
+  strategic: "Strategic / investment conversation",
+  other: "Other",
+};
 
 const getHeader = (headers: ApiRequest["headers"], name: string): string | undefined => {
   const value = headers[name] ?? headers[name.toLowerCase()];
@@ -41,33 +73,34 @@ const constantTimeMatches = (provided: string, expected: string): boolean => {
 const sign = (value: string, secret: string): string =>
   createHmac("sha256", secret).update(value).digest("base64url");
 
-const createSessionToken = (username: string, secret: string): string => {
+const createSessionToken = (secret: string): string => {
   const expiresAt = Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS;
-  const encodedUsername = Buffer.from(username, "utf8").toString("base64url");
-  const payload = `v1.${expiresAt}.${encodedUsername}`;
+  const encodedSubject = Buffer.from(SESSION_SUBJECT, "utf8").toString("base64url");
+  const payload = `v2.${expiresAt}.${encodedSubject}`;
   return `${payload}.${sign(payload, secret)}`;
 };
 
-const verifySessionToken = (token: string, secret: string): string | null => {
-  const [version, expiresAtValue, encodedUsername, signature, ...remainder] = token.split(".");
-  if (version !== "v1" || remainder.length > 0 || !expiresAtValue || !encodedUsername || !signature) {
-    return null;
+const verifySessionToken = (token: string, secret: string): boolean => {
+  const [version, expiresAtValue, encodedSubject, signature, ...remainder] = token.split(".");
+  if (version !== "v2" || remainder.length > 0 || !expiresAtValue || !encodedSubject || !signature) {
+    return false;
   }
 
-  const payload = `${version}.${expiresAtValue}.${encodedUsername}`;
+  const payload = `${version}.${expiresAtValue}.${encodedSubject}`;
   if (!constantTimeMatches(signature, sign(payload, secret))) {
-    return null;
+    return false;
   }
 
   const expiresAt = Number(expiresAtValue);
   if (!Number.isSafeInteger(expiresAt) || expiresAt <= Math.floor(Date.now() / 1000)) {
-    return null;
+    return false;
   }
 
   try {
-    return Buffer.from(encodedUsername, "base64url").toString("utf8");
+    const subject = Buffer.from(encodedSubject, "base64url").toString("utf8");
+    return constantTimeMatches(subject, SESSION_SUBJECT);
   } catch {
-    return null;
+    return false;
   }
 };
 
@@ -89,7 +122,9 @@ const parseCookies = (cookieHeader: string | undefined): Record<string, string> 
   }, {});
 };
 
-const readCredentials = (body: unknown): Credentials | null => {
+const clean = (value: unknown, max: number): string => String(value ?? "").trim().slice(0, max);
+
+const readSubmission = (body: unknown): DemoAccessSubmission | null => {
   let value = body;
 
   if (typeof value === "string") {
@@ -104,10 +139,25 @@ const readCredentials = (body: unknown): Credentials | null => {
     return null;
   }
 
-  const candidate = value as Partial<Credentials>;
-  return typeof candidate.username === "string" && typeof candidate.password === "string"
-    ? { username: candidate.username, password: candidate.password }
-    : null;
+  const raw = value as Record<string, unknown>;
+  if (JSON.stringify(raw).length > MAX_BODY_LENGTH) {
+    return null;
+  }
+
+  const interest = clean(raw.interest, 40) as DemoInterest;
+  if (!(interest in interestLabels)) {
+    return null;
+  }
+
+  return {
+    name: clean(raw.name, 120),
+    email: clean(raw.email, 240).toLowerCase(),
+    organization: clean(raw.organization, 200),
+    interest,
+    notes: clean(raw.notes, 1500),
+    acknowledged: raw.acknowledged === true,
+    website: clean(raw.website, 300),
+  };
 };
 
 const isSameOrigin = (request: ApiRequest): boolean => {
@@ -146,14 +196,70 @@ const setCommonHeaders = (response: ApiResponse) => {
   response.setHeader("X-Content-Type-Options", "nosniff");
 };
 
-export default function handler(request: ApiRequest, response: ApiResponse) {
+const escapeHtml = (value: string): string =>
+  value.replace(/[&<>\"]/g, (character) => {
+    const entities: Record<string, string> = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+    };
+    return entities[character] ?? character;
+  });
+
+const deliverDemoRequest = async (submission: DemoAccessSubmission): Promise<boolean> => {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.TERRASATCH_INQUIRY_FROM;
+
+  if (!apiKey || !from) {
+    return false;
+  }
+
+  const entries: Array<[string, string]> = [
+    ["Name", submission.name],
+    ["Email", submission.email],
+    ["Organization", submission.organization],
+    ["Interest", interestLabels[submission.interest]],
+    ["Notes", submission.notes || "—"],
+    ["Demo notice acknowledged", submission.acknowledged ? "Yes" : "No"],
+  ];
+
+  const text = entries.map(([key, value]) => `${key}: ${value}`).join("\n");
+  const html = `<h1>Public demo access</h1><table>${entries
+    .map(
+      ([key, value]) =>
+        `<tr><th style="text-align:left;vertical-align:top;padding:6px 12px 6px 0">${escapeHtml(key)}</th><td style="padding:6px 0;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`,
+    )
+    .join("")}</table>`;
+
+  try {
+    const resendResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [DEMO_INQUIRY_TO],
+        reply_to: submission.email,
+        subject: `TerraSatch · Public demo access · ${submission.organization}`,
+        text,
+        html,
+      }),
+    });
+
+    return resendResponse.ok;
+  } catch {
+    return false;
+  }
+};
+
+export default async function handler(request: ApiRequest, response: ApiResponse) {
   setCommonHeaders(response);
 
-  const configuredUsername = process.env.TERRASATCH_DEMO_USERNAME;
-  const configuredPassword = process.env.TERRASATCH_DEMO_PASSWORD;
   const sessionSecret = process.env.TERRASATCH_DEMO_SESSION_SECRET;
-
-  if (!configuredUsername || !configuredPassword || !sessionSecret || sessionSecret.length < 32) {
+  if (!sessionSecret || sessionSecret.length < 32) {
     return response.status(503).json({
       authenticated: false,
       error: "Demo access has not been configured for this environment.",
@@ -164,15 +270,13 @@ export default function handler(request: ApiRequest, response: ApiResponse) {
 
   if (method === "GET") {
     const token = parseCookies(getHeader(request.headers, "cookie"))[SESSION_COOKIE];
-    const username = token ? verifySessionToken(token, sessionSecret) : null;
-
-    if (!username || !constantTimeMatches(username, configuredUsername)) {
+    if (!token || !verifySessionToken(token, sessionSecret)) {
       return response.status(401).json({ authenticated: false });
     }
 
     return response.status(200).json({
       authenticated: true,
-      user: { username },
+      user: { access: SESSION_SUBJECT },
     });
   }
 
@@ -181,27 +285,41 @@ export default function handler(request: ApiRequest, response: ApiResponse) {
       return response.status(403).json({ authenticated: false, error: "Request origin was not accepted." });
     }
 
-    const credentials = readCredentials(request.body);
-    const usernameMatches = credentials
-      ? constantTimeMatches(credentials.username, configuredUsername)
-      : false;
-    const passwordMatches = credentials
-      ? constantTimeMatches(credentials.password, configuredPassword)
-      : false;
-    const isValid = Boolean(credentials && usernameMatches && passwordMatches);
-
-    if (!isValid) {
-      return response.status(401).json({
+    const submission = readSubmission(request.body);
+    if (!submission || submission.website) {
+      return response.status(400).json({
         authenticated: false,
-        error: "Access denied.",
+        error: "Please complete the demo access form.",
       });
     }
 
-    const token = createSessionToken(configuredUsername, sessionSecret);
+    if (!submission.name || !submission.organization || !EMAIL_PATTERN.test(submission.email)) {
+      return response.status(400).json({
+        authenticated: false,
+        error: "Name, organization, and a valid email are required.",
+      });
+    }
+
+    if (!submission.acknowledged) {
+      return response.status(400).json({
+        authenticated: false,
+        error: "Please acknowledge the demo-use notice before continuing.",
+      });
+    }
+
+    const delivered = await deliverDemoRequest(submission);
+    if (!delivered) {
+      return response.status(503).json({
+        authenticated: false,
+        error: "Demo access requests are temporarily unavailable. Please try again shortly.",
+      });
+    }
+
+    const token = createSessionToken(sessionSecret);
     response.setHeader("Set-Cookie", sessionCookie(token, SESSION_TTL_SECONDS));
     return response.status(200).json({
       authenticated: true,
-      user: { username: configuredUsername },
+      user: { access: SESSION_SUBJECT },
     });
   }
 
