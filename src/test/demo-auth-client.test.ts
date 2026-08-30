@@ -1,5 +1,15 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { DemoAuthError, getDemoSession, signInToDemos, signOutOfDemos } from "@/lib/demo-auth";
+import { DemoAuthError, getDemoSession, requestDemoAccess, signOutOfDemos } from "@/lib/demo-auth";
+
+const demoRequest = {
+  name: "Demo Evaluator",
+  email: "evaluator@example.com",
+  organization: "Mountain Ops Example",
+  interest: "avalanche" as const,
+  notes: "Evaluating avalanche workflows.",
+  acknowledged: true,
+  website: "",
+};
 
 describe("demo auth client", () => {
   afterEach(() => {
@@ -26,37 +36,47 @@ describe("demo auth client", () => {
     );
   });
 
-  it("returns the authorized operator after a successful sign in", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(JSON.stringify({ authenticated: true, user: { username: "terrain-operator" } }), {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        }),
-      ),
+  it("returns an authorized public-demo session after a successful request", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ authenticated: true, user: { access: "public-demo" } }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
     );
+    vi.stubGlobal("fetch", fetchMock);
 
-    await expect(signInToDemos("terrain-operator", "ridge-line-access")).resolves.toEqual({
-      username: "terrain-operator",
-    });
+    await expect(requestDemoAccess(demoRequest)).resolves.toEqual({ access: "public-demo" });
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/demo-auth",
+      expect.objectContaining({
+        method: "POST",
+        credentials: "same-origin",
+        body: JSON.stringify(demoRequest),
+      }),
+    );
   });
 
-  it("returns a useful generic message for rejected credentials", async () => {
+  it("surfaces the server message when a request is rejected", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
-        new Response(JSON.stringify({ authenticated: false, error: "Access denied." }), {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }),
+        new Response(
+          JSON.stringify({
+            authenticated: false,
+            error: "Please acknowledge the demo-use notice before continuing.",
+          }),
+          {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          },
+        ),
       ),
     );
 
-    await expect(signInToDemos("wrong", "wrong")).rejects.toEqual(
+    await expect(requestDemoAccess({ ...demoRequest, acknowledged: false })).rejects.toEqual(
       expect.objectContaining<Partial<DemoAuthError>>({
-        message: "Access denied. Check your TerraSatch demo credentials.",
-        status: 401,
+        message: "Please acknowledge the demo-use notice before continuing.",
+        status: 400,
       }),
     );
   });
@@ -105,7 +125,7 @@ describe("demo auth client", () => {
         }),
       )
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ authenticated: true, user: { username: "terrain-operator" } }), {
+        new Response(JSON.stringify({ authenticated: true, user: { access: "public-demo" } }), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         }),
