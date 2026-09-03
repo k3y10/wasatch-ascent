@@ -1,68 +1,57 @@
-import { ExternalLink, FileText } from "lucide-react";
+import { Download, ExternalLink } from "lucide-react";
 
-const documents = [
-  {
-    title: "TerraSatch V1 Whitepaper",
-    description: "Platform overview, mission, architecture, modules, and roadmap.",
-    version: "v1.3",
-    date: "March 2026",
-    file: "/documents/TerraSatch-Whitepaper.pdf",
-  },
-  {
-    title: "AvyTS Module Whitepaper",
-    description: "Avalanche terrain intelligence, snowpack modeling, and field workflows.",
-    version: "v1.1.0",
-    date: "March 2026",
-    file: "/documents/AvyTS-Whitepaper.pdf",
-  },
-  {
-    title: "SherpAI V1 Whitepaper",
-    description: "Terrain intelligence automation, briefings, and domain-constrained field support.",
-    version: "v1.0.0",
-    date: "March 2026",
-    file: "/documents/SherpAI-Whitepaper.pdf",
-  },
-];
+const WHITEPAPER_PATH = "/documents/TerraSatch-Whitepaper.pdf?v=2-20260830";
 
 const DocumentsSection = () => (
-  <section id="documents" className="content-auto relative overflow-hidden py-24">
+  <section id="documents" aria-labelledby="whitepaper-heading" className="content-auto relative overflow-hidden py-24">
     <div className="absolute inset-0 topo-overlay opacity-30" />
-    <div className="container relative mx-auto grid gap-12 px-6 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
-      <div>
-        <h2 className="font-display text-5xl font-bold uppercase leading-none sm:text-6xl">
-          Research, when you need the depth<span className="text-primary">.</span>
+    <div className="container relative mx-auto px-6">
+      <div className="mx-auto max-w-6xl">
+        <h2 id="whitepaper-heading" className="font-display text-5xl font-bold uppercase leading-none sm:text-6xl">
+          TerraSatch Whitepaper<span className="text-primary">.</span>
         </h2>
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-          The homepage stays focused. Technical architecture and module research remain available in the whitepapers.
-        </p>
-      </div>
 
-      <div className="border-y border-border/70">
-        {documents.map((document) => (
-          <a
-            key={document.title}
-            href={document.file}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-5 border-b border-border/70 py-6 transition-colors last:border-b-0 hover:text-primary"
-          >
-            <FileText className="size-6 shrink-0 text-primary" aria-hidden="true" />
-            <div className="min-w-0 flex-1">
-              <h3 className="font-display text-2xl font-bold uppercase text-foreground transition-colors group-hover:text-primary">
-                {document.title}
-              </h3>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{document.description}</p>
-              <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-primary/70">
-                {document.version} &middot; {document.date}
-              </p>
+        <div className="mt-8 overflow-hidden rounded-2xl border border-border/70 bg-background/70">
+          <div className="flex flex-col gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <p className="font-mono text-xs leading-relaxed uppercase tracking-[0.12em] text-muted-foreground">
+              Version 2.0 &middot; August 30, 2026 &middot; 31 pages
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href={WHITEPAPER_PATH}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/40 px-4 py-2 font-mono text-xs uppercase tracking-[0.1em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              >
+                Open PDF
+                <ExternalLink className="size-4" aria-hidden="true" />
+              </a>
+              <a
+                href={WHITEPAPER_PATH}
+                download="TerraSatch-Whitepaper-v2.pdf"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 py-2 font-mono text-xs uppercase tracking-[0.1em] text-foreground transition-colors hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              >
+                Download PDF
+                <Download className="size-4" aria-hidden="true" />
+              </a>
             </div>
-            <ExternalLink className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" aria-hidden="true" />
-          </a>
-        ))}
+          </div>
+
+          <div className="bg-muted/20 p-2 sm:p-3">
+            <iframe
+              src={`${WHITEPAPER_PATH}#view=FitH`}
+              title="TerraSatch Whitepaper, Version 2.0, August 30, 2026"
+              loading="lazy"
+              className="h-[75vh] min-h-[480px] w-full rounded-lg bg-white sm:min-h-[640px]"
+            />
+          </div>
+          <p className="px-5 pb-5 pt-2 text-sm text-muted-foreground sm:px-6">
+            If the preview is unavailable, choose Open PDF to read the full whitepaper in your browser.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 );
 
 export default DocumentsSection;
-

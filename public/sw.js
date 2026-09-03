@@ -1,5 +1,5 @@
-const SHELL_CACHE = "terrasatch-shell-v3";
-const STATIC_CACHE = "terrasatch-static-v3";
+const SHELL_CACHE = "terrasatch-shell-v4";
+const STATIC_CACHE = "terrasatch-static-v4";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -37,6 +37,9 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin || isPrivatePath(url.pathname)) return;
+
+  // Let the browser fetch PDFs directly; a document navigation is not the app shell.
+  if (url.pathname.startsWith("/documents/")) return;
 
   if (request.mode === "navigate") {
     event.respondWith(
