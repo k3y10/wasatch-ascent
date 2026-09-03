@@ -1,7 +1,10 @@
 import { MouseEvent, useEffect, useState } from "react";
 import { ArrowUpRight, Download, Menu, Moon, Sun, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/hooks/use-theme";
+import { cn } from "@/lib/utils";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -12,23 +15,28 @@ type NavItem =
   | { label: string; section: string; href?: never }
   | { label: string; href: string; section?: never };
 
-const navItems: NavItem[] = [
+const exploreItems: NavItem[] = [
   { label: "Listen", section: "listen" },
   { label: "Watch", section: "watch" },
   { label: "Learn", section: "learn" },
   { label: "Adapt", section: "adapt" },
   { label: "Teams", section: "use-cases" },
   { label: "Pilot", section: "pilot" },
+];
+
+const resourceItems: NavItem[] = [
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
   { label: "Demo access", href: "/demo-access" },
 ];
 
+const navItems = [...exploreItems, ...resourceItems];
+
 const scrollToSection = (section: string, behavior: ScrollBehavior = "smooth") => {
   const target = document.getElementById(section);
   if (!target) return false;
 
-  const nav = document.querySelector("nav");
+  const nav = document.querySelector("[data-site-header]");
   const navHeight = nav?.getBoundingClientRect().height ?? 64;
   const targetTop = window.scrollY + target.getBoundingClientRect().top - navHeight - 12;
 
@@ -104,21 +112,16 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileMenuOpen]);
-
   const handleInstall = async () => {
     if (!installPrompt) return;
+    setIsMobileMenuOpen(false);
     await installPrompt.prompt();
     await installPrompt.userChoice;
     setInstallPrompt(null);
   };
 
   const handleSectionNavigation = (event: MouseEvent<HTMLAnchorElement>, section: string) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     setIsMobileMenuOpen(false);
 
@@ -146,28 +149,21 @@ const Navbar = () => {
       ? (event: MouseEvent<HTMLAnchorElement>) => handleSectionNavigation(event, item.section)
       : () => setIsMobileMenuOpen(false);
 
-    if (mobile) {
-      return (
-        <Button key={item.label} asChild variant="ghost" className="w-full justify-start">
-          <a href={href} onClick={onClick}>{item.label}</a>
-        </Button>
-      );
-    }
-
     return (
-      <a
+      <Button
         key={item.label}
-        href={href}
-        onClick={onClick}
-        className="whitespace-nowrap text-[13px] font-medium text-muted-foreground transition-colors hover:text-primary 2xl:text-sm"
+        asChild
+        variant="navigation"
+        size={mobile ? "default" : "sm"}
+        className={cn(mobile ? "h-11 w-full justify-start px-3" : "px-2")}
       >
-        {item.label}
-      </a>
+        <a href={href} onClick={onClick}>{item.label}</a>
+      </Button>
     );
   };
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/82 backdrop-blur-2xl">
+    <nav data-site-header aria-label="Primary navigation" className="fixed inset-x-0 top-0 z-50 border-b border-border/80 bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
         <a href="/" className="flex min-w-0 items-center gap-3" aria-label="TerraSatch home">
           <img src="/terrasatch-logo.png" alt="" className="size-10 rounded-lg" width={1254} height={1254} />
@@ -179,58 +175,88 @@ const Navbar = () => {
           </div>
         </a>
 
-        <div className="hidden min-w-0 flex-1 items-center justify-center gap-3 xl:flex 2xl:gap-4">
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 xl:flex 2xl:gap-2">
           {navItems.map((item) => renderNavLink(item))}
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          {installPrompt ? (
-            <Button variant="outline" size="sm" onClick={handleInstall} className="hidden 2xl:inline-flex">
-              <Download data-icon="inline-start" />
-              Install web app
-            </Button>
-          ) : null}
-          <Button asChild variant="outline" size="sm" className="hidden 2xl:inline-flex">
+          <Button asChild variant="navigation" size="sm" className="hidden xl:inline-flex">
             <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer">
               Data room
               <ArrowUpRight data-icon="inline-end" />
             </a>
           </Button>
-          <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
-            {theme === "dark" ? <Sun /> : <Moon />}
+          <Separator orientation="vertical" className="mx-1 hidden h-6 xl:block" />
+          {installPrompt ? (
+            <Button
+              variant="navigation"
+              size="icon"
+              onClick={handleInstall}
+              aria-label="Install website app"
+              title="Install website app"
+              className="hidden xl:inline-flex"
+            >
+              <Download aria-hidden="true" />
+            </Button>
+          ) : null}
+          <Button variant="navigation" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === "dark" ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="xl:hidden"
-            onClick={() => setIsMobileMenuOpen((open) => !open)}
-            aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? <X /> : <Menu />}
-          </Button>
+          <Popover open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="navigation"
+                size="sm"
+                className="h-10 px-3 xl:hidden"
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              >
+                {isMobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+                <span className="hidden sm:inline">{isMobileMenuOpen ? "Close" : "Menu"}</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              sideOffset={12}
+              collisionPadding={16}
+              aria-label="Navigation menu"
+              className="max-h-[calc(100dvh-5rem)] w-[calc(100vw-2rem)] max-w-[26rem] overflow-y-auto overscroll-contain p-3 motion-reduce:animate-none sm:p-4 xl:hidden"
+            >
+              <section aria-labelledby="navigation-explore-heading">
+                <h2 id="navigation-explore-heading" className="px-3 pb-2 pt-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  Explore
+                </h2>
+                <div className="grid grid-cols-2 gap-1">
+                  {exploreItems.map((item) => renderNavLink(item, true))}
+                </div>
+              </section>
+              <Separator className="my-3" />
+              <section aria-labelledby="navigation-resources-heading">
+                <h2 id="navigation-resources-heading" className="px-3 pb-2 pt-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  Resources
+                </h2>
+                <div className="grid grid-cols-2 gap-1">
+                  {resourceItems.map((item) => renderNavLink(item, true))}
+                  <Button asChild variant="navigation" className="h-11 w-full justify-start px-3">
+                    <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
+                      Data room
+                      <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
+                    </a>
+                  </Button>
+                </div>
+              </section>
+              {installPrompt ? (
+                <>
+                  <Separator className="my-3" />
+                  <Button variant="secondary" onClick={handleInstall} className="h-11 w-full justify-start px-3">
+                    <Download data-icon="inline-start" aria-hidden="true" />
+                    Install website app
+                  </Button>
+                </>
+              ) : null}
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
-
-      {isMobileMenuOpen ? (
-        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-border/50 bg-background/96 p-4 xl:hidden">
-          <div className="container mx-auto grid gap-2 px-0 sm:grid-cols-2 sm:px-2">
-            {navItems.map((item) => renderNavLink(item, true))}
-            <Button asChild variant="outline" className="w-full justify-start">
-              <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
-                Data room
-                <ArrowUpRight data-icon="inline-end" />
-              </a>
-            </Button>
-            {installPrompt ? (
-              <Button variant="outline" onClick={handleInstall} className="w-full justify-start">
-                <Download data-icon="inline-start" />
-                Install website app
-              </Button>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
     </nav>
   );
 };
