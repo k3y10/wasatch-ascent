@@ -1,10 +1,11 @@
-const SHELL_CACHE = "terrasatch-shell-v4";
-const STATIC_CACHE = "terrasatch-static-v4";
+const SHELL_CACHE = "terrasatch-shell-v5";
+const STATIC_CACHE = "terrasatch-static-v5";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/site.webmanifest",
   "/favicon.ico",
+  "/favicon.ico?v=d9195770",
   "/pwa-icon.svg",
   "/pwa-icon-maskable.svg",
   "/terralisten-sasquatch.png",
