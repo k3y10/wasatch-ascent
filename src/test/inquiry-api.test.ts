@@ -38,7 +38,7 @@ const validRequest = {
     name: "Pat Operator",
     email: "pat@example.com",
     organization: "Example Rescue",
-    notes: "Multilingual radio pilot",
+    workflow: "Turn field radio observations into a searchable incident timeline",
   },
 };
 
@@ -56,6 +56,7 @@ describe("inquiry API", () => {
 
     expect(response.statusCode).toBe(503);
     expect(response.body?.fallbackMailto).toContain("mailto:mccunekeaton@gmail.com");
+    expect(response.body?.fallbackMailto).toContain("free%20evaluation%20request");
   });
 
   it("sends configured inquiries to the founder through the server-only provider", async () => {
@@ -72,9 +73,11 @@ describe("inquiry API", () => {
     const payload = JSON.parse(String(request.body)) as {
       to: string[];
       reply_to: string;
+      subject: string;
     };
     expect(payload.to).toEqual(["mccunekeaton@gmail.com"]);
     expect(payload.reply_to).toBe("pat@example.com");
+    expect(payload.subject).toContain("Free evaluation request");
   });
 
   it("rejects cross-origin submissions", async () => {
