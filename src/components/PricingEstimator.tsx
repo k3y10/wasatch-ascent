@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { ArrowRight, Building2, Check, Database, Gauge, Radio, Route, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { trackFunnelEvent } from "@/lib/funnel-analytics";
 import { cn } from "@/lib/utils";
 
 type PricingPlan = {
@@ -15,10 +16,10 @@ type PricingPlan = {
 
 const pricingPlans: PricingPlan[] = [
   {
-    name: "Limited pilot",
+    name: "Free exploration",
     price: "$0",
-    cadence: "30-day discovery",
-    description: "A founder-reviewed test designed to prove one useful workflow without creating a production burden.",
+    cadence: "30 days",
+    description: "A founder-reviewed exploration designed to validate one useful workflow before any production commitment.",
     points: [
       "One small team and one workflow",
       "Up to two hours of approved sample audio",
@@ -32,7 +33,7 @@ const pricingPlans: PricingPlan[] = [
     name: "Team rollout",
     price: "Scoped quote",
     cadence: "Monthly or annual",
-    description: "Defined after a successful pilot, using measured traffic and the minimum operational scope needed.",
+    description: "Defined only after the exploration shows value, using the minimum operational scope the team actually needs.",
     points: [
       "Active radios, teams, and channels",
       "Processed audio and retention volume",
@@ -90,8 +91,8 @@ const PricingEstimator = () => (
           Simple scope. Honest pricing<span className="text-primary">.</span>
         </h2>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-frost-dim">
-          TerraListen is priced from measured operating needs, not an oversized list of inputs. We start small,
-          validate the workflow, then quote only the radios, processing, retention, and support the team will use.
+          We start with a free exploration, validate whether the workflow is useful, then price only the radios,
+          processing, retention, integrations, and support the team actually needs.
         </p>
       </div>
 
@@ -144,21 +145,28 @@ const PricingEstimator = () => (
 
       <div className="mt-12 flex flex-col justify-between gap-6 border-l border-primary pl-6 lg:flex-row lg:items-center">
         <div>
-          <p className="font-display text-2xl font-bold uppercase">No invented precision.</p>
+          <p className="font-display text-2xl font-bold uppercase">Prove value before scaling.</p>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Paid pricing is confirmed only after discovery shows real processing volume and requirements. The limited
-            pilot remains $0 because its sample data, workflow, users, and support are explicitly capped.
+            Paid pricing is confirmed only after the exploration shows real usage and requirements. The 30-day exploration remains $0 because its sample data, workflow, users, and support are explicitly capped.
           </p>
         </div>
         <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
           <Button asChild size="lg">
-            <a href="#pilot">
-              Apply for the limited pilot
+            <a
+              href="#pilot"
+              onClick={() => trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "pricing" })}
+            >
+              Start free exploration
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <a href="mailto:mccunekeaton@gmail.com?subject=TerraSatch%20deployment%20inquiry">Discuss a rollout</a>
+            <a
+              href="mailto:mccunekeaton@gmail.com?subject=TerraSatch%20deployment%20inquiry"
+              onClick={() => trackFunnelEvent({ stage: "convert", action: "discuss-rollout", source: "pricing" })}
+            >
+              Discuss a rollout
+            </a>
           </Button>
         </div>
       </div>
@@ -167,4 +175,3 @@ const PricingEstimator = () => (
 );
 
 export default PricingEstimator;
-
