@@ -4,12 +4,9 @@ import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
 import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
 import LearnAdaptSection from "@/components/LearnAdaptSection";
-import APISection from "@/components/APISection";
-import PricingEstimator from "@/components/PricingEstimator";
+import NextStepSection from "@/components/NextStepSection";
 import PilotSection from "@/components/PilotSection";
-import DocumentsSection from "@/components/DocumentsSection";
-import PartnersSection from "@/components/PartnersSection";
-import EngagementSection from "@/components/EngagementSection";
+import PricingEstimator from "@/components/PricingEstimator";
 import Footer from "@/components/Footer";
 import AmbientParticles from "@/components/AmbientParticles";
 import { ScrollReveal } from "@/hooks/use-scroll-animation";
@@ -43,18 +40,11 @@ const Index = () => {
       <ScrollReveal><TerrainIntelligenceSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><LearnAdaptSection /></ScrollReveal>
+      <ScrollReveal><NextStepSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><PilotSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><PricingEstimator /></ScrollReveal>
-      <div className="amber-line" />
-      <ScrollReveal><APISection /></ScrollReveal>
-      <div className="amber-line" />
-      <ScrollReveal><EngagementSection /></ScrollReveal>
-      <div className="amber-line" />
-      <ScrollReveal><PartnersSection /></ScrollReveal>
-      <div className="amber-line" />
-      <ScrollReveal><DocumentsSection /></ScrollReveal>
       <Footer />
     </div>
   );
