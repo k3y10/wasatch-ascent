@@ -2,6 +2,7 @@ import { ArrowDown, ArrowRight, Files, MapPinned, Radio, ShieldCheck } from "luc
 import heroImage from "@/assets/hero-wasatch.jpg";
 import topoTexture from "@/assets/topo-texture.jpg";
 import { Button } from "@/components/ui/button";
+import { trackFunnelEvent } from "@/lib/funnel-analytics";
 import { cn } from "@/lib/utils";
 
 const capabilities = [
@@ -91,13 +92,19 @@ const HeroSection = () => (
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
-              <a href="#listen">
-                Explore TerraListen
+              <a
+                href="#listen"
+                onClick={() => trackFunnelEvent({ stage: "demonstrate", action: "see-terralisten-work", source: "hero" })}
+              >
+                See TerraListen work
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
-              <a href="#pilot">
+              <a
+                href="#pilot"
+                onClick={() => trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "hero" })}
+              >
                 Start free exploration
                 <ArrowDown data-icon="inline-end" />
               </a>
