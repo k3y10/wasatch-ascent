@@ -28,7 +28,7 @@ const roadmap = [
   { stage: "Now", title: "TerraListen", detail: "AI radio agent + human-authorized routing" },
   { stage: "Next", title: "Operational outputs", detail: "Documents, workflows, and field integrations" },
   { stage: "Expand", title: "Terrain modules", detail: "TerraGrid + AvyTS, PyroTS, HydroTS, GeoTS, InfraTS" },
-  { stage: "Future", title: "Field intelligence", detail: "SherpAI, AR views, and partner APIs" },
+  { stage: "Future", title: "Field intelligence", detail: "AR views, field integrations, and partner APIs" },
 ];
 
 const investorTypeOptions = [
@@ -272,4 +272,3 @@ const EngagementSection = () => {
 };
 
 export default EngagementSection;
-
