@@ -143,14 +143,14 @@ const LearnAdaptSection = () => (
 
         <div className="mt-10 flex flex-col justify-between gap-5 border-l border-primary pl-6 sm:flex-row sm:items-center">
           <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            One team. One workflow. Approved sample audio. A clear finding before any production commitment.
+            You can keep reading, see the product examples, or move into a team evaluation when you are ready.
           </p>
           <Button asChild variant="outline" className="shrink-0">
             <a
-              href="#pilot"
-              onClick={() => trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "teams" })}
+              href="#next-step"
+              onClick={() => trackFunnelEvent({ stage: "educate", action: "choose-next-step", source: "teams" })}
             >
-              Free exploration
+              Choose next step
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
