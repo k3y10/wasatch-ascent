@@ -1,9 +1,10 @@
 import { MouseEvent, useEffect, useState } from "react";
-import { ArrowUpRight, Download, Menu, Moon, Sun, X } from "lucide-react";
+import { ArrowRight, Download, Menu, Moon, Sun, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/hooks/use-theme";
+import { trackFunnelEvent } from "@/lib/funnel-analytics";
 import { cn } from "@/lib/utils";
 
 type BeforeInstallPromptEvent = Event & {
@@ -16,18 +17,16 @@ type NavItem =
   | { label: string; href: string; section?: never };
 
 const exploreItems: NavItem[] = [
-  { label: "Listen", section: "listen" },
-  { label: "Watch", section: "watch" },
-  { label: "Learn", section: "learn" },
-  { label: "Adapt", section: "adapt" },
+  { label: "How it works", section: "listen" },
   { label: "Teams", section: "use-cases" },
   { label: "Explore", section: "pilot" },
 ];
 
 const resourceItems: NavItem[] = [
+  { label: "Demo access", href: "/demo-access" },
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
-  { label: "Demo access", href: "/demo-access" },
+  { label: "Investors", href: "/investors" },
 ];
 
 const navItems = [...exploreItems, ...resourceItems];
@@ -162,6 +161,11 @@ const Navbar = () => {
     );
   };
 
+  const handleExploreClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "header" });
+    handleSectionNavigation(event, "pilot");
+  };
+
   return (
     <nav data-site-header aria-label="Primary navigation" className="fixed inset-x-0 top-0 z-50 border-b border-border/80 bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
@@ -180,10 +184,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <Button asChild variant="navigation" size="sm" className="hidden xl:inline-flex">
-            <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer">
-              Data room
-              <ArrowUpRight data-icon="inline-end" />
+          <Button asChild size="sm" className="hidden xl:inline-flex">
+            <a href="/#pilot" onClick={handleExploreClick}>
+              Start exploration
+              <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
           <Separator orientation="vertical" className="mx-1 hidden h-6 xl:block" />
@@ -223,9 +227,9 @@ const Navbar = () => {
             >
               <section aria-labelledby="navigation-explore-heading">
                 <h2 id="navigation-explore-heading" className="px-3 pb-2 pt-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  Explore
+                  Product
                 </h2>
-                <div className="grid grid-cols-2 gap-1">
+                <div className="grid gap-1">
                   {exploreItems.map((item) => renderNavLink(item, true))}
                 </div>
               </section>
@@ -236,12 +240,6 @@ const Navbar = () => {
                 </h2>
                 <div className="grid grid-cols-2 gap-1">
                   {resourceItems.map((item) => renderNavLink(item, true))}
-                  <Button asChild variant="navigation" className="h-11 w-full justify-start px-3">
-                    <a href="https://data.terrasatch.com" target="_blank" rel="noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
-                      Data room
-                      <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
-                    </a>
-                  </Button>
                 </div>
               </section>
               {installPrompt ? (
