@@ -35,13 +35,13 @@ const PricingEstimator = () => (
     <div className="container relative mx-auto px-6">
       <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
         <div className="max-w-3xl">
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">After exploration</p>
-          <h2 className="mt-3 font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
-            If it works, scope the rollout<span className="text-primary">.</span>
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">After a successful evaluation</p>
+          <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] text-foreground sm:text-5xl lg:text-6xl">
+            Scope only what your operation needs<span className="text-primary">.</span>
           </h2>
         </div>
         <p className="max-w-xl text-sm leading-relaxed text-muted-foreground lg:text-right">
-          You do not need to choose a production plan before the evaluation. If the workflow proves useful, we scope only what your team actually needs.
+          Production pricing comes after the workflow proves useful. We scope the radios, processing, retention, integrations, and support your team actually needs.
         </p>
       </div>
 
@@ -69,28 +69,21 @@ const PricingEstimator = () => (
       </div>
 
       <div className="mt-10 flex flex-col justify-between gap-5 border-l border-primary pl-6 sm:flex-row sm:items-center">
-        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Not ready to talk rollout? Start with the free exploration. Production scope comes later, only if the evaluation earns it.
-        </p>
-        <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-          <Button asChild variant="outline">
-            <a
-              href="#pilot"
-              onClick={() => trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "rollout-section" })}
-            >
-              Start free exploration
-            </a>
-          </Button>
-          <Button asChild>
-            <a
-              href="mailto:mccunekeaton@gmail.com?subject=TerraSatch%20rollout%20inquiry"
-              onClick={() => trackFunnelEvent({ stage: "convert", action: "discuss-rollout", source: "rollout-section" })}
-            >
-              Discuss rollout
-              <ArrowRight data-icon="inline-end" />
-            </a>
-          </Button>
+        <div>
+          <p className="font-display text-xl font-bold uppercase">Already completed an evaluation?</p>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            The next conversation is about deployment scope, not another signup flow.
+          </p>
         </div>
+        <Button asChild>
+          <a
+            href="mailto:mccunekeaton@gmail.com?subject=TerraSatch%20rollout%20inquiry"
+            onClick={() => trackFunnelEvent({ stage: "convert", action: "discuss-rollout", source: "rollout-section" })}
+          >
+            Discuss rollout
+            <ArrowRight data-icon="inline-end" />
+          </a>
+        </Button>
       </div>
     </div>
   </section>
