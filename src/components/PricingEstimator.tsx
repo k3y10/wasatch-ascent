@@ -72,7 +72,7 @@ const PricingEstimator = () => (
         <div>
           <p className="font-display text-xl font-bold uppercase">Already completed an evaluation?</p>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            The next conversation is about deployment scope, not another signup flow.
+            The next conversation is deployment scope, not another signup flow.
           </p>
         </div>
         <Button asChild>
