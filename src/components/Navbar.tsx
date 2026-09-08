@@ -21,7 +21,7 @@ const exploreItems: NavItem[] = [
   { label: "Learn", section: "learn" },
   { label: "Adapt", section: "adapt" },
   { label: "Teams", section: "use-cases" },
-  { label: "Pilot", section: "pilot" },
+  { label: "Explore", section: "pilot" },
 ];
 
 const resourceItems: NavItem[] = [
