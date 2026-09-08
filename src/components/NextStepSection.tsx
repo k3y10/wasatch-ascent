@@ -24,7 +24,7 @@ const paths = [
     description: "Go to the separate investor path for the founder round, data room, and whitepaper.",
     href: "/investors",
     icon: Landmark,
-    event: { stage: "route", action: "investor-information", source: "next-step-router" },
+    event: { stage: "educate", action: "investor-information", source: "next-step-router" },
   },
 ] as const;
 
