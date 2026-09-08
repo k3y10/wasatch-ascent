@@ -119,7 +119,7 @@ const LearnAdaptSection = () => (
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Teams · field operations</p>
             <h2 className="mt-4 max-w-4xl font-display text-5xl font-bold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
-              Trusted where work leaves the network<span className="text-primary">.</span>
+              Built for where work leaves the network<span className="text-primary">.</span>
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Start with one recurring radio workflow. Prove that the record is useful, then expand only where it saves time.
@@ -145,7 +145,7 @@ const LearnAdaptSection = () => (
             One team. One workflow. Approved sample audio. A clear finding before any production commitment.
           </p>
           <Button asChild variant="outline" className="shrink-0">
-            <a href="#pilot">Start small<ArrowRight data-icon="inline-end" /></a>
+            <a href="#pilot">Free exploration<ArrowRight data-icon="inline-end" /></a>
           </Button>
         </div>
       </div>
@@ -154,4 +154,3 @@ const LearnAdaptSection = () => (
 );
 
 export default LearnAdaptSection;
-
