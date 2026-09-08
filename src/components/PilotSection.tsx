@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { trackFunnelEvent } from "@/lib/funnel-analytics";
 import { submitInquiry } from "@/lib/inquiry";
+
+const explorationPath = [
+  ["Explore", "Choose one real workflow and approved sample data."],
+  ["Validate", "Review the output with the people who actually use the workflow."],
+  ["Decide", "Define a rollout only if the team sees clear operational value."],
+];
 
 const explorationLimits = [
   "One small team with up to five participants",
@@ -46,6 +53,7 @@ const PilotSection = () => {
         return;
       }
       if (!result.ok) throw new Error(result.error || "Unable to submit inquiry.");
+      trackFunnelEvent({ stage: "convert", action: "exploration-request-submitted", source: "exploration-form" });
       toast.success("Exploration request sent to Keaton.");
       setSent(true);
     } catch (error) {
@@ -73,6 +81,19 @@ const PilotSection = () => {
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
             The goal is simple: identify where TerraSatch can actually help before moving toward a larger deployment.
           </p>
+
+          <div className="mt-8 border-y border-border/70">
+            {explorationPath.map(([stage, detail], index) => (
+              <div key={stage} className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-border/70 py-4 last:border-b-0">
+                <span className="font-mono text-[10px] tracking-[0.18em] text-primary">0{index + 1}</span>
+                <div>
+                  <p className="font-display text-lg font-bold uppercase">{stage}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
           <ul className="mt-8 flex flex-col gap-3">
             {explorationLimits.map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-foreground/80">
@@ -117,7 +138,7 @@ const PilotSection = () => {
               <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={pilot.website} onChange={(event) => setPilot({ ...pilot, website: event.target.value })} />
               <Button type="submit" size="lg" disabled={pending}>
                 {pending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                {pending ? "Sending request..." : "Start free exploration"}
+                {pending ? "Sending request..." : "Start free 30-day exploration"}
               </Button>
             </FieldGroup>
           </form>
