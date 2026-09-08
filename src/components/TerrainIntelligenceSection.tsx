@@ -4,36 +4,34 @@ import OperationalSnapshot from "@/components/OperationalSnapshot";
 
 const terrainInputs = [
   {
-    label: "Survey the cell",
-    detail: "Drone imagery, elevation models, aspect, slope, and repeatable terrain context for the area crews are discussing.",
+    label: "Survey the area",
+    detail: "Use terrain, elevation, aspect, slope, imagery, and repeatable cell context for the place crews are discussing.",
     icon: Camera,
   },
   {
-    label: "Join field evidence",
-    detail: "Snowpit profiles, patrol notes, radio observations, and uncertainty stay attached to the location where they were collected.",
+    label: "Keep field evidence attached",
+    detail: "Snowpits, patrol notes, radio observations, and uncertainty remain connected to the location where they were collected.",
     icon: Snowflake,
   },
   {
-    label: "Compare regional context",
-    detail: "Forecast zones, weather, wind loading, and published observations help a reviewer see what changed around the local report.",
+    label: "Compare the bigger picture",
+    detail: "Weather, forecast zones, wind loading, and published observations help reviewers understand what surrounds the local report.",
     icon: Wind,
   },
 ];
 
 const TerrainIntelligenceSection = () => (
-  <section id="watch" className="scroll-mt-20 relative overflow-hidden bg-terrain-deep py-28">
+  <section id="watch" className="scroll-mt-20 relative overflow-hidden bg-terrain-deep py-24 sm:py-28">
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
       <div className="grid gap-12 xl:grid-cols-[0.85fr_1.15fr] xl:items-end">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Watch · AvyTS terrain intelligence</p>
-          <h2 className="mt-4 max-w-3xl font-display text-5xl font-bold uppercase leading-[0.9] text-foreground sm:text-6xl lg:text-7xl">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Watch · terrain context</p>
+          <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] text-foreground sm:text-5xl lg:text-6xl">
             See the terrain around the call<span className="text-primary">.</span>
           </h2>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-frost-dim">
-            TerraSatch turns a field report into more than a pin on a map. AvyTS resolves the signal against an
-            inspectable terrain cell, then carries the observation into the regional picture a forecaster, patrol
-            lead, or backcountry team needs to review.
+            A field report becomes more useful when the team can see where it happened and what surrounds it. AvyTS connects the report to terrain, weather, forecast zones, and nearby evidence for review.
           </p>
         </div>
 
@@ -44,21 +42,20 @@ const TerrainIntelligenceSection = () => (
           height={947}
           label="AvyTS · Regional terrain"
           title="Local evidence in regional context"
-          description="Reviewers can keep provider geometry, mapped observations, cell terrain, and the selected forecast region visible in one operating picture. Illustrative product preview."
+          description="Reviewers can keep mapped observations, terrain context, provider geometry, and the selected forecast region visible in one operating picture. Illustrative product preview."
           mediaClassName="aspect-[4/3] sm:aspect-[1587/947]"
           imageClassName="object-[57%_center] sm:object-center"
         />
       </div>
 
-      <div className="mt-16 grid border-y border-border/70 lg:grid-cols-[0.8fr_1.2fr]">
+      <div className="mt-14 grid border-y border-border/70 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="border-b border-border/70 py-8 lg:border-b-0 lg:border-r lg:pr-10">
           <MapPinned className="size-7 text-primary" aria-hidden="true" />
           <h3 className="mt-5 font-display text-3xl font-bold uppercase leading-none">
-            From drone cell to regional awareness<span className="text-primary">.</span>
+            From local evidence to regional awareness<span className="text-primary">.</span>
           </h3>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Drone surveys and repeated field work create a grounded local view. The point is not automated judgment;
-            it is better evidence, better context, and a clearer handoff for the person accountable for the decision.
+            The goal is not automated judgment. It is to give the responsible operator better evidence, clearer context, and an easier handoff.
           </p>
           <Button asChild variant="outline" className="mt-7">
             <a href="/demo-access">
@@ -89,8 +86,7 @@ const TerrainIntelligenceSection = () => (
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">04</p>
               <h4 className="mt-1 font-display text-2xl font-bold uppercase">Keep humans in command</h4>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                TerraListen and AvyTS prepare a traceable record, briefing, or follow-up queue. A qualified reviewer
-                remains responsible for publishing operational guidance and taking action.
+                TerraListen and AvyTS can prepare a traceable record, briefing, or follow-up queue. A qualified reviewer remains responsible for guidance and action.
               </p>
             </div>
           </div>
@@ -101,4 +97,3 @@ const TerrainIntelligenceSection = () => (
 );
 
 export default TerrainIntelligenceSection;
-
