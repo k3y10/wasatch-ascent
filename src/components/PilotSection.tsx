@@ -9,9 +9,9 @@ import { trackFunnelEvent } from "@/lib/funnel-analytics";
 import { submitInquiry } from "@/lib/inquiry";
 
 const evaluationSteps = [
-  ["Tell us one workflow", "Share the operational problem you want to evaluate."],
-  ["Review a controlled test", "Use approved sample data with the people who know the workflow."],
-  ["Decide what is worth keeping", "Scope a rollout only if the evaluation produces clear value."],
+  ["Tell us the workflow", "Share one real operational problem you want to test."],
+  ["We set up a controlled evaluation", "Use approved sample data and the context your organization chooses to provide."],
+  ["Your team reviews the result", "Only discuss rollout if the workflow proves useful."],
 ];
 
 const PilotSection = () => {
@@ -28,7 +28,7 @@ const PilotSection = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!pilot.name || !pilot.email || !pilot.organization || !pilot.workflow) {
-      toast.error("Complete the required exploration fields.");
+      toast.error("Complete the required evaluation fields.");
       return;
     }
 
@@ -36,20 +36,20 @@ const PilotSection = () => {
     try {
       const { result } = await submitInquiry({
         mode: "pilot",
-        scope: "Free 30-day exploration; one small team; one workflow; approved sample data; no custom integration or production SLA",
+        scope: "Free 30-day evaluation; one small team; one workflow; approved sample data; no custom integration or production SLA",
         ...pilot,
       });
       if (result.fallbackMailto) {
-        toast("Opening your email app so the founder still receives the inquiry.");
+        toast("Opening your email app so the founder still receives the request.");
         window.location.assign(result.fallbackMailto);
         return;
       }
-      if (!result.ok) throw new Error(result.error || "Unable to submit inquiry.");
-      trackFunnelEvent({ stage: "convert", action: "exploration-request-submitted", source: "exploration-form" });
-      toast.success("Exploration request sent to Keaton.");
+      if (!result.ok) throw new Error(result.error || "Unable to submit request.");
+      trackFunnelEvent({ stage: "convert", action: "evaluation-request-submitted", source: "evaluation-form" });
+      toast.success("Evaluation request sent to Keaton.");
       setSent(true);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to submit exploration request.");
+      toast.error(error instanceof Error ? error.message : "Unable to submit evaluation request.");
     } finally {
       setPending(false);
     }
@@ -65,15 +65,15 @@ const PilotSection = () => {
           <div className="flex size-12 items-center justify-center rounded-full border border-primary/45 bg-primary/10">
             <Users className="size-6 text-primary" aria-hidden="true" />
           </div>
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">For operational teams</p>
-          <h2 className="mt-3 font-display text-5xl font-bold uppercase leading-none lg:text-6xl">
-            Explore TerraSatch with your team<span className="text-primary">.</span>
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Free 30-day evaluation</p>
+          <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] sm:text-5xl lg:text-6xl">
+            Evaluate TerraSatch with your team<span className="text-primary">.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-frost-dim">
-            This is not an account signup. It is a no-cost, 30-day evaluation of one real workflow using approved sample data.
+            This is not an account signup. Choose one real workflow and evaluate whether TerraListen and Satchy make the information easier to capture, connect, and review.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            TerraListen and Satchy can build context around the terminology, locations, and workflow your organization chooses to provide. Your team reviews the result and decides whether it is useful.
+            The evaluation uses approved sample data and the operational context your organization chooses to provide. Your team stays in control of what is tested and whether anything moves forward.
           </p>
 
           <div className="mt-8 border-y border-border/70">
@@ -96,7 +96,7 @@ const PilotSection = () => {
         {sent ? (
           <div className="flex min-h-80 flex-col items-center justify-center gap-4 rounded-xl border border-primary/30 bg-background/70 p-8 text-center" role="status">
             <CheckCircle2 className="size-9 text-primary" aria-hidden="true" />
-            <h3 className="font-display text-3xl font-bold uppercase">Exploration request received</h3>
+            <h3 className="font-display text-3xl font-bold uppercase">Evaluation request received</h3>
             <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
               Keaton will review the workflow and follow up directly about the most useful next step.
             </p>
@@ -104,10 +104,10 @@ const PilotSection = () => {
         ) : (
           <form onSubmit={handleSubmit} className="rounded-xl border border-primary/30 bg-background/75 p-5 shadow-[var(--shadow-elevated)] sm:p-7">
             <div className="mb-7">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Free 30-day exploration</p>
-              <h3 className="mt-2 font-display text-3xl font-bold uppercase">Tell us what you want to evaluate</h3>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Request an evaluation</p>
+              <h3 className="mt-2 font-display text-3xl font-bold uppercase">Tell us what you want to test</h3>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                We review each request manually. No credit card, software account, or production commitment is required.
+                No credit card, software account, or production commitment is required.
               </p>
             </div>
 
@@ -148,7 +148,7 @@ const PilotSection = () => {
               </Field>
 
               <Field>
-                <FieldLabel htmlFor="pilot-workflow">What would you like to evaluate? *</FieldLabel>
+                <FieldLabel htmlFor="pilot-workflow">What workflow should we evaluate? *</FieldLabel>
                 <Textarea
                   id="pilot-workflow"
                   value={pilot.workflow}
@@ -157,7 +157,7 @@ const PilotSection = () => {
                   className="min-h-28"
                   required
                 />
-                <FieldDescription>Keep it simple. One workflow or operational problem is enough to start.</FieldDescription>
+                <FieldDescription>One workflow or operational problem is enough to start.</FieldDescription>
               </Field>
 
               <input
@@ -171,7 +171,7 @@ const PilotSection = () => {
 
               <Button type="submit" size="lg" className="w-full" disabled={pending}>
                 {pending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                {pending ? "Sending request..." : "Request free exploration"}
+                {pending ? "Sending request..." : "Request free 30-day evaluation"}
               </Button>
             </FieldGroup>
           </form>
