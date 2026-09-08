@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import OperationalSnapshot from "@/components/OperationalSnapshot";
+import { trackFunnelEvent } from "@/lib/funnel-analytics";
 
 const learnInputs = [
   { title: "Calls + observations", description: "Keep authorized radio calls, field notes, and structured observations connected to their source and location.", icon: History },
@@ -122,7 +123,7 @@ const LearnAdaptSection = () => (
               Built for where work leaves the network<span className="text-primary">.</span>
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Start with one recurring radio workflow. Prove that the record is useful, then expand only where it saves time.
+              Start with one real workflow. Prove that the record is useful with the people who use it, then expand only where TerraSatch earns a role.
             </p>
           </div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary lg:text-right">
@@ -145,7 +146,13 @@ const LearnAdaptSection = () => (
             One team. One workflow. Approved sample audio. A clear finding before any production commitment.
           </p>
           <Button asChild variant="outline" className="shrink-0">
-            <a href="#pilot">Free exploration<ArrowRight data-icon="inline-end" /></a>
+            <a
+              href="#pilot"
+              onClick={() => trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "teams" })}
+            >
+              Free exploration
+              <ArrowRight data-icon="inline-end" />
+            </a>
           </Button>
         </div>
       </div>
