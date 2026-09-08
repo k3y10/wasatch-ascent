@@ -12,6 +12,7 @@ const API = lazy(() => import("./pages/API.tsx"));
 const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
 const Demos = lazy(() => import("./pages/Demos.tsx"));
 const Edge = lazy(() => import("./pages/Downloads.tsx"));
+const Investors = lazy(() => import("./pages/Investors.tsx"));
 const ProtectedDemoRoute = lazy(() => import("./components/ProtectedDemoRoute.tsx"));
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/api" element={<API />} />
             <Route path="/edge" element={<Edge />} />
             <Route path="/downloads" element={<Navigate to="/edge" replace />} />
+            <Route path="/investors" element={<Investors />} />
             <Route path="/demo-access" element={<DemoAccess />} />
             <Route
               path="/demos"
