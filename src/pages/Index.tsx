@@ -4,7 +4,6 @@ import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
 import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
 import LearnAdaptSection from "@/components/LearnAdaptSection";
-import NextStepSection from "@/components/NextStepSection";
 import PilotSection from "@/components/PilotSection";
 import PricingEstimator from "@/components/PricingEstimator";
 import Footer from "@/components/Footer";
@@ -40,7 +39,6 @@ const Index = () => {
       <ScrollReveal><TerrainIntelligenceSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><LearnAdaptSection /></ScrollReveal>
-      <ScrollReveal><NextStepSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><PilotSection /></ScrollReveal>
       <div className="amber-line" />
