@@ -19,7 +19,6 @@ type NavItem =
 const exploreItems: NavItem[] = [
   { label: "How it works", section: "listen" },
   { label: "Teams", section: "use-cases" },
-  { label: "Explore", section: "pilot" },
 ];
 
 const resourceItems: NavItem[] = [
@@ -231,6 +230,12 @@ const Navbar = () => {
                 </h2>
                 <div className="grid gap-1">
                   {exploreItems.map((item) => renderNavLink(item, true))}
+                  <Button asChild className="mt-1 h-11 w-full justify-between px-3">
+                    <a href="/#pilot" onClick={handleExploreClick}>
+                      Start exploration
+                      <ArrowRight data-icon="inline-end" />
+                    </a>
+                  </Button>
                 </div>
               </section>
               <Separator className="my-3" />
