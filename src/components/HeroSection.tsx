@@ -82,12 +82,11 @@ const HeroSection = () => (
             TerraSatch field intelligence platform
           </p>
           <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
-            AI for teams beyond the edge of coverage<span className="text-primary">.</span>
+            Turn field communication into field intelligence<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            TerraSatch connects field signal, terrain, and human judgment for backcountry teams and remote operations.
-            Satchy is our Sasquatch AI agent, working through TerraListen to turn authorized radio traffic into a mapped,
-            reviewable operational record without interrupting the channel.
+            TerraSatch helps remote teams turn authorized radio communications and field observations into searchable, mapped,
+            reviewable operational records. TerraListen captures the signal while Satchy helps organize the context for human review.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -98,8 +97,8 @@ const HeroSection = () => (
               </a>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
-              <a href="#listen">
-                See how it works
+              <a href="#pilot">
+                Start free exploration
                 <ArrowDown data-icon="inline-end" />
               </a>
             </Button>
@@ -128,4 +127,3 @@ const HeroSection = () => (
 );
 
 export default HeroSection;
-
