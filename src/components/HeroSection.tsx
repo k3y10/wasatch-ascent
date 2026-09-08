@@ -38,7 +38,7 @@ const CapabilityRail = () => (
           <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
         </h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
-          One operating loop from radio signal to reviewed field action.
+          One operating loop from field communication to reviewed action.
         </p>
       </div>
 
@@ -86,26 +86,25 @@ const HeroSection = () => (
             Turn field communication into field intelligence<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            TerraSatch helps remote teams turn authorized radio communications and field observations into searchable, mapped,
-            reviewable operational records. TerraListen captures the signal while Satchy helps organize the context for human review.
+            TerraSatch helps remote teams preserve field communication, connect it to terrain and operational context, and prepare reviewable records without replacing the people responsible for the decision.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
               <a
                 href="#listen"
-                onClick={() => trackFunnelEvent({ stage: "demonstrate", action: "see-terralisten-work", source: "hero" })}
+                onClick={() => trackFunnelEvent({ stage: "demonstrate", action: "see-how-it-works", source: "hero" })}
               >
-                See TerraListen work
+                See how it works
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
               <a
                 href="#pilot"
-                onClick={() => trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "hero" })}
+                onClick={() => trackFunnelEvent({ stage: "validate", action: "evaluate-with-team", source: "hero" })}
               >
-                Start free exploration
+                Evaluate with your team
                 <ArrowDown data-icon="inline-end" />
               </a>
             </Button>
