@@ -160,8 +160,8 @@ const Navbar = () => {
     );
   };
 
-  const handleExploreClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    trackFunnelEvent({ stage: "validate", action: "start-free-exploration", source: "header" });
+  const handleEvaluateClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    trackFunnelEvent({ stage: "validate", action: "evaluate-terrasatch", source: "header" });
     handleSectionNavigation(event, "pilot");
   };
 
@@ -184,8 +184,8 @@ const Navbar = () => {
 
         <div className="flex shrink-0 items-center gap-1.5">
           <Button asChild size="sm" className="hidden xl:inline-flex">
-            <a href="/#pilot" onClick={handleExploreClick}>
-              Start exploration
+            <a href="/#pilot" onClick={handleEvaluateClick}>
+              Evaluate TerraSatch
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
@@ -231,8 +231,8 @@ const Navbar = () => {
                 <div className="grid gap-1">
                   {exploreItems.map((item) => renderNavLink(item, true))}
                   <Button asChild className="mt-1 h-11 w-full justify-between px-3">
-                    <a href="/#pilot" onClick={handleExploreClick}>
-                      Start exploration
+                    <a href="/#pilot" onClick={handleEvaluateClick}>
+                      Evaluate TerraSatch
                       <ArrowRight data-icon="inline-end" />
                     </a>
                   </Button>
