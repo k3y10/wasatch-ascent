@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import OperationalSnapshot from "@/components/OperationalSnapshot";
+import { trackFunnelEvent } from "@/lib/funnel-analytics";
 
 const learnInputs = [
   { title: "Calls + observations", description: "Keep authorized radio calls, field notes, and structured observations connected to their source and location.", icon: History },
@@ -40,14 +41,15 @@ const LearnAdaptSection = () => (
         <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Learn · operational memory</p>
-            <h2 className="mt-4 font-display text-5xl font-bold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
+            <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] sm:text-5xl lg:text-6xl">
               Keep what the field already learned<span className="text-primary">.</span>
             </h2>
           </div>
           <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground lg:justify-self-end">
-            TerraSatch connects calls, snowpits, drone cells, documents, and shift records into durable operational memory. The source observation stays distinct from AI interpretation so the record remains reviewable.
+            TerraSatch keeps calls, observations, terrain, documents, and shift records connected so useful context does not disappear when the moment or shift ends.
           </p>
         </div>
+
         <div className="mt-14 grid border-y border-border/70 md:grid-cols-3">
           {learnInputs.map(({ title, description, icon: Icon }) => (
             <article key={title} className="border-b border-border/70 py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0">
@@ -65,7 +67,7 @@ const LearnAdaptSection = () => (
           height={874}
           label="Operational memory · Salt Lake"
           title="The record stays attached to place"
-          description="A selected observation remains connected to its cell, elevation, aspect, trigger, problem, source, and surrounding forecast context. This is an illustrative integration preview."
+          description="A selected observation remains connected to its location, terrain details, source, and surrounding context. This is an illustrative integration preview."
           className="mt-14"
           mediaClassName="aspect-[4/3] sm:aspect-[1586/874]"
           imageClassName="object-[54%_center] sm:object-center"
@@ -78,13 +80,13 @@ const LearnAdaptSection = () => (
       <div className="container relative mx-auto px-6">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Adapt · reviewed operational outputs</p>
-            <h2 className="mt-4 font-display text-5xl font-bold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Adapt · reviewed outputs</p>
+            <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] sm:text-5xl lg:text-6xl">
               Turn context into something the team can use<span className="text-primary">.</span>
             </h2>
           </div>
           <p className="max-w-2xl text-lg leading-relaxed text-frost-dim lg:justify-self-end">
-            TerraSatch prepares reviewable alerts, briefings, handoffs, and reports for approved human action. It supports the operator responsible for the decision; it does not replace them.
+            Prepare reviewable briefings, handoffs, reports, and follow-up actions while keeping the responsible operator in control.
           </p>
         </div>
 
@@ -95,7 +97,7 @@ const LearnAdaptSection = () => (
           height={883}
           label="Adapt · Wildfire operations"
           title="The same field loop, beyond avalanche work"
-          description="Incident context, authorized radio input, weather, and local cells can be assembled into one reviewable operating picture before a team publishes or acts. Demo data is illustrative."
+          description="Incident context, approved radio input, weather, and local cells can be assembled into one reviewable operating picture before a team publishes or acts. Demo data is illustrative."
           className="mt-14"
           mediaClassName="aspect-[4/3] sm:aspect-[1486/883]"
           imageClassName="object-[50%_center] sm:object-center"
@@ -118,11 +120,11 @@ const LearnAdaptSection = () => (
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Teams · field operations</p>
-            <h2 className="mt-4 max-w-4xl font-display text-5xl font-bold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
-              Trusted where work leaves the network<span className="text-primary">.</span>
+            <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] sm:text-5xl lg:text-6xl">
+              Built for where work leaves the network<span className="text-primary">.</span>
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Start with one recurring radio workflow. Prove that the record is useful, then expand only where it saves time.
+              TerraSatch is being shaped around teams that already rely on radios, terrain awareness, field observations, and human judgment.
             </p>
           </div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary lg:text-right">
@@ -141,11 +143,20 @@ const LearnAdaptSection = () => (
         </div>
 
         <div className="mt-10 flex flex-col justify-between gap-5 border-l border-primary pl-6 sm:flex-row sm:items-center">
-          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            One team. One workflow. Approved sample audio. A clear finding before any production commitment.
-          </p>
+          <div>
+            <p className="font-display text-xl font-bold uppercase">Does this look relevant to your operation?</p>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+              Evaluate one real workflow with your team. No software account or production commitment is required.
+            </p>
+          </div>
           <Button asChild variant="outline" className="shrink-0">
-            <a href="#pilot">Start small<ArrowRight data-icon="inline-end" /></a>
+            <a
+              href="#pilot"
+              onClick={() => trackFunnelEvent({ stage: "validate", action: "evaluate-one-workflow", source: "teams" })}
+            >
+              Evaluate one workflow
+              <ArrowRight data-icon="inline-end" />
+            </a>
           </Button>
         </div>
       </div>
@@ -154,4 +165,3 @@ const LearnAdaptSection = () => (
 );
 
 export default LearnAdaptSection;
-

@@ -28,7 +28,7 @@ const roadmap = [
   { stage: "Now", title: "TerraListen", detail: "AI radio agent + human-authorized routing" },
   { stage: "Next", title: "Operational outputs", detail: "Documents, workflows, and field integrations" },
   { stage: "Expand", title: "Terrain modules", detail: "TerraGrid + AvyTS, PyroTS, HydroTS, GeoTS, InfraTS" },
-  { stage: "Future", title: "Field intelligence", detail: "SherpAI, AR views, and partner APIs" },
+  { stage: "Future", title: "Field intelligence", detail: "Satchy + AR views + partner APIs" },
 ];
 
 const investorTypeOptions = [
@@ -184,8 +184,7 @@ const EngagementSection = () => {
               Fall 2026 founder round.
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-frost-dim">
-              Opening in September 2026 and continuing through the holidays. We’re speaking with aligned
-              angels, operators, funds, strategic partners, and qualified supporters.
+              This section is specifically for investor and strategic interest. Operational teams evaluating TerraSatch should use the free exploration path on the main site instead.
             </p>
             <p className="mt-5 border-l border-primary pl-4 font-mono text-[10px] uppercase leading-relaxed tracking-[0.16em] text-muted-foreground">
               Pre-seed SAFE · $750K target · $1M hard cap · $8M post-money SAFE cap · 0% discount
@@ -265,11 +264,9 @@ const EngagementSection = () => {
             )}
           </form>
         </div>
-
       </div>
     </section>
   );
 };
 
 export default EngagementSection;
-

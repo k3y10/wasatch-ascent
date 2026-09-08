@@ -9,20 +9,23 @@ const workflow = [
 ];
 
 const TerraListenSection = () => (
-  <section id="listen" className="scroll-mt-20 relative overflow-hidden py-28">
+  <section id="listen" className="scroll-mt-20 relative overflow-hidden py-24 sm:py-28">
     <div className="absolute inset-0 bg-terrain-deep" />
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
-      <div className="grid gap-6 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-        <h2 className="max-w-4xl font-display text-5xl font-bold uppercase leading-[0.9] text-foreground sm:text-6xl lg:text-7xl">
-          Radio to operational record<span className="text-primary">.</span>
-        </h2>
+      <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Listen · radio to operational record</p>
+          <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] text-foreground sm:text-5xl lg:text-6xl">
+            See the signal take shape<span className="text-primary">.</span>
+          </h2>
+        </div>
         <p className="max-w-xl text-lg leading-relaxed text-frost-dim lg:pb-1">
-          TerraListen preserves authorized field input and gives Satchy one searchable, reviewable operational record to work from.
+          TerraListen preserves approved field communication, keeps the source attached, and turns it into a searchable record your team can review.
         </p>
       </div>
 
-      <div className="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-4 xl:gap-0">
+      <div className="mt-14 grid gap-10 md:grid-cols-2 xl:grid-cols-4 xl:gap-0">
         {workflow.map(({ label, description, icon: Icon }, index) => (
           <article key={label} className="relative border-t border-border/70 pt-6 xl:border-t-0 xl:pt-0">
             <div className="flex items-center">
@@ -40,16 +43,16 @@ const TerraListenSection = () => (
         ))}
       </div>
 
-      <div className="mt-20 border-t border-border/70 pt-10">
-        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+      <div className="mt-16 border-t border-border/70 pt-10">
+        <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Example operational record</p>
             <h3 className="mt-3 font-display text-3xl font-bold uppercase leading-none sm:text-4xl">
-              See the signal take shape<span className="text-primary">.</span>
+              One call, mapped and reviewable<span className="text-primary">.</span>
             </h3>
           </div>
           <p className="max-w-md text-sm leading-relaxed text-muted-foreground lg:text-right">
-            Sample radio events become an accountable timeline, linked locations, and a review-ready report.
+            A field report can stay connected to its transcript, extracted observation, location, timeline, and human review.
           </p>
         </div>
         <OperationalSnapshot
@@ -58,8 +61,8 @@ const TerraListenSection = () => (
           width={1585}
           height={843}
           label="TerraListen + AvyTS · Vail Pass"
-          title="One call, mapped and reviewable"
-          description="A radio report becomes a source-linked transcript, a structured field observation, a terrain-cell signal, and a clear handoff to forecast review. This is an illustrative product preview."
+          title="One field report, connected"
+          description="The original radio report remains available while the structured observation, terrain context, and review handoff stay linked to it. Illustrative product preview."
           className="mt-8"
           mediaClassName="aspect-[4/3] sm:aspect-[1585/843]"
           imageClassName="object-[61%_center] sm:object-center"
@@ -70,4 +73,3 @@ const TerraListenSection = () => (
 );
 
 export default TerraListenSection;
-

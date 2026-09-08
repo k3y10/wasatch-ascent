@@ -1,9 +1,9 @@
 const Footer = () => {
   return (
     <>
-      <div className="h-[88px] sm:h-[72px]" aria-hidden="true" />
+      <div className="h-[104px] sm:h-[72px]" aria-hidden="true" />
       <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/95 backdrop-blur-xl">
-        <div className="container mx-auto flex min-h-[88px] flex-col justify-center gap-2 px-4 py-3 sm:min-h-[72px] sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="container mx-auto flex min-h-[104px] flex-col justify-center gap-2 px-4 py-3 sm:min-h-[72px] sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-3">
             <img src="/terrasatch-logo.png" alt="TerraSatch" className="size-8 rounded-lg" width={1254} height={1254} />
             <div className="leading-tight">
@@ -15,11 +15,12 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10px] text-muted-foreground sm:justify-end">
+            <a href="/#pilot" className="transition-colors hover:text-primary">Evaluate</a>
+            <a href="/demo-access" className="transition-colors hover:text-primary">Demo</a>
+            <a href="/investors" className="transition-colors hover:text-primary">Investors</a>
+            <a href="/api" className="transition-colors hover:text-primary">API</a>
+            <a href="/edge" className="transition-colors hover:text-primary">Edge</a>
             <span>© 2026 TerraSatch</span>
-            <span>Born in the Wasatch</span>
-            <a href="mailto:mccunekeaton@gmail.com" className="transition-colors hover:text-primary">
-              Founder inquiries
-            </a>
           </div>
         </div>
       </footer>

@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getDemoSession, signInToDemos } from "@/lib/demo-auth";
+import { trackFunnelEvent } from "@/lib/funnel-analytics";
 
 type AccessLocationState = {
   from?: string;
@@ -65,6 +66,7 @@ const DemoAccess = () => {
 
     try {
       await signInToDemos(username.trim(), password);
+      trackFunnelEvent({ stage: "demonstrate", action: "secure-demo-opened", source: "demo-access" });
       navigate(destination, { replace: true });
     } catch (signInError) {
       setError(signInError instanceof Error ? signInError.message : "Unable to open the secure demo workspace.");

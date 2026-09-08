@@ -36,7 +36,7 @@ const parseBody = (request: ApiRequest): Record<string, unknown> => {
 };
 
 const buildFallbackMailto = (mode: InquiryMode, fields: Record<string, string>) => {
-  const subject = mode === "pilot" ? "TerraSatch limited pilot inquiry" : "TerraSatch Fall 2026 investor interest";
+  const subject = mode === "pilot" ? "TerraSatch free evaluation request" : "TerraSatch Fall 2026 investor interest";
   const body = Object.entries(fields)
     .filter(([key, value]) => key !== "website" && value)
     .map(([key, value]) => `${key}: ${value}`)
@@ -103,7 +103,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       });
     }
 
-    const title = mode === "pilot" ? "Limited pilot inquiry" : "Fall 2026 investor interest";
+    const title = mode === "pilot" ? "Free evaluation request" : "Fall 2026 investor interest";
     const entries = Object.entries(fields).filter(
       ([key, value]) => !["website", "mode"].includes(key) && value,
     );
@@ -144,4 +144,3 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     return response.status(400).json({ ok: false, error: "The inquiry could not be processed." });
   }
 }
-
