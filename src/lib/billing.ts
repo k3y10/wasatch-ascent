@@ -1,6 +1,29 @@
 export type PlanCode = "field" | "team" | "operations" | "enterprise";
 export type BillingInterval = "monthly" | "annual";
 
+export type BillingEntitlements = {
+  max_sites: number | null;
+  max_members: number | null;
+  max_edge_devices: number | null;
+  max_channels: number | null;
+  included_processing_hours: number | null;
+  retention_days: number | null;
+  api_access: boolean;
+  priority_support: boolean;
+};
+
+export type BillingPlan = {
+  code: PlanCode;
+  name: string;
+  description: string;
+  monthly_amount_cents: number | null;
+  annual_amount_cents: number | null;
+  trial_days: number;
+  self_service: boolean;
+  recommended: boolean;
+  entitlements: BillingEntitlements;
+};
+
 export type CheckoutStatus = {
   state: "processing" | "ready" | "expired";
   plan_code: PlanCode;
@@ -38,6 +61,14 @@ const responseError = async (response: Response) => {
   } catch {
     return `Request failed (${response.status}).`;
   }
+};
+
+export const getBillingPlans = async () => {
+  const response = await fetch(`${TERRASATCH_API_URL}/api/v1/billing/plans`, {
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) throw new Error(await responseError(response));
+  return (await response.json()) as BillingPlan[];
 };
 
 export const createBillingCheckout = async (payload: CheckoutPayload) => {
