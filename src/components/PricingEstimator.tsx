@@ -1,14 +1,6 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { LucideIcon } from "lucide-react";
-import {
-  ArrowRight,
-  Building2,
-  Check,
-  Loader2,
-  Radio,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
+import { ArrowRight, Building2, Check, Loader2, Radio, ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,7 +13,6 @@ import {
   createBillingCheckout,
   formatUsd,
   getBillingPlans,
-  type BillingInterval,
   type BillingPlan,
   type PlanCode,
 } from "@/lib/billing";
@@ -34,65 +25,70 @@ const planIcons: Record<PlanCode, LucideIcon> = {
   enterprise: Building2,
 };
 
+type SelfServicePlanCode = "field" | "team";
+
 const planPositioning: Record<
   PlanCode,
   {
-    displayName: string;
     audience: string;
     summary: string;
     why: string;
     examples: string[];
+    modelRange: string;
   }
 > = {
   field: {
-    displayName: "Individual / Field",
-    audience: "Solo operator or very small field crew",
-    summary: "The lowest-cost way to run TerraListen for one focused field workflow without paying for team-scale capacity.",
-    why: "Choose this when one person or a very small crew owns the radios, review, and daily workflow.",
-    examples: ["Solo guides", "Independent field operators", "Small evaluation crews"],
+    audience: "One person · one radio or channel",
+    summary: "Personal TerraListen access for an individual field professional who wants structured logs, summaries, and a reviewable operational record.",
+    why: "Use Individual when the workflow belongs to one operator and does not need shared team administration.",
+    examples: ["Independent guide", "Field researcher", "Solo operator"],
+    modelRange: "$29–$79 / month planning range",
   },
   team: {
-    displayName: "Team",
-    audience: "One operating team sharing the same workflow",
-    summary: "Built for a patrol, guide, SAR, or field team that needs more people, radios, Edge devices, and shared history.",
-    why: "Choose this when the workflow belongs to a team instead of one operator.",
-    examples: ["Ski patrol", "SAR teams", "Guide operations"],
+    audience: "Multiple users and radios · shared workflow",
+    summary: "Shared TerraListen access for a working crew that needs common channels, maps, history, and administrative controls.",
+    why: "Use Team when several people need to work from the same radio traffic and operational context.",
+    examples: ["Ski patrol", "SAR team", "Guide operation"],
+    modelRange: "$250–$750 / month planning range",
   },
   operations: {
-    displayName: "Operations",
-    audience: "Larger, multi-shift, or multi-site operations",
-    summary: "For persistent operational use with significantly more channels, hardware, processing capacity, and site coverage.",
-    why: "Choose this when TerraListen is becoming part of regular operations across shifts, teams, or locations.",
-    examples: ["Mountain operations", "Incident teams", "Multi-site field programs"],
+    audience: "One operating site, team, or department",
+    summary: "A recurring annual software license for a site after the workflow has been validated and TerraListen becomes part of regular operations.",
+    why: "Use an Annual Site license when deployment includes larger crews, more radios and channels, longer history, support, and operational ownership.",
+    examples: ["Mountain operations", "Snow safety department", "Field program"],
+    modelRange: "$25K–$60K / year planning range",
   },
   enterprise: {
-    displayName: "Organization",
-    audience: "Departments, agencies, and custom deployments",
-    summary: "A scoped annual deployment for organizations that need custom limits, integrations, governance, or support.",
-    why: "Choose this when your deployment no longer fits a fixed self-service plan.",
-    examples: ["Agencies", "Multiple departments", "Custom integrations"],
+    audience: "Multiple teams or sites · custom deployment",
+    summary: "Higher-touch deployment for organizations that need integrations, extended retention, private hosting, security controls, or broader support.",
+    why: "Use Enterprise when the deployment spans sites or requires infrastructure and governance beyond a standard site license.",
+    examples: ["Agency", "Multi-site operator", "Integrated enterprise deployment"],
+    modelRange: "$75K–$250K+ / year planning range",
   },
 };
 
 const inputClass =
   "h-11 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary";
 
-const formatCapacity = (value: number | null, fallback = "Custom") =>
-  value === null ? fallback : String(value);
+const formatCapacity = (value: number | null, prefix = "") =>
+  value === null ? "Custom" : `${prefix}${value}`;
 
 const isSelfServicePlan = (
   plan: BillingPlan,
-): plan is BillingPlan & { code: Exclude<PlanCode, "enterprise"> } =>
-  plan.self_service && plan.code !== "enterprise";
+): plan is BillingPlan & { code: SelfServicePlanCode } =>
+  plan.self_service && (plan.code === "field" || plan.code === "team");
 
-const annualSavings = (plan: BillingPlan) => {
-  if (plan.monthly_amount_cents === null || plan.annual_amount_cents === null) return null;
-  const savings = plan.monthly_amount_cents * 12 - plan.annual_amount_cents;
-  return savings > 0 ? savings : null;
+const planPrice = (plan: BillingPlan) => {
+  if (plan.monthly_amount_cents !== null) {
+    return { amount: formatUsd(plan.monthly_amount_cents), cadence: "/ month", interval: "monthly" as const };
+  }
+  if (plan.annual_amount_cents !== null) {
+    return { amount: formatUsd(plan.annual_amount_cents), cadence: "/ year", interval: "annual" as const };
+  }
+  return { amount: "Custom", cadence: "annual scope", interval: null };
 };
 
 const PricingEstimator = () => {
-  const [interval, setInterval] = useState<BillingInterval>("monthly");
   const [plans, setPlans] = useState<BillingPlan[]>([]);
   const [plansLoading, setPlansLoading] = useState(true);
   const [plansError, setPlansError] = useState("");
@@ -121,17 +117,12 @@ const PricingEstimator = () => {
     };
   }, []);
 
-  const selectedAmount = useMemo(() => {
-    if (!selectedPlan) return null;
-    return interval === "monthly"
-      ? selectedPlan.monthly_amount_cents
-      : selectedPlan.annual_amount_cents;
-  }, [interval, selectedPlan]);
-
   const trialDays = useMemo(
-    () => plans.find((plan) => plan.self_service)?.trial_days ?? null,
+    () => plans.find((plan) => plan.self_service)?.trial_days ?? 30,
     [plans],
   );
+
+  const selectedPrice = selectedPlan ? planPrice(selectedPlan) : null;
 
   const openTrial = (plan: BillingPlan) => {
     if (!isSelfServicePlan(plan)) return;
@@ -150,7 +141,7 @@ const PricingEstimator = () => {
         email: form.email,
         organization_name: form.organizationName,
         plan_code: selectedPlan.code,
-        billing_interval: interval,
+        billing_interval: "monthly",
       });
       window.location.assign(checkout.checkout_url);
     } catch (checkoutError) {
@@ -171,37 +162,14 @@ const PricingEstimator = () => {
       <div className="container relative mx-auto px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
-            Pick the way you operate<span className="text-primary">.</span>
+            Start with the operator. Scale to the organization<span className="text-primary">.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-frost-dim sm:text-lg">
-            Individual is for one operator or a very small field crew. Team adds shared people, radios, and history. Operations adds multi-site and higher-volume capacity. Organization is custom.
+            The same pricing model used in the TerraSatch pitch deck: individual access, a shared team subscription, then annual site and enterprise licensing as deployments grow.
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Self-service plans include a {trialDays ?? 30}-day free trial. A card is required to start, nothing is charged today, and billing begins after the trial unless you cancel first.
+            Individual and Team can begin with a {trialDays}-day trial. Card required, $0 today. Site and Enterprise deployments are scoped before contracting.
           </p>
-        </div>
-
-        <div className="mx-auto mt-9 flex w-fit rounded-lg border border-border/80 bg-background/75 p-1" aria-label="Billing interval">
-          <button
-            type="button"
-            onClick={() => setInterval("monthly")}
-            className={cn(
-              "rounded-md px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] transition",
-              interval === "monthly" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            Monthly
-          </button>
-          <button
-            type="button"
-            onClick={() => setInterval("annual")}
-            className={cn(
-              "rounded-md px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] transition",
-              interval === "annual" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            Annual
-          </button>
         </div>
 
         {plansLoading ? (
@@ -221,18 +189,16 @@ const PricingEstimator = () => {
             {plans.map((plan) => {
               const Icon = planIcons[plan.code];
               const positioning = planPositioning[plan.code];
-              const amount = interval === "monthly" ? plan.monthly_amount_cents : plan.annual_amount_cents;
-              const cadence = amount === null ? "Custom annual scope" : interval === "monthly" ? "/ month" : "/ year";
-              const savings = annualSavings(plan);
+              const price = planPrice(plan);
               const entitlement = plan.entitlements;
 
               return (
                 <article
                   key={plan.code}
                   className={cn(
-                    "relative flex min-h-full flex-col rounded-xl border bg-background/90 p-6 shadow-sm backdrop-blur-sm transition",
+                    "relative flex min-h-full flex-col rounded-xl border bg-background/92 p-6 shadow-sm backdrop-blur-sm",
                     plan.recommended
-                      ? "border-primary/70 bg-terrain-surface/90 shadow-lg shadow-black/10"
+                      ? "border-primary/70 bg-terrain-surface/95 shadow-lg shadow-black/10"
                       : "border-border/75",
                   )}
                 >
@@ -248,34 +214,30 @@ const PricingEstimator = () => {
                   </div>
 
                   <div className="mt-5">
-                    <h3 className="font-display text-2xl font-bold uppercase leading-tight">{positioning.displayName}</h3>
-                    <p className="mt-2 text-sm font-medium leading-relaxed text-foreground/80">{positioning.audience}</p>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{positioning.summary}</p>
+                    <h3 className="font-display text-2xl font-bold uppercase leading-tight">{plan.name}</h3>
+                    <p className="mt-2 text-sm font-semibold leading-relaxed text-foreground/80">{positioning.audience}</p>
+                    <p className="mt-3 min-h-20 text-sm leading-relaxed text-muted-foreground">{positioning.summary}</p>
                   </div>
 
                   <div className="mt-6 rounded-lg border border-border/70 bg-terrain-deep/55 p-4">
                     <div className="flex items-end gap-2">
-                      <span className="font-display text-4xl font-bold text-primary">
-                        {amount === null ? "Custom" : formatUsd(amount)}
-                      </span>
-                      <span className="pb-1 text-xs font-medium text-muted-foreground">{cadence}</span>
+                      <span className="font-display text-4xl font-bold text-primary">{price.amount}</span>
+                      <span className="pb-1 text-xs font-medium text-muted-foreground">{price.cadence}</span>
                     </div>
-                    {amount !== null && plan.trial_days > 0 ? (
-                      <div className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
+                    <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">{positioning.modelRange}</p>
+                    {isSelfServicePlan(plan) ? (
+                      <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
                         <strong className="text-foreground">$0 today</strong> · {plan.trial_days}-day free trial · card required
-                        {interval === "annual" && savings ? (
-                          <span className="mt-1 block text-primary">Save {formatUsd(savings)} versus monthly billing.</span>
-                        ) : null}
-                      </div>
+                      </p>
                     ) : (
                       <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
-                        Scoped with your organization before deployment.
+                        Planning-model base price. Final annual scope is set from deployment requirements.
                       </p>
                     )}
                   </div>
 
                   <div className="mt-6">
-                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Included capacity</p>
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Operating capacity</p>
                     <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                       <div className="border-b border-border/50 pb-2">
                         <dt className="text-xs text-muted-foreground">Sites</dt>
@@ -283,15 +245,15 @@ const PricingEstimator = () => {
                       </div>
                       <div className="border-b border-border/50 pb-2">
                         <dt className="text-xs text-muted-foreground">People</dt>
-                        <dd className="mt-0.5 font-semibold text-foreground">{entitlement.max_members === null ? "Custom" : `Up to ${entitlement.max_members}`}</dd>
+                        <dd className="mt-0.5 font-semibold text-foreground">{formatCapacity(entitlement.max_members, "Up to ")}</dd>
                       </div>
                       <div className="border-b border-border/50 pb-2">
                         <dt className="text-xs text-muted-foreground">Edge devices</dt>
-                        <dd className="mt-0.5 font-semibold text-foreground">{entitlement.max_edge_devices === null ? "Custom" : `Up to ${entitlement.max_edge_devices}`}</dd>
+                        <dd className="mt-0.5 font-semibold text-foreground">{formatCapacity(entitlement.max_edge_devices, "Up to ")}</dd>
                       </div>
                       <div className="border-b border-border/50 pb-2">
                         <dt className="text-xs text-muted-foreground">Radio channels</dt>
-                        <dd className="mt-0.5 font-semibold text-foreground">{entitlement.max_channels === null ? "Custom" : `Up to ${entitlement.max_channels}`}</dd>
+                        <dd className="mt-0.5 font-semibold text-foreground">{formatCapacity(entitlement.max_channels, "Up to ")}</dd>
                       </div>
                     </dl>
                   </div>
@@ -299,19 +261,11 @@ const PricingEstimator = () => {
                   <div className="mt-5 space-y-2 text-sm text-foreground/80">
                     <div className="flex items-start gap-2">
                       <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                      <span>
-                        {entitlement.included_processing_hours === null
-                          ? "Custom processing capacity"
-                          : `${entitlement.included_processing_hours} processing hours / month`}
-                      </span>
+                      <span>{entitlement.included_processing_hours === null ? "Processing scoped to deployment" : `${entitlement.included_processing_hours} processing hours / month`}</span>
                     </div>
                     <div className="flex items-start gap-2">
                       <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                      <span>
-                        {entitlement.retention_days === null
-                          ? "Custom operational history"
-                          : `${entitlement.retention_days}-day operational history`}
-                      </span>
+                      <span>{entitlement.retention_days === null ? "Retention scoped to deployment" : `${entitlement.retention_days}-day operational history`}</span>
                     </div>
                     {entitlement.api_access && (
                       <div className="flex items-start gap-2">
@@ -330,20 +284,18 @@ const PricingEstimator = () => {
                   <div className="mt-6 border-t border-border/60 pt-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground">Why this tier</p>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{positioning.why}</p>
-                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                      {positioning.examples.join(" · ")}
-                    </p>
+                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{positioning.examples.join(" · ")}</p>
                   </div>
 
                   <div className="mt-auto pt-7">
-                    {!isSelfServicePlan(plan) ? (
-                      <Button asChild variant="outline" className="w-full">
-                        <a href="#pilot">Discuss organization scope</a>
-                      </Button>
-                    ) : (
+                    {isSelfServicePlan(plan) ? (
                       <Button className="w-full" onClick={() => openTrial(plan)}>
                         Start {plan.trial_days}-Day Trial
                         <ArrowRight data-icon="inline-end" />
+                      </Button>
+                    ) : (
+                      <Button asChild variant="outline" className="w-full">
+                        <a href="#pilot">Discuss deployment scope</a>
                       </Button>
                     )}
                   </div>
@@ -353,36 +305,33 @@ const PricingEstimator = () => {
           </div>
         )}
 
-        {!plansLoading && !plansError && (
-          <div className="mt-8 rounded-xl border border-border/70 bg-background/55 px-6 py-5">
-            <p className="font-display text-lg font-bold uppercase">What changes as you move up?</p>
-            <p className="mt-2 max-w-5xl text-sm leading-relaxed text-muted-foreground">
-              You are mainly buying more shared operational capacity: more people can work in the same organization, more Edge devices and radio channels can stay connected, more processing is included, history lasts longer, and Operations expands beyond a single site. Organization adds custom limits, integrations, governance, API access, and support.
-            </p>
-          </div>
-        )}
-
-        <div className="mt-10 flex flex-col justify-between gap-5 border-l border-primary pl-6 md:flex-row md:items-center">
-          <div>
-            <p className="font-display text-xl font-bold uppercase">Not sure which tier fits yet?</p>
-            <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-              The limited pilot remains available for organizations that want to validate one workflow before choosing a subscription or deployment scope.
-            </p>
-          </div>
-          <Button asChild variant="outline" className="shrink-0">
-            <a href="#pilot">Apply for limited pilot</a>
-          </Button>
+        <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-border/70 bg-border/70 md:grid-cols-4">
+          {[
+            ["Individual", "One person, one radio/channel, personal logs and summaries."],
+            ["Team", "Shared users, radios, channels, maps, retention, and admin controls."],
+            ["Annual Site", "A recurring operating license after the workflow proves useful."],
+            ["Enterprise", "More sites, integrations, retention, private hosting, security, and support."],
+          ].map(([title, copy]) => (
+            <div key={title} className="bg-background/90 p-5">
+              <p className="font-display text-base font-bold uppercase">{title}</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{copy}</p>
+            </div>
+          ))}
         </div>
+
+        <p className="mx-auto mt-5 max-w-3xl text-center text-xs leading-relaxed text-muted-foreground">
+          These are planning-model prices used in the TerraSatch pitch and financial model. Site and enterprise pricing remains flexible until completed purchases validate onboarding, support burden, deployment scope, and renewal value.
+        </p>
       </div>
 
       <Dialog open={selectedPlan !== null} onOpenChange={(open) => !open && !submitting && setSelectedPlan(null)}>
         <DialogContent className="max-w-xl border-border/80 bg-background">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl uppercase">
-              Start {selectedPlan ? planPositioning[selectedPlan.code].displayName : "TerraSatch"} trial
+              Start {selectedPlan?.name ?? "TerraSatch"} trial
             </DialogTitle>
             <DialogDescription>
-              {selectedPlan?.trial_days ?? 0} days free. Stripe securely collects the payment method. TerraSatch does not store card data.
+              {selectedPlan?.trial_days ?? 30} days free. Stripe securely collects the payment method. TerraSatch does not store card data.
             </DialogDescription>
           </DialogHeader>
 
@@ -393,10 +342,7 @@ const PricingEstimator = () => {
             </div>
             <div className="mt-2 flex items-center justify-between gap-4">
               <span className="text-muted-foreground">After trial</span>
-              <strong>
-                {selectedAmount === null ? "Custom" : formatUsd(selectedAmount)}
-                {selectedAmount !== null ? (interval === "monthly" ? "/month" : "/year") : ""}
-              </strong>
+              <strong>{selectedPrice ? `${selectedPrice.amount}${selectedPrice.cadence}` : "—"}</strong>
             </div>
           </div>
 
@@ -444,7 +390,7 @@ const PricingEstimator = () => {
               {submitting ? "Opening secure Checkout" : "Continue to secure Checkout"}
             </Button>
             <p className="text-center text-[11px] leading-relaxed text-muted-foreground">
-              By continuing, you authorize Stripe to store your payment method for the selected subscription. You can cancel during the trial to avoid the first charge.
+              By continuing, you authorize Stripe to store your payment method for the monthly subscription. Cancel during the trial to avoid the first charge.
             </p>
           </form>
         </DialogContent>
