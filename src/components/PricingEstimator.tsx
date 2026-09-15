@@ -1,4 +1,4 @@
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { ArrowRight, Building2, Check, Loader2, Radio, ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,113 +9,124 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { createBillingCheckout, formatUsd, type BillingInterval } from "@/lib/billing";
+import {
+  createBillingCheckout,
+  formatUsd,
+  getBillingPlans,
+  type BillingInterval,
+  type BillingPlan,
+  type PlanCode,
+} from "@/lib/billing";
 import { cn } from "@/lib/utils";
 
-type SelfServicePlanCode = "field" | "team" | "operations";
-
-type PricingPlan = {
-  code: SelfServicePlanCode | "enterprise";
-  name: string;
-  description: string;
-  monthlyCents: number | null;
-  annualCents: number | null;
-  points: string[];
-  icon: LucideIcon;
-  featured?: boolean;
+const planIcons: Record<PlanCode, LucideIcon> = {
+  field: Radio,
+  team: Users,
+  operations: ShieldCheck,
+  enterprise: Building2,
 };
-
-const pricingPlans: PricingPlan[] = [
-  {
-    code: "field",
-    name: "Field",
-    description: "For small professional field teams that need a focused TerraListen deployment.",
-    monthlyCents: 9_900,
-    annualCents: 99_000,
-    points: [
-      "1 operating site",
-      "Up to 3 members",
-      "Up to 2 paired Edge devices",
-      "Up to 4 configured channels",
-      "15 processing hours per month",
-      "14-day operational-history target",
-    ],
-    icon: Radio,
-  },
-  {
-    code: "team",
-    name: "Team",
-    description: "For active teams that need shared radio intelligence, handoffs, and reporting.",
-    monthlyCents: 34_900,
-    annualCents: 349_000,
-    points: [
-      "1 primary operating site",
-      "Up to 10 members",
-      "Up to 6 Edge devices",
-      "Up to 12 configured channels",
-      "75 processing hours per month",
-      "90-day operational-history target",
-    ],
-    icon: Users,
-    featured: true,
-  },
-  {
-    code: "operations",
-    name: "Operations",
-    description: "For larger mountain, response, land, utility, and field operations.",
-    monthlyCents: 99_900,
-    annualCents: 999_000,
-    points: [
-      "Up to 3 operating sites",
-      "Up to 30 members",
-      "Up to 20 Edge devices",
-      "Up to 40 configured channels",
-      "250 processing hours per month",
-      "Priority support and advanced controls",
-    ],
-    icon: ShieldCheck,
-  },
-  {
-    code: "enterprise",
-    name: "Organization",
-    description: "For multi-site or higher-assurance deployments that need a scoped agreement.",
-    monthlyCents: null,
-    annualCents: null,
-    points: [
-      "Custom multi-site deployment",
-      "Larger Edge fleets and operating groups",
-      "Custom retention and integrations",
-      "Security and data-governance requirements",
-      "Implementation and support plan",
-      "Optional SLA and private deployment scope",
-    ],
-    icon: Building2,
-  },
-];
 
 const inputClass =
   "h-11 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary";
 
+const plural = (count: number, singular: string, pluralForm = `${singular}s`) =>
+  `${count} ${count === 1 ? singular : pluralForm}`;
+
+const planPoints = (plan: BillingPlan) => {
+  const entitlement = plan.entitlements;
+  if (plan.code === "enterprise") {
+    return [
+      "Custom multi-site deployment",
+      "Custom member and operating-group capacity",
+      "Custom Edge fleet capacity",
+      "Custom monitored-channel capacity",
+      "Custom processing and retention scope",
+      "API access and priority support",
+    ];
+  }
+
+  const points = [
+    entitlement.max_sites === null
+      ? "Custom operating-site capacity"
+      : plural(entitlement.max_sites, "operating site"),
+    entitlement.max_members === null
+      ? "Custom member capacity"
+      : `Up to ${plural(entitlement.max_members, "member")}`,
+    entitlement.max_edge_devices === null
+      ? "Custom Edge fleet"
+      : `Up to ${plural(entitlement.max_edge_devices, "Edge device")}`,
+    entitlement.max_channels === null
+      ? "Custom channel capacity"
+      : `Up to ${plural(entitlement.max_channels, "configured channel")}`,
+    entitlement.included_processing_hours === null
+      ? "Custom processing capacity"
+      : `${entitlement.included_processing_hours} processing hours per month`,
+    entitlement.retention_days === null
+      ? "Custom operational-history retention"
+      : `${entitlement.retention_days}-day operational-history target`,
+  ];
+
+  if (entitlement.api_access) points.push("API access included");
+  if (entitlement.priority_support) points.push("Priority support included");
+  return points;
+};
+
+const isSelfServicePlan = (
+  plan: BillingPlan,
+): plan is BillingPlan & { code: Exclude<PlanCode, "enterprise"> } =>
+  plan.self_service && plan.code !== "enterprise";
+
 const PricingEstimator = () => {
   const [interval, setInterval] = useState<BillingInterval>("monthly");
-  const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
+  const [plans, setPlans] = useState<BillingPlan[]>([]);
+  const [plansLoading, setPlansLoading] = useState(true);
+  const [plansError, setPlansError] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState<BillingPlan | null>(null);
   const [form, setForm] = useState({ displayName: "", email: "", organizationName: "" });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    let active = true;
+    getBillingPlans()
+      .then((catalog) => {
+        if (!active) return;
+        setPlans(catalog);
+        setPlansError("");
+      })
+      .catch(() => {
+        if (!active) return;
+        setPlansError("Subscription pricing is temporarily unavailable. The limited pilot path remains open.");
+      })
+      .finally(() => {
+        if (active) setPlansLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const selectedAmount = useMemo(() => {
     if (!selectedPlan) return null;
-    return interval === "monthly" ? selectedPlan.monthlyCents : selectedPlan.annualCents;
+    return interval === "monthly"
+      ? selectedPlan.monthly_amount_cents
+      : selectedPlan.annual_amount_cents;
   }, [interval, selectedPlan]);
 
-  const openTrial = (plan: PricingPlan) => {
+  const trialDays = useMemo(
+    () => plans.find((plan) => plan.self_service)?.trial_days ?? null,
+    [plans],
+  );
+
+  const openTrial = (plan: BillingPlan) => {
+    if (!isSelfServicePlan(plan)) return;
     setError("");
     setSelectedPlan(plan);
   };
 
   const submitTrial = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!selectedPlan || selectedPlan.code === "enterprise") return;
+    if (!selectedPlan || !isSelfServicePlan(selectedPlan)) return;
     setSubmitting(true);
     setError("");
     try {
@@ -145,13 +156,13 @@ const PricingEstimator = () => {
       <div className="container relative mx-auto px-6">
         <div className="mx-auto max-w-4xl text-center">
           <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-primary">
-            30 days free · card required · $0 today
+            {trialDays ? `${trialDays} days free · card required · $0 today` : "Subscription plans · secure Stripe Checkout"}
           </p>
           <h2 className="mt-4 font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
             Start small. Scale when the workflow proves itself<span className="text-primary">.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-frost-dim">
-            Choose the operating level that fits your team. Your selected subscription begins after the 30-day trial unless you cancel before the trial ends.
+            Choose the operating level that fits your team. Self-service subscriptions begin after the free trial unless you cancel before it ends.
           </p>
         </div>
 
@@ -174,66 +185,84 @@ const PricingEstimator = () => {
               interval === "annual" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >
-            Annual · 2 months included
+            Annual
           </button>
         </div>
 
-        <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border/70 bg-border/70 lg:grid-cols-4">
-          {pricingPlans.map(({ code, name, description, monthlyCents, annualCents, points, icon: Icon, featured }) => {
-            const amount = interval === "monthly" ? monthlyCents : annualCents;
-            const cadence = amount === null ? "Custom agreement" : interval === "monthly" ? "per month" : "per year";
-            return (
-              <article
-                key={code}
-                className={cn(
-                  "relative flex min-h-full flex-col bg-background/95 p-7",
-                  featured && "bg-terrain-surface",
-                )}
-              >
-                {featured && (
-                  <span className="absolute right-5 top-5 rounded-full border border-primary/50 bg-primary/10 px-3 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-primary">
-                    Recommended
-                  </span>
-                )}
-                <Icon className={cn("size-7 text-foreground/55", featured && "text-primary")} aria-hidden="true" />
-                <h3 className="mt-5 font-display text-3xl font-bold uppercase">{name}</h3>
-                <p className="mt-2 min-h-16 text-sm leading-relaxed text-muted-foreground">{description}</p>
-
-                <div className="mt-6 border-y border-border/70 py-5">
-                  <p className="font-display text-4xl font-bold text-primary">
-                    {amount === null ? "Custom" : formatUsd(amount)}
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{cadence}</p>
-                  {amount !== null && (
-                    <p className="mt-3 text-xs text-muted-foreground">30-day free trial · $0 charged today</p>
+        {plansLoading ? (
+          <div className="mt-12 grid place-items-center rounded-xl border border-border/70 bg-background/75 px-6 py-16 text-muted-foreground">
+            <Loader2 className="mb-3 size-6 animate-spin text-primary" aria-hidden="true" />
+            <span className="font-mono text-xs uppercase tracking-[0.16em]">Loading subscription catalog</span>
+          </div>
+        ) : plansError ? (
+          <div className="mx-auto mt-12 max-w-2xl rounded-xl border border-border/70 bg-background/80 p-8 text-center">
+            <p className="text-sm leading-relaxed text-muted-foreground">{plansError}</p>
+            <Button asChild variant="outline" className="mt-5">
+              <a href="#pilot">Apply for limited pilot</a>
+            </Button>
+          </div>
+        ) : (
+          <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border/70 bg-border/70 lg:grid-cols-4">
+            {plans.map((plan) => {
+              const Icon = planIcons[plan.code];
+              const amount = interval === "monthly" ? plan.monthly_amount_cents : plan.annual_amount_cents;
+              const cadence = amount === null ? "Custom agreement" : interval === "monthly" ? "per month" : "per year";
+              const points = planPoints(plan);
+              return (
+                <article
+                  key={plan.code}
+                  className={cn(
+                    "relative flex min-h-full flex-col bg-background/95 p-7",
+                    plan.recommended && "bg-terrain-surface",
                   )}
-                </div>
-
-                <ul className="mt-6 flex flex-1 flex-col gap-3">
-                  {points.map((point) => (
-                    <li key={point} className="flex items-start gap-3 text-sm leading-relaxed text-foreground/80">
-                      <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-8">
-                  {code === "enterprise" ? (
-                    <Button asChild variant="outline" className="w-full">
-                      <a href="#pilot">Discuss organization scope</a>
-                    </Button>
-                  ) : (
-                    <Button className="w-full" onClick={() => openTrial(pricingPlans.find((plan) => plan.code === code)!)}>
-                      Start 30-Day Trial
-                      <ArrowRight data-icon="inline-end" />
-                    </Button>
+                >
+                  {plan.recommended && (
+                    <span className="absolute right-5 top-5 rounded-full border border-primary/50 bg-primary/10 px-3 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-primary">
+                      Recommended
+                    </span>
                   )}
-                </div>
-              </article>
-            );
-          })}
-        </div>
+                  <Icon className={cn("size-7 text-foreground/55", plan.recommended && "text-primary")} aria-hidden="true" />
+                  <h3 className="mt-5 font-display text-3xl font-bold uppercase">{plan.name}</h3>
+                  <p className="mt-2 min-h-16 text-sm leading-relaxed text-muted-foreground">{plan.description}</p>
+
+                  <div className="mt-6 border-y border-border/70 py-5">
+                    <p className="font-display text-4xl font-bold text-primary">
+                      {amount === null ? "Custom" : formatUsd(amount)}
+                    </p>
+                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{cadence}</p>
+                    {amount !== null && plan.trial_days > 0 && (
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        {plan.trial_days}-day free trial · $0 charged today
+                      </p>
+                    )}
+                  </div>
+
+                  <ul className="mt-6 flex flex-1 flex-col gap-3">
+                    {points.map((point) => (
+                      <li key={point} className="flex items-start gap-3 text-sm leading-relaxed text-foreground/80">
+                        <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-8">
+                    {!isSelfServicePlan(plan) ? (
+                      <Button asChild variant="outline" className="w-full">
+                        <a href="#pilot">Discuss organization scope</a>
+                      </Button>
+                    ) : (
+                      <Button className="w-full" onClick={() => openTrial(plan)}>
+                        Start {plan.trial_days}-Day Trial
+                        <ArrowRight data-icon="inline-end" />
+                      </Button>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
 
         <div className="mt-10 flex flex-col justify-between gap-5 border-l border-primary pl-6 md:flex-row md:items-center">
           <div>
@@ -255,7 +284,7 @@ const PricingEstimator = () => {
               Start {selectedPlan?.name ?? "TerraSatch"} trial
             </DialogTitle>
             <DialogDescription>
-              30 days free. Stripe securely collects the payment method. TerraSatch does not store card data.
+              {selectedPlan?.trial_days ?? 0} days free. Stripe securely collects the payment method. TerraSatch does not store card data.
             </DialogDescription>
           </DialogHeader>
 
@@ -265,7 +294,7 @@ const PricingEstimator = () => {
               <strong>$0</strong>
             </div>
             <div className="mt-2 flex items-center justify-between gap-4">
-              <span className="text-muted-foreground">After 30 days</span>
+              <span className="text-muted-foreground">After trial</span>
               <strong>
                 {selectedAmount === null ? "Custom" : formatUsd(selectedAmount)}
                 {selectedAmount !== null ? (interval === "monthly" ? "/month" : "/year") : ""}
