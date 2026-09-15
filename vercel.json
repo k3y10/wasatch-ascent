@@ -10,29 +10,13 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/demo-access",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/demos",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/downloads",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/edge",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/api",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/investors",
-      "destination": "/index.html"
-    }
+    { "source": "/demo-access", "destination": "/index.html" },
+    { "source": "/demos", "destination": "/index.html" },
+    { "source": "/downloads", "destination": "/index.html" },
+    { "source": "/edge", "destination": "/index.html" },
+    { "source": "/api", "destination": "/index.html" },
+    { "source": "/investors", "destination": "/index.html" },
+    { "source": "/activate", "destination": "/index.html" },
+    { "source": "/billing/success", "destination": "/index.html" }
   ]
 }

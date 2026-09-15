@@ -9,6 +9,8 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const API = lazy(() => import("./pages/API.tsx"));
+const Activate = lazy(() => import("./pages/Activate.tsx"));
+const BillingSuccess = lazy(() => import("./pages/BillingSuccess.tsx"));
 const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
 const Demos = lazy(() => import("./pages/Demos.tsx"));
 const Edge = lazy(() => import("./pages/Downloads.tsx"));
@@ -40,6 +42,8 @@ const App = () => (
             <Route path="/edge" element={<Edge />} />
             <Route path="/downloads" element={<Navigate to="/edge" replace />} />
             <Route path="/investors" element={<Investors />} />
+            <Route path="/activate" element={<Activate />} />
+            <Route path="/billing/success" element={<BillingSuccess />} />
             <Route path="/demo-access" element={<DemoAccess />} />
             <Route
               path="/demos"
