@@ -38,31 +38,31 @@ const planPositioning: Record<
   }
 > = {
   field: {
-    audience: "One person · one radio or channel",
-    summary: "Personal TerraListen access for an individual field professional who wants structured logs, summaries, and a reviewable operational record.",
-    why: "Use Individual when the workflow belongs to one operator and does not need shared team administration.",
-    examples: ["Independent guide", "Field researcher", "Solo operator"],
+    audience: "One person · one field workflow · one radio or channel",
+    summary: "A hands-free field notebook for people who want to keep moving. Capture observations by voice or radio, keep the original record, and organize what you saw by time, location, route, and map context.",
+    why: "Use Individual when you want a personal TerraSatch workspace for your own routes, observations, notes, summaries, and field history without paying for shared team administration.",
+    examples: ["Hunters & foragers", "Hikers & climbers", "Guides & field engineers", "Researchers & inspectors"],
     modelRange: "$29–$79 / month planning range",
   },
   team: {
-    audience: "Multiple users and radios · shared workflow",
-    summary: "Shared TerraListen access for a working crew that needs common channels, maps, history, and administrative controls.",
-    why: "Use Team when several people need to work from the same radio traffic and operational context.",
-    examples: ["Ski patrol", "SAR team", "Guide operation"],
+    audience: "A crew sharing radios, observations, routes, and maps",
+    summary: "The same field capture workflow, shared across a working team. Multiple people contribute observations into common channels, maps, history, and operational context.",
+    why: "Use Team when the information no longer belongs to one person and several operators need to work from the same field record.",
+    examples: ["Ski patrol", "SAR teams", "Guide operations", "Field crews"],
     modelRange: "$250–$750 / month planning range",
   },
   operations: {
     audience: "One operating site, team, or department",
-    summary: "A recurring annual software license for a site after the workflow has been validated and TerraListen becomes part of regular operations.",
-    why: "Use an Annual Site license when deployment includes larger crews, more radios and channels, longer history, support, and operational ownership.",
-    examples: ["Mountain operations", "Snow safety department", "Field program"],
+    summary: "A recurring annual deployment for organizations using TerraSatch as part of regular field operations, with greater user, radio, channel, retention, and support capacity.",
+    why: "Use an Annual Site license when TerraSatch moves from an individual or small-team tool into an operational system owned by a department or site.",
+    examples: ["Mountain operations", "Snow safety departments", "Engineering field programs", "Public-safety operations"],
     modelRange: "$25K–$60K / year planning range",
   },
   enterprise: {
-    audience: "Multiple teams or sites · custom deployment",
-    summary: "Higher-touch deployment for organizations that need integrations, extended retention, private hosting, security controls, or broader support.",
-    why: "Use Enterprise when the deployment spans sites or requires infrastructure and governance beyond a standard site license.",
-    examples: ["Agency", "Multi-site operator", "Integrated enterprise deployment"],
+    audience: "Multiple teams, sites, integrations, or higher-assurance deployments",
+    summary: "A custom deployment for organizations that need multi-site coordination, integrations, extended retention, private hosting, security controls, or broader operational support.",
+    why: "Use Enterprise when the deployment spans locations or requires infrastructure, governance, integrations, and support beyond a standard site license.",
+    examples: ["Agencies", "Multi-site operators", "Large field organizations", "Government & defense operations"],
     modelRange: "$75K–$250K+ / year planning range",
   },
 };
@@ -162,10 +162,10 @@ const PricingEstimator = () => {
       <div className="container relative mx-auto px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
-            Start with the operator. Scale to the organization<span className="text-primary">.</span>
+            Start with your field notes. Scale to the organization<span className="text-primary">.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-frost-dim sm:text-lg">
-            The same pricing model used in the TerraSatch pitch deck: individual access, a shared team subscription, then annual site and enterprise licensing as deployments grow.
+            Talk, observe, and keep moving. TerraSatch turns field communication into an organized record, from one person's routes and observations to shared team and organization-wide operations.
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             Individual and Team can begin with a {trialDays}-day trial. Card required, $0 today. Site and Enterprise deployments are scoped before contracting.
@@ -216,7 +216,7 @@ const PricingEstimator = () => {
                   <div className="mt-5">
                     <h3 className="font-display text-2xl font-bold uppercase leading-tight">{plan.name}</h3>
                     <p className="mt-2 text-sm font-semibold leading-relaxed text-foreground/80">{positioning.audience}</p>
-                    <p className="mt-3 min-h-20 text-sm leading-relaxed text-muted-foreground">{positioning.summary}</p>
+                    <p className="mt-3 min-h-24 text-sm leading-relaxed text-muted-foreground">{positioning.summary}</p>
                   </div>
 
                   <div className="mt-6 rounded-lg border border-border/70 bg-terrain-deep/55 p-4">
@@ -307,10 +307,10 @@ const PricingEstimator = () => {
 
         <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-border/70 bg-border/70 md:grid-cols-4">
           {[
-            ["Individual", "One person, one radio/channel, personal logs and summaries."],
-            ["Team", "Shared users, radios, channels, maps, retention, and admin controls."],
-            ["Annual Site", "A recurring operating license after the workflow proves useful."],
-            ["Enterprise", "More sites, integrations, retention, private hosting, security, and support."],
+            ["Individual", "Voice or radio field notes organized around your routes, locations, observations, and personal history."],
+            ["Team", "Shared users, radios, observations, maps, history, and administration for one working crew."],
+            ["Annual Site", "A recurring operational deployment for a site, department, or larger field program."],
+            ["Enterprise", "Multi-site coordination, integrations, private infrastructure, security controls, and higher-touch support."],
           ].map(([title, copy]) => (
             <div key={title} className="bg-background/90 p-5">
               <p className="font-display text-base font-bold uppercase">{title}</p>
