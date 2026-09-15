@@ -1,20 +1,31 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { CheckCircle2, KeyRound, Loader2 } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { activateBillingAccount } from "@/lib/billing";
 
 const inputClass =
   "h-11 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary";
 
+const readActivationToken = () => {
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const queryParams = new URLSearchParams(window.location.search);
+  return hashParams.get("token") ?? queryParams.get("token") ?? "";
+};
+
 const Activate = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token") ?? "";
+  const [token] = useState(readActivationToken);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [activated, setActivated] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!token) return;
+    const cleanUrl = `${window.location.pathname}`;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }, [token]);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
