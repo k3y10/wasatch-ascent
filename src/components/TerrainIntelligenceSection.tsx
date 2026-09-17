@@ -21,11 +21,11 @@ const terrainInputs = [
 ];
 
 const TerrainIntelligenceSection = () => (
-  <section id="watch" className="scroll-mt-20 relative overflow-hidden bg-terrain-deep py-24 sm:py-28">
+  <section id="watch" className="scroll-mt-20 relative overflow-hidden bg-terrain-deep pt-14 pb-20 sm:pt-16 sm:pb-24">
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
-      <div className="grid gap-12 xl:grid-cols-[0.85fr_1.15fr] xl:items-end">
-        <div>
+      <div className="grid gap-10 xl:grid-cols-[0.85fr_1.15fr] xl:items-start">
+        <div className="xl:pt-2">
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Watch · terrain context</p>
           <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] text-foreground sm:text-5xl lg:text-6xl">
             See the terrain around the call<span className="text-primary">.</span>
