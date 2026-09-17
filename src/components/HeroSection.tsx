@@ -83,10 +83,10 @@ const HeroSection = () => (
             TerraSatch field intelligence platform
           </p>
           <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
-            Connect the field. Make it intelligent<span className="text-primary">.</span>
+            Turn field information into finished work<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            Satchy connects fragmented field communication and operational data into one shared intelligence layer. Keep the radios, maps, weather feeds, sensors, and systems your teams already use, then turn those signals into searchable records, context, tasks, and reviewed actions.
+            TerraSatch turns what happens in the field into what needs to happen next. Speak through radio or voice. Satchy connects your observations to maps, tasks, and reports while you keep moving.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -95,7 +95,7 @@ const HeroSection = () => (
                 href="#connect"
                 onClick={() => trackFunnelEvent({ stage: "demonstrate", action: "see-how-it-works", source: "hero" })}
               >
-                See how it connects
+                See how it works
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
