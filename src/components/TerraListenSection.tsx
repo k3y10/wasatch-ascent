@@ -9,7 +9,7 @@ const workflow = [
 ];
 
 const TerraListenSection = () => (
-  <section id="listen" className="scroll-mt-20 relative overflow-hidden py-24 sm:py-28">
+  <section id="listen" className="scroll-mt-20 relative overflow-hidden pt-20 pb-14 sm:pt-24 sm:pb-16">
     <div className="absolute inset-0 bg-terrain-deep" />
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
