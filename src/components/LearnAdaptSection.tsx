@@ -16,8 +16,8 @@ import OperationalSnapshot from "@/components/OperationalSnapshot";
 import { trackFunnelEvent } from "@/lib/funnel-analytics";
 
 const learnInputs = [
-  { title: "Calls + observations", description: "Keep authorized radio calls, field notes, and structured observations connected to their source and location.", icon: History },
-  { title: "Terrain + documents", description: "Join terrain cells, snowpits, drone context, approved documents, and shift records without flattening them into one opaque answer.", icon: Layers3 },
+  { title: "Communication + observations", description: "Keep authorized calls, voice, field notes, and structured observations connected to their source and location.", icon: History },
+  { title: "Terrain + connected data", description: "Join terrain cells, weather, approved documents, sensor context, and shift records without flattening them into one opaque answer.", icon: Layers3 },
   { title: "Durable memory", description: "Build a searchable operational history crews can review across a shift, incident, site, or recurring workflow.", icon: BookOpenCheck },
 ];
 
@@ -46,7 +46,7 @@ const LearnAdaptSection = () => (
             </h2>
           </div>
           <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground lg:justify-self-end">
-            TerraSatch keeps calls, observations, terrain, documents, and shift records connected so useful context does not disappear when the moment or shift ends.
+            Satchy keeps communication, observations, terrain, weather, documents, and connected operational data linked so useful context does not disappear when the moment, shift, or system changes.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ const LearnAdaptSection = () => (
           height={883}
           label="Adapt · Wildfire operations"
           title="The same field loop, beyond avalanche work"
-          description="Incident context, approved radio input, weather, and local cells can be assembled into one reviewable operating picture before a team publishes or acts. Demo data is illustrative."
+          description="Incident context, approved communication, weather, and local cells can be assembled into one reviewable operating picture before a team publishes or acts. Demo data is illustrative."
           className="mt-14"
           mediaClassName="aspect-[4/3] sm:aspect-[1486/883]"
           imageClassName="object-[50%_center] sm:object-center"
@@ -121,10 +121,10 @@ const LearnAdaptSection = () => (
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Teams · field operations</p>
             <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] sm:text-5xl lg:text-6xl">
-              Built for where work leaves the network<span className="text-primary">.</span>
+              Built around the systems field teams already use<span className="text-primary">.</span>
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              TerraSatch is being shaped around teams that already rely on radios, terrain awareness, field observations, and human judgment.
+              TerraSatch is being shaped around teams that already depend on communication systems, terrain awareness, field observations, connected data, and human judgment. The goal is to connect that infrastructure, not make crews relearn the field.
             </p>
           </div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary lg:text-right">
