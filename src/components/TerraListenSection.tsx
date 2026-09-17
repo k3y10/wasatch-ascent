@@ -2,10 +2,10 @@ import { AudioLines, FileCheck2, Map, Radio } from "lucide-react";
 import OperationalSnapshot from "@/components/OperationalSnapshot";
 
 const workflow = [
-  { label: "Listen", description: "Capture authorized radio and field input without changing how crews communicate.", icon: Radio },
-  { label: "Understand", description: "Create searchable text with source, time, location, and field context.", icon: AudioLines },
-  { label: "Route", description: "Connect the record to the appropriate map, timeline, and team workflow.", icon: Map },
-  { label: "Review", description: "Prepare a shared timeline, handoff, or report for human review.", icon: FileCheck2 },
+  { label: "Listen", description: "Capture authorized radio and voice input without changing how crews already communicate.", icon: Radio },
+  { label: "Understand", description: "Create searchable text with source, time, location, and field context preserved.", icon: AudioLines },
+  { label: "Connect", description: "Join the record to maps, weather, terrain, timelines, and the appropriate team workflow.", icon: Map },
+  { label: "Review", description: "Prepare a shared handoff, task, timeline, or report while keeping the original source available.", icon: FileCheck2 },
 ];
 
 const TerraListenSection = () => (
@@ -15,13 +15,13 @@ const TerraListenSection = () => (
     <div className="container relative mx-auto px-6">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Listen · radio to operational record</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Listen · radio as a connected source</p>
           <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] text-foreground sm:text-5xl lg:text-6xl">
             See the signal take shape<span className="text-primary">.</span>
           </h2>
         </div>
         <p className="max-w-xl text-lg leading-relaxed text-frost-dim lg:pb-1">
-          TerraListen preserves approved field communication, keeps the source attached, and turns it into a searchable record your team can review.
+          TerraListen is one entry point into Satchy. It preserves approved radio and voice communication, keeps the source attached, then connects that record to the rest of the operational picture.
         </p>
       </div>
 
@@ -52,7 +52,7 @@ const TerraListenSection = () => (
             </h3>
           </div>
           <p className="max-w-md text-sm leading-relaxed text-muted-foreground lg:text-right">
-            A field report can stay connected to its transcript, extracted observation, location, timeline, and human review.
+            A radio report can remain connected to its transcript, extracted observation, location, surrounding data, timeline, and human review instead of disappearing after the call ends.
           </p>
         </div>
         <OperationalSnapshot
