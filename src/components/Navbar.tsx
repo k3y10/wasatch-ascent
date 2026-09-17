@@ -17,7 +17,7 @@ type NavItem =
   | { label: string; href: string; section?: never };
 
 const exploreItems: NavItem[] = [
-  { label: "How it works", section: "listen" },
+  { label: "How it works", section: "connect" },
   { label: "Pricing", section: "cost" },
   { label: "Workspace", href: "/workspace" },
 ];
