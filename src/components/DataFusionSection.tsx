@@ -1,100 +1,164 @@
-import { Radar, Satellite, Radio, Cloud, Cpu } from "lucide-react";
+import {
+  ArrowRight,
+  CloudSun,
+  Database,
+  FileCheck2,
+  MapPinned,
+  MessageSquareText,
+  Network,
+  Radio,
+  Satellite,
+  ShieldCheck,
+  Smartphone,
+  Waypoints,
+} from "lucide-react";
 
-const steps = [
+const sources = [
   {
-    num: "01",
-    icon: Radar,
-    title: "Terrain Capture",
-    desc: "Drones, LiDAR, satellite imagery, and field kits collect terrain, snowpack, and weather data every pass.",
-  },
-  {
-    num: "02",
-    icon: Cpu,
-    title: "Edge AI & AvyTS",
-    desc: "AvyTS micro-models score hazards on-ridge, even offline, while edge nodes compress data for uplink.",
-  },
-  {
-    num: "03",
+    label: "Radio + voice",
+    detail: "Capture approved field communication without asking crews to abandon the tools they already carry.",
+    status: "Core workflow",
     icon: Radio,
-    title: "Sync Channels",
-    desc: "Wireless mesh, LoRa, and SDR radios auto-route packets, voice snippets, and alerts across the patrol area.",
   },
   {
-    num: "04",
+    label: "Weather + terrain",
+    detail: "Bring forecasts, maps, location, terrain, and environmental context alongside the field record.",
+    status: "Connected context",
+    icon: CloudSun,
+  },
+  {
+    label: "Sensors + APIs",
+    detail: "Connect approved operational feeds and existing software through an extensible integration layer.",
+    status: "Extensible",
+    icon: Database,
+  },
+  {
+    label: "Cellular + satellite",
+    detail: "Extend the same operating model to approved provider channels as connector support is developed.",
+    status: "Roadmap",
     icon: Satellite,
-    title: "Backhaul & Cloud",
-    desc: "Multi-link Starlink and LEO channels push synchronized datasets into the cloud with redundancy.",
-  },
-  {
-    num: "05",
-    icon: Cloud,
-    title: "Intelligence & APIs",
-    desc: "Data lakes and APIs redistribute insights to dashboards, partners, and automation hooks.",
   },
 ];
 
-const DataFusionSection = () => {
-  return (
-    <section className="relative py-32 overflow-hidden">
-      <div className="absolute inset-0 topo-overlay opacity-30" />
+const intelligenceSteps = [
+  { label: "Ingest", detail: "Keep source, time, location, and permissions attached.", icon: Network },
+  { label: "Understand", detail: "Normalize fragmented signals into shared operational context.", icon: Waypoints },
+  { label: "Coordinate", detail: "Connect related events, people, places, and workflows.", icon: MapPinned },
+  { label: "Review", detail: "Keep consequential outputs traceable and human-approved.", icon: ShieldCheck },
+];
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <div className="signal-badge signal-badge-amber mx-auto mb-4 w-fit">
-            <span className="font-mono text-[10px]">DATA PIPELINE</span>
-          </div>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Terrain Data <span className="text-primary">Fusion</span>
+const outputs = [
+  { label: "One operating picture", icon: MapPinned },
+  { label: "Searchable operational memory", icon: Database },
+  { label: "Handoffs, tasks + reports", icon: FileCheck2 },
+  { label: "Connected communication paths", icon: MessageSquareText },
+];
+
+const DataFusionSection = () => (
+  <section id="connect" className="scroll-mt-20 relative overflow-hidden border-y border-border/60 bg-background py-24 sm:py-28">
+    <div className="absolute inset-0 topo-overlay opacity-20" />
+    <div className="container relative mx-auto px-6">
+      <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Connect · existing infrastructure</p>
+          <h2 className="mt-4 max-w-4xl font-display text-4xl font-bold uppercase leading-[0.95] text-foreground sm:text-5xl lg:text-6xl">
+            Fragmented signals in. One operational picture out<span className="text-primary">.</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Capture flows from sensors to AvyTS inference, crosses AI-managed radio mesh,
-            then rides backhaul into cloud intelligence before streaming out through APIs.
-          </p>
+        </div>
+        <p className="max-w-xl text-lg leading-relaxed text-muted-foreground lg:pb-1">
+          Your teams already communicate through different systems. Satchy is designed to connect those signals, preserve their source, and make the infrastructure you already use more intelligent instead of forcing a full replacement.
+        </p>
+      </div>
+
+      <div className="mt-14 grid overflow-hidden border-y border-border/70 xl:grid-cols-[0.9fr_1.05fr_0.8fr]">
+        <div className="border-b border-border/70 py-8 xl:border-b-0 xl:border-r xl:pr-8">
+          <div className="flex items-center gap-3">
+            <Radio className="size-6 text-primary" aria-hidden="true" />
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">01 · Sources</p>
+              <h3 className="mt-1 font-display text-2xl font-bold uppercase">Use what the field already uses</h3>
+            </div>
+          </div>
+
+          <div className="mt-7 divide-y divide-border/70 border-t border-border/70">
+            {sources.map(({ label, detail, status, icon: Icon }) => (
+              <article key={label} className="grid gap-3 py-5 sm:grid-cols-[auto_1fr_auto] sm:items-start">
+                <div className="flex size-9 items-center justify-center border border-primary/30 bg-primary/10">
+                  <Icon className="size-4 text-primary" aria-hidden="true" />
+                </div>
+                <div>
+                  <h4 className="font-display text-lg font-bold uppercase">{label}</h4>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{detail}</p>
+                </div>
+                <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-primary/80 sm:pt-1 sm:text-right">{status}</span>
+              </article>
+            ))}
+          </div>
         </div>
 
-        {/* Pipeline steps */}
-        <div className="max-w-5xl mx-auto">
-          <div className="relative">
-            {/* Connecting line */}
-            <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px">
-              <div className="amber-line w-full" />
+        <div className="border-b border-border/70 py-8 xl:border-b-0 xl:border-r xl:px-8">
+          <div className="flex items-center gap-3">
+            <div className="flex size-12 items-center justify-center rounded-full border border-primary/45 bg-primary/10">
+              <span className="font-display text-sm font-bold uppercase text-primary">S</span>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              {steps.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <div key={step.num} className="relative group">
-                    <div className="glass-card-elevated rounded-xl p-5 text-center transition-all duration-500 hover:shadow-[var(--shadow-glow)] hover:translate-y-[-4px] h-full">
-                      <div className="font-mono text-[10px] text-primary/50 mb-3">{step.num}</div>
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
-                        <Icon className="w-5 h-5 text-primary" />
-                      </div>
-                      <h3 className="font-display font-bold text-sm text-foreground mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">
-                        {step.desc}
-                      </p>
-                    </div>
-
-                    {/* Arrow between steps (mobile) */}
-                    {i < steps.length - 1 && (
-                      <div className="md:hidden flex justify-center my-2">
-                        <svg className="w-4 h-4 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">02 · Satchy</p>
+              <h3 className="mt-1 font-display text-2xl font-bold uppercase">Turn connection into intelligence</h3>
             </div>
+          </div>
+
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            Satchy does not need every source to look the same. It keeps the original signal traceable, then connects the pieces into a shared operational layer teams can search, review, and act from.
+          </p>
+
+          <div className="mt-7 grid gap-0 border-y border-border/70 sm:grid-cols-2">
+            {intelligenceSteps.map(({ label, detail, icon: Icon }, index) => (
+              <article
+                key={label}
+                className="border-b border-border/70 py-5 sm:px-5 sm:odd:border-r sm:[&:nth-child(3)]:border-b-0 sm:[&:nth-child(4)]:border-b-0 sm:first:pl-0 sm:[&:nth-child(2)]:pr-0 sm:[&:nth-child(3)]:pl-0 sm:last:pr-0"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <Icon className="size-5 text-primary" aria-hidden="true" />
+                  <span className="font-mono text-[9px] tracking-[0.18em] text-primary/60">0{index + 1}</span>
+                </div>
+                <h4 className="mt-4 font-display text-xl font-bold uppercase">{label}</h4>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{detail}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="py-8 xl:pl-8">
+          <div className="flex items-center gap-3">
+            <ArrowRight className="size-6 text-primary" aria-hidden="true" />
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">03 · Outcomes</p>
+              <h3 className="mt-1 font-display text-2xl font-bold uppercase">Give the team one place to work from</h3>
+            </div>
+          </div>
+
+          <div className="mt-7 divide-y divide-border/70 border-y border-border/70">
+            {outputs.map(({ label, icon: Icon }) => (
+              <div key={label} className="flex items-center gap-4 py-5">
+                <Icon className="size-5 shrink-0 text-primary" aria-hidden="true" />
+                <p className="font-display text-lg font-bold uppercase">{label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-7 border-l border-primary pl-5">
+            <div className="flex items-center gap-2 text-primary">
+              <Smartphone className="size-4" aria-hidden="true" />
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em]">Connector roadmap</p>
+            </div>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              Planned provider integrations can extend Satchy to approved cellular, satellite, and messaging channels. Availability will depend on provider APIs, permissions, and deployment requirements.
+            </p>
           </div>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default DataFusionSection;
