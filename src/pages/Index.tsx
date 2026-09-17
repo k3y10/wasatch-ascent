@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import DataFusionSection from "@/components/DataFusionSection";
 import TerraListenSection from "@/components/TerraListenSection";
 import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
 import LearnAdaptSection from "@/components/LearnAdaptSection";
@@ -33,6 +34,8 @@ const Index = () => {
       <AmbientParticles />
       <Navbar />
       <HeroSection />
+      <div className="amber-line" />
+      <ScrollReveal><DataFusionSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><TerraListenSection /></ScrollReveal>
       <div className="amber-line" />
