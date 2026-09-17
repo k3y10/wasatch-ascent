@@ -21,32 +21,33 @@ const terrainInputs = [
 ];
 
 const TerrainIntelligenceSection = () => (
-  <section id="watch" className="scroll-mt-20 relative overflow-hidden bg-terrain-deep pt-14 pb-20 sm:pt-16 sm:pb-24">
+  <section id="watch" className="scroll-mt-20 relative overflow-hidden bg-terrain-deep py-24 sm:py-28">
     <div className="absolute inset-0 topo-overlay opacity-35" />
     <div className="container relative mx-auto px-6">
-      <div className="grid gap-10 xl:grid-cols-[0.85fr_1.15fr] xl:items-start">
-        <div className="xl:pt-2">
+      <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+        <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Watch · terrain context</p>
           <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] text-foreground sm:text-5xl lg:text-6xl">
             See the terrain around the call<span className="text-primary">.</span>
           </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-frost-dim">
-            A field report becomes more useful when the team can see where it happened and what surrounds it. AvyTS connects the report to terrain, weather, forecast zones, and nearby evidence for review.
-          </p>
         </div>
-
-        <OperationalSnapshot
-          src="/showcase/avyts-regional-terrain.webp"
-          alt="AvyTS regional terrain demo showing mapped avalanche regions, a selected Wyoming forecast area, terrain cells, and evidence controls"
-          width={1587}
-          height={947}
-          label="AvyTS · Regional terrain"
-          title="Local evidence in regional context"
-          description="Reviewers can keep mapped observations, terrain context, provider geometry, and the selected forecast region visible in one operating picture. Illustrative product preview."
-          mediaClassName="aspect-[4/3] sm:aspect-[1587/947]"
-          imageClassName="object-[57%_center] sm:object-center"
-        />
+        <p className="max-w-xl text-lg leading-relaxed text-frost-dim lg:pb-1">
+          A field report becomes more useful when the team can see where it happened and what surrounds it. AvyTS connects the report to terrain, weather, forecast zones, and nearby evidence for review.
+        </p>
       </div>
+
+      <OperationalSnapshot
+        src="/showcase/avyts-regional-terrain.webp"
+        alt="AvyTS regional terrain demo showing mapped avalanche regions, a selected Wyoming forecast area, terrain cells, and evidence controls"
+        width={1587}
+        height={947}
+        label="AvyTS · Regional terrain"
+        title="Local evidence in regional context"
+        description="Reviewers can keep mapped observations, terrain context, provider geometry, and the selected forecast region visible in one operating picture. Illustrative product preview."
+        className="mt-14"
+        mediaClassName="aspect-[4/3] sm:aspect-[1587/947]"
+        imageClassName="object-[57%_center] sm:object-center"
+      />
 
       <div className="mt-14 grid border-y border-border/70 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="border-b border-border/70 py-8 lg:border-b-0 lg:border-r lg:pr-10">
