@@ -8,22 +8,22 @@ import { cn } from "@/lib/utils";
 const capabilities = [
   {
     label: "Listen",
-    description: "Capture authorized radio and voice input. Preserve the original words, source, and time.",
+    description: "Bring approved communication and field data into one flow, starting with radio and voice.",
     icon: Radio,
   },
   {
     label: "Watch",
-    description: "Connect observations with maps, terrain, sensors, imagery, and location context.",
+    description: "Attach maps, terrain, weather, sensors, imagery, and location context to what the team is reporting.",
     icon: MapPinned,
   },
   {
     label: "Learn",
-    description: "Understand the person’s or organization’s workflow through connected observations and field history.",
+    description: "Preserve source-linked operational memory across people, shifts, incidents, and connected systems.",
     icon: Files,
   },
   {
     label: "Adapt",
-    description: "Move information into reviewable tasks, reports, and workflows. People approve consequential actions.",
+    description: "Route reviewed intelligence into tasks, reports, handoffs, and the workflows teams already use.",
     icon: ShieldCheck,
   },
 ];
@@ -38,7 +38,7 @@ const CapabilityRail = () => (
           <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
         </h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
-          One operating loop from field communication to reviewed action.
+          One operating loop across the systems your field already depends on.
         </p>
       </div>
 
@@ -83,19 +83,19 @@ const HeroSection = () => (
             TerraSatch field intelligence platform
           </p>
           <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
-            Turn field information into finished work<span className="text-primary">.</span>
+            Connect the field. Make it intelligent<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            TerraSatch turns what happens in the field into what needs to happen next. Speak through radio or voice. Satchy connects your observations to maps, tasks, and reports while you keep moving.
+            Satchy connects fragmented field communication and operational data into one shared intelligence layer. Keep the radios, maps, weather feeds, sensors, and systems your teams already use, then turn those signals into searchable records, context, tasks, and reviewed actions.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
               <a
-                href="#listen"
+                href="#connect"
                 onClick={() => trackFunnelEvent({ stage: "demonstrate", action: "see-how-it-works", source: "hero" })}
               >
-                See how it works
+                See how it connects
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
