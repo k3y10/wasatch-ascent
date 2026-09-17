@@ -1,4 +1,4 @@
-import { FALLBACK_PLANS, catalogMatchesPitchModel } from "@/lib/plan-catalog";
+import { FALLBACK_PLANS, catalogMatchesPublicPricing } from "@/lib/plan-catalog";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -45,11 +45,11 @@ const planPositioning: Record<
     summary: string;
     why: string;
     examples: string[];
-    modelRange: string;
+    highlights: string[];
   }
 > = {
   field: {
-    audience: "Your personal AI field assistant",
+    audience: "Take Satchy into the field.",
     summary:
       "Talk. Keep moving. Satchy takes the field notes. Your words become searchable observations connected to your map, routes, and field history.",
     why:
@@ -60,19 +60,19 @@ const planPositioning: Record<
       "Guides & researchers",
       "Engineers & inspectors",
     ],
-    modelRange: "$29–$79 / month planning range",
+    highlights: ["Personal field notebook", "Your observations, map & history", "One personal Edge connection"],
   },
   team: {
-    audience: "The same Satchy, shared by your crew",
+    audience: "Give the whole crew Satchy.",
     summary:
       "Bring everyone’s radio and voice observations into a shared map. Turn the team’s field history into assignments, approvals, shift handoffs, and reports.",
     why:
       "Built for crews that need field communication to become shared information instead of staying inside separate radios, notebooks, or memories.",
     examples: ["Ski patrol", "SAR teams", "Guide operations", "Field crews"],
-    modelRange: "$250–$750 / month planning range",
+    highlights: ["Up to 10 people", "Shared radios, map & observations", "Crew handoffs & review workflows"],
   },
   operations: {
-    audience: "An operating layer for your department",
+    audience: "Deploy Satchy into the operation.",
     summary:
       "Connect crews and shifts across one site. Add capacity, longer history, administration, and support around the way your department works.",
     why:
@@ -83,16 +83,16 @@ const planPositioning: Record<
       "Engineering programs",
       "Public-safety operations",
     ],
-    modelRange: "$25K–$60K / year planning range",
+    highlights: ["Site-level Satchy deployment", "Department workflows & APIs", "Scoped integrations & priority support"],
   },
   enterprise: {
-    audience: "Connected operations across your organization",
+    audience: "Connect the organization.",
     summary:
       "Coordinate sites and departments with scoped integrations, private infrastructure, security controls, extended retention, and custom workflows.",
     why:
       "Built for organizations that need TerraSatch connected to larger operational systems, data sources, sensors, mapping, or approved automation workflows.",
     examples: ["Agencies", "Multi-site operators", "Large field organizations", "Government & defense"],
-    modelRange: "$75K–$250K+ / year planning range",
+    highlights: ["Multi-site deployment", "Private infrastructure & governance", "Custom integrations & support"],
   },
 };
 
@@ -109,12 +109,12 @@ const isSelfServicePlan = (
 
 const planPrice = (plan: BillingPlan) => {
   if (plan.monthly_amount_cents !== null) {
-    return { amount: formatUsd(plan.monthly_amount_cents), cadence: "/ month" };
+    return { amount: `${plan.code === "operations" ? "From " : ""}${formatUsd(plan.monthly_amount_cents)}`, cadence: "/ month" };
   }
   if (plan.annual_amount_cents !== null) {
     return { amount: formatUsd(plan.annual_amount_cents), cadence: "/ year" };
   }
-  return { amount: "Custom", cadence: "annual scope" };
+  return { amount: "Custom", cadence: "scoped to your organization" };
 };
 
 const PricingEstimator = () => {
@@ -131,7 +131,7 @@ const PricingEstimator = () => {
     getBillingPlans()
       .then((catalog) => {
         if (!active) return;
-        if (catalogMatchesPitchModel(catalog)) {
+        if (catalogMatchesPublicPricing(catalog)) {
           // The published model stays stable; API availability gates checkout only.
           setPlans(FALLBACK_PLANS);
           setCatalogOnline(import.meta.env.VITE_TERRASATCH_CHECKOUT_ENABLED === "true");
@@ -230,8 +230,8 @@ const PricingEstimator = () => {
           <p className="font-mono text-xs uppercase tracking-widest text-primary">One observation. More useful work.</p>
           <blockquote className="mt-3 font-display text-2xl font-semibold sm:text-3xl">“Fresh elk tracks heading northeast. Two sets.”</blockquote>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Keep the original words. Add time, location, route position, and an editable wildlife observation. Find it again when you need it.</p>
-          <a href="/workspace-preview" className="mt-5 inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline underline-offset-4">Explore the sample field workspace <ArrowRight className="size-4" aria-hidden="true" /></a>
-          <p className="mt-2 text-xs text-muted-foreground">Illustrative workflow · sample data · no live radio or mapping connection</p>
+          <a href="/workspace" className="mt-5 inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline underline-offset-4">Open your field workspace <ArrowRight className="size-4" aria-hidden="true" /></a>
+          <p className="mt-2 text-xs text-muted-foreground">Example observation · workspace requires an activated account and connected sources</p>
         </div>
 
         {!catalogOnline && !catalogChecking && (
@@ -282,22 +282,25 @@ const PricingEstimator = () => {
                 </div>
 
                 <div className="mt-6 min-h-44 rounded-lg border border-border/70 bg-terrain-deep/55 p-4">
-                  <div className="flex items-end gap-2">
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                     <span className="font-display text-3xl font-bold text-primary">{price.amount}</span>
                     <span className="pb-1 text-xs font-medium text-muted-foreground">{price.cadence}</span>
                   </div>
-                  <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">{positioning.modelRange}</p>
+
                   {isSelfServicePlan(plan) ? (
                     <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
                       {catalogOnline ? "$0 today" : "Planned trial"} · {plan.trial_days} days · card required at checkout. Charges begin after the trial unless canceled.
                     </p>
                   ) : (
                     <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
-                      Annual base. Final scope is agreed around your deployment.
+                      {plan.code === "operations" ? "Starting software price. Agents, integrations, automation, retention, and support determine final scope." : "A proposal built around your sites, security, integrations, and support needs."}
                     </p>
                   )}
                 </div>
 
+                <ul className="mt-5 space-y-2 text-sm">
+                  {positioning.highlights.map(item => <li className="flex gap-2" key={item}><Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>{item}</span></li>)}
+                </ul>
                 <details className="mt-6">
                   <summary className="cursor-pointer text-sm font-semibold text-foreground">Capacity &amp; plan details</summary>
                   <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
@@ -381,8 +384,23 @@ const PricingEstimator = () => {
           })}
         </div>
 
+        <div className="mt-10 grid gap-5 lg:grid-cols-2">
+          <article className="rounded-xl border border-border bg-background/80 p-6">
+            <p className="font-mono text-xs uppercase tracking-widest text-primary">Scope by operational capability</p>
+            <h3 className="mt-3 font-display text-2xl">Satchy Agents</h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">A Satchy Agent connects an authorized radio, Edge device, or workflow to your field record and reviewable next steps. Scope agents around the work you need covered—not AI tokens.</p>
+            <p className="mt-3 text-xs text-muted-foreground">Agent allowances and additional-agent pricing are being evaluated with pilot deployments. No add-on charge is enabled.</p>
+          </article>
+          <article className="rounded-xl border border-border bg-background/80 p-6">
+            <p className="font-mono text-xs uppercase tracking-widest text-primary">Operations &amp; Enterprise · scoped roadmap</p>
+            <h3 className="mt-3 font-display text-2xl">Drone &amp; system orchestration</h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Discuss telemetry, imagery, mission preparation, and human-approved workflows as a separate integration. Autonomous operations are not included in Individual or Team.</p>
+            <p className="mt-3 text-xs text-muted-foreground">Availability, supported equipment, approval policies, and implementation costs require an agreed scope. No autonomous dispatch is offered in this preview.</p>
+          </article>
+        </div>
+
         <p className="mx-auto mt-7 max-w-3xl text-center text-xs leading-relaxed text-muted-foreground">
-          The experience stays connected as your scale grows: people, radios, channels, sites, retention, workflows, administration, integrations, and support. Availability and final scope are confirmed during evaluation.
+          Early access: confirm connected sources and available workflows during onboarding. Hardware and custom implementation are scoped separately. The experience grows with: people, radios, channels, sites, retention, workflows, administration, integrations, and support. Availability and final scope are confirmed during evaluation.
         </p>
       </div>
 
@@ -420,7 +438,7 @@ const PricingEstimator = () => {
               />
             </label>
             <label className="block text-sm font-medium">
-              Work email
+              Email
               <input
                 className={cn(inputClass, "mt-2")}
                 required

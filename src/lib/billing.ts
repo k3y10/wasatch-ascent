@@ -40,7 +40,7 @@ type CheckoutPayload = {
   display_name: string;
   email: string;
   organization_name: string;
-  plan_code: Exclude<PlanCode, "enterprise">;
+  plan_code: "field" | "team";
   billing_interval: BillingInterval;
 };
 

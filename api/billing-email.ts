@@ -255,6 +255,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     const idempotencyKey = `terrasatch-billing/${payload.kind}/${payload.eventId}`.slice(0, 256);
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
+      signal: AbortSignal.timeout(8000),
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
@@ -270,14 +271,13 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     });
 
     if (!resendResponse.ok) {
-      const detail = await resendResponse.text().catch(() => "");
-      console.error("TerraSatch billing email delivery failed", resendResponse.status, detail.slice(0, 500));
+      console.error("TerraSatch billing email delivery failed", resendResponse.status);
       return response.status(502).json({ ok: false, error: "Email delivery failed." });
     }
 
     return response.status(200).json({ ok: true });
-  } catch (error) {
-    console.error("TerraSatch billing email processing failed", error);
+  } catch {
+    console.error("TerraSatch billing email processing failed");
     return response.status(400).json({ ok: false, error: "Billing email could not be processed." });
   }
 }

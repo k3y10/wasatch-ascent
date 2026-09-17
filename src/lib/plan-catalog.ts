@@ -5,7 +5,7 @@ export const FALLBACK_PLANS: BillingPlan[] = [
     code: "field",
     name: "Individual",
     description: "Personal TerraSatch access for one field user.",
-    monthly_amount_cents: 4_900,
+    monthly_amount_cents: 2_400,
     annual_amount_cents: null,
     trial_days: 30,
     self_service: true,
@@ -25,7 +25,7 @@ export const FALLBACK_PLANS: BillingPlan[] = [
     code: "team",
     name: "Team",
     description: "Shared TerraSatch access for one working crew.",
-    monthly_amount_cents: 50_000,
+    monthly_amount_cents: 39_900,
     annual_amount_cents: null,
     trial_days: 30,
     self_service: true,
@@ -43,10 +43,10 @@ export const FALLBACK_PLANS: BillingPlan[] = [
   },
   {
     code: "operations",
-    name: "Annual Site",
+    name: "Operations",
     description: "Recurring TerraSatch deployment for one operating site or department.",
-    monthly_amount_cents: null,
-    annual_amount_cents: 5_000_000,
+    monthly_amount_cents: 199_900,
+    annual_amount_cents: null,
     trial_days: 0,
     self_service: false,
     recommended: false,
@@ -66,7 +66,7 @@ export const FALLBACK_PLANS: BillingPlan[] = [
     name: "Enterprise",
     description: "Multi-site or higher-assurance TerraSatch deployment.",
     monthly_amount_cents: null,
-    annual_amount_cents: 12_500_000,
+    annual_amount_cents: null,
     trial_days: 0,
     self_service: false,
     recommended: false,
@@ -84,7 +84,7 @@ export const FALLBACK_PLANS: BillingPlan[] = [
 ];
 
 
-export function catalogMatchesPitchModel(catalog: unknown): catalog is BillingPlan[] {
+export function catalogMatchesPublicPricing(catalog: unknown): catalog is BillingPlan[] {
   if (!Array.isArray(catalog) || catalog.length !== FALLBACK_PLANS.length) return false;
   return FALLBACK_PLANS.every(expected => {
     const matches = catalog.filter(plan => plan?.code === expected.code);

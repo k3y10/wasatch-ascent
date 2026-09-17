@@ -74,7 +74,7 @@ const Activate = () => {
                 Your TerraSatch portal password is set. You can now sign in to the organization portal.
               </p>
               <Button asChild className="mt-7">
-                <a href="https://api.terrasatch.com/portal/login">Open TerraSatch portal</a>
+                <Link to="/workspace">Open TerraSatch workspace</Link>
               </Button>
             </div>
           ) : (
