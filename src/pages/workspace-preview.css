@@ -1,0 +1,13 @@
+.workspace-layout { display: grid; grid-template-columns: minmax(0, 1fr); }
+.sample-map { height: 320px; background: radial-gradient(ellipse at 40% 60%, hsl(var(--forest) / .2), transparent 65%), hsl(var(--terrain-deep)); }
+.field-workspace { --muted-foreground: 215 10% 67%; }
+.light .field-workspace { --muted-foreground: 220 10% 38%; }
+@media (min-width: 1024px) {
+  .workspace-layout { grid-template-columns: minmax(0, 1fr) 320px; }
+  .workspace-nav { grid-column: 1 / -1; }
+  #satchy-panel { position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; }
+}
+@media (min-width: 1280px) {
+  .workspace-layout { grid-template-columns: 164px minmax(0, 1fr) 320px; }
+  .workspace-nav { grid-column: auto; }
+}

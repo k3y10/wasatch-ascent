@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
     <>
-      <div className="h-[104px] sm:h-[72px]" aria-hidden="true" />
-      <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/95 backdrop-blur-xl">
+      <div className="hidden sm:block sm:h-[72px]" aria-hidden="true" />
+      <footer className="relative sm:fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/95 backdrop-blur-xl">
         <div className="container mx-auto flex min-h-[104px] flex-col justify-center gap-2 px-4 py-3 sm:min-h-[72px] sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-3">
             <img src="/terrasatch-logo.png" alt="TerraSatch" className="size-8 rounded-lg" width={1254} height={1254} />

@@ -18,7 +18,8 @@ type NavItem =
 
 const exploreItems: NavItem[] = [
   { label: "How it works", section: "listen" },
-  { label: "Teams", section: "use-cases" },
+  { label: "Pricing", section: "cost" },
+  { label: "Workspace preview", href: "/workspace-preview" },
 ];
 
 const resourceItems: NavItem[] = [

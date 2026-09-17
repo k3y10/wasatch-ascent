@@ -11,7 +11,7 @@ import { submitInquiry } from "@/lib/inquiry";
 const evaluationSteps = [
   ["Tell us the workflow", "Share one real operational problem you want to test."],
   ["We set up a controlled evaluation", "Use approved sample data and the context your organization chooses to provide."],
-  ["Your team reviews the result", "Only discuss rollout if the workflow proves useful."],
+  ["You review the result", "Only discuss rollout if the workflow proves useful."],
 ];
 
 const PilotSection = () => {
@@ -36,7 +36,7 @@ const PilotSection = () => {
     try {
       const { result } = await submitInquiry({
         mode: "pilot",
-        scope: "Free 30-day evaluation; one small team; one workflow; approved sample data; no custom integration or production SLA",
+        scope: "Free 30-day evaluation; one individual or small team; one workflow; approved sample data; no custom integration or production SLA",
         ...pilot,
       });
       if (result.fallbackMailto) {
@@ -67,13 +67,13 @@ const PilotSection = () => {
           </div>
           <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Free 30-day evaluation</p>
           <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] sm:text-5xl lg:text-6xl">
-            Evaluate TerraSatch with your team<span className="text-primary">.</span>
+            Evaluate TerraSatch in your field<span className="text-primary">.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-frost-dim">
             This is not an account signup. Choose one real workflow and evaluate whether TerraListen and Satchy make the information easier to capture, connect, and review.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            The evaluation uses approved sample data and the operational context your organization chooses to provide. Your team stays in control of what is tested and whether anything moves forward.
+            The evaluation uses approved sample data and the field context you choose to provide. You stay in control of what is tested and whether anything moves forward.
           </p>
 
           <div className="mt-8 border-y border-border/70">
@@ -89,7 +89,7 @@ const PilotSection = () => {
           </div>
 
           <p className="mt-6 font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em] text-muted-foreground">
-            One team · one workflow · approved sample data · no production commitment
+            One person or crew · one workflow · approved sample data · no production commitment
           </p>
         </div>
 
@@ -124,7 +124,7 @@ const PilotSection = () => {
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="pilot-email">Work email *</FieldLabel>
+                  <FieldLabel htmlFor="pilot-email">Email *</FieldLabel>
                   <Input
                     id="pilot-email"
                     type="email"
@@ -137,7 +137,7 @@ const PilotSection = () => {
               </div>
 
               <Field>
-                <FieldLabel htmlFor="pilot-org">Organization *</FieldLabel>
+                <FieldLabel htmlFor="pilot-org">Organization or personal use case *</FieldLabel>
                 <Input
                   id="pilot-org"
                   autoComplete="organization"

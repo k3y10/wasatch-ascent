@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+const WorkspacePreview = lazy(() => import("./pages/WorkspacePreview.tsx"));
 const API = lazy(() => import("./pages/API.tsx"));
 const Activate = lazy(() => import("./pages/Activate.tsx"));
 const BillingSuccess = lazy(() => import("./pages/BillingSuccess.tsx"));
@@ -38,6 +39,7 @@ const App = () => (
         <Suspense fallback={<RouteLoading />}>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/workspace-preview" element={<WorkspacePreview />} />
             <Route path="/api" element={<API />} />
             <Route path="/edge" element={<Edge />} />
             <Route path="/downloads" element={<Navigate to="/edge" replace />} />

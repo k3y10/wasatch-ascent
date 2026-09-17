@@ -8,22 +8,22 @@ import { cn } from "@/lib/utils";
 const capabilities = [
   {
     label: "Listen",
-    description: "Capture authorized radio traffic and field observations without occupying the channel.",
+    description: "Capture authorized radio and voice input. Preserve the original words, source, and time.",
     icon: Radio,
   },
   {
     label: "Watch",
-    description: "Resolve each report against terrain, weather, forecast zones, and the current operating picture.",
+    description: "Connect observations with maps, terrain, sensors, imagery, and location context.",
     icon: MapPinned,
   },
   {
     label: "Learn",
-    description: "Connect calls, snowpits, drone cells, documents, and shift records into durable operational memory.",
+    description: "Understand the person’s or organization’s workflow through connected observations and field history.",
     icon: Files,
   },
   {
     label: "Adapt",
-    description: "Prepare reviewable alerts, briefings, handoffs, and reports for approved human action.",
+    description: "Move information into reviewable tasks, reports, and workflows. People approve consequential actions.",
     icon: ShieldCheck,
   },
 ];
@@ -83,10 +83,10 @@ const HeroSection = () => (
             TerraSatch field intelligence platform
           </p>
           <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
-            Turn field communication into field intelligence<span className="text-primary">.</span>
+            Turn field information into finished work<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            TerraSatch helps remote teams preserve field communication, connect it to terrain and operational context, and prepare reviewable records without replacing the people responsible for the decision.
+            TerraSatch turns what happens in the field into what needs to happen next. Speak through radio or voice. Satchy connects your observations to maps, tasks, and reports while you keep moving.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -101,10 +101,10 @@ const HeroSection = () => (
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
               <a
-                href="#pilot"
-                onClick={() => trackFunnelEvent({ stage: "validate", action: "evaluate-with-team", source: "hero" })}
+                href="#cost"
+                onClick={() => trackFunnelEvent({ stage: "validate", action: "compare-plans", source: "hero" })}
               >
-                Evaluate with your team
+                Find your plan
                 <ArrowDown data-icon="inline-end" />
               </a>
             </Button>

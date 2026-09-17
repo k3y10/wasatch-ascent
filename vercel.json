@@ -10,6 +10,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/workspace-preview", "destination": "/index.html" },
     { "source": "/demo-access", "destination": "/index.html" },
     { "source": "/demos", "destination": "/index.html" },
     { "source": "/downloads", "destination": "/index.html" },

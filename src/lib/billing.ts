@@ -66,6 +66,7 @@ const responseError = async (response: Response) => {
 export const getBillingPlans = async () => {
   const response = await fetch(`${TERRASATCH_API_URL}/api/v1/billing/plans`, {
     headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(8000),
   });
   if (!response.ok) throw new Error(await responseError(response));
   return (await response.json()) as BillingPlan[];

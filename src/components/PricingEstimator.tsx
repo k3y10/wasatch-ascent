@@ -1,3 +1,4 @@
+import { FALLBACK_PLANS, catalogMatchesPitchModel } from "@/lib/plan-catalog";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -37,89 +38,6 @@ const planIcons: Record<PlanCode, LucideIcon> = {
 
 type SelfServicePlanCode = "field" | "team";
 
-const FALLBACK_PLANS: BillingPlan[] = [
-  {
-    code: "field",
-    name: "Individual",
-    description: "Personal TerraSatch access for one field user.",
-    monthly_amount_cents: 4_900,
-    annual_amount_cents: null,
-    trial_days: 30,
-    self_service: true,
-    recommended: false,
-    entitlements: {
-      max_sites: 1,
-      max_members: 1,
-      max_edge_devices: 1,
-      max_channels: 1,
-      included_processing_hours: 15,
-      retention_days: 14,
-      api_access: false,
-      priority_support: false,
-    },
-  },
-  {
-    code: "team",
-    name: "Team",
-    description: "Shared TerraSatch access for one working crew.",
-    monthly_amount_cents: 50_000,
-    annual_amount_cents: null,
-    trial_days: 30,
-    self_service: true,
-    recommended: true,
-    entitlements: {
-      max_sites: 1,
-      max_members: 10,
-      max_edge_devices: 6,
-      max_channels: 12,
-      included_processing_hours: 75,
-      retention_days: 90,
-      api_access: true,
-      priority_support: false,
-    },
-  },
-  {
-    code: "operations",
-    name: "Annual Site",
-    description: "Recurring TerraSatch deployment for one operating site or department.",
-    monthly_amount_cents: null,
-    annual_amount_cents: 5_000_000,
-    trial_days: 0,
-    self_service: false,
-    recommended: false,
-    entitlements: {
-      max_sites: 1,
-      max_members: 30,
-      max_edge_devices: 20,
-      max_channels: 40,
-      included_processing_hours: 250,
-      retention_days: 365,
-      api_access: true,
-      priority_support: true,
-    },
-  },
-  {
-    code: "enterprise",
-    name: "Enterprise",
-    description: "Multi-site or higher-assurance TerraSatch deployment.",
-    monthly_amount_cents: null,
-    annual_amount_cents: 12_500_000,
-    trial_days: 0,
-    self_service: false,
-    recommended: false,
-    entitlements: {
-      max_sites: null,
-      max_members: null,
-      max_edge_devices: null,
-      max_channels: null,
-      included_processing_hours: null,
-      retention_days: null,
-      api_access: true,
-      priority_support: true,
-    },
-  },
-];
-
 const planPositioning: Record<
   PlanCode,
   {
@@ -131,9 +49,9 @@ const planPositioning: Record<
   }
 > = {
   field: {
-    audience: "One person taking Satchy into the field",
+    audience: "Your personal AI field assistant",
     summary:
-      "Use your radio or voice as a hands-free field notebook. Satchy captures what you say, keeps the original record, and organizes observations around time, location, route, and map context while you keep moving.",
+      "Talk. Keep moving. Satchy takes the field notes. Your words become searchable observations connected to your map, routes, and field history.",
     why:
       "Built for people working or exploring on their own who want useful field records without stopping to type into forms.",
     examples: [
@@ -145,18 +63,18 @@ const planPositioning: Record<
     modelRange: "$29–$79 / month planning range",
   },
   team: {
-    audience: "A crew taking Satchy into the same operation",
+    audience: "The same Satchy, shared by your crew",
     summary:
-      "Multiple people and radios contribute to one shared field record. Satchy connects calls, observations, routes, maps, history, and summaries so the team sees the same operational picture.",
+      "Bring everyone’s radio and voice observations into a shared map. Turn the team’s field history into assignments, approvals, shift handoffs, and reports.",
     why:
       "Built for crews that need field communication to become shared information instead of staying inside separate radios, notebooks, or memories.",
     examples: ["Ski patrol", "SAR teams", "Guide operations", "Field crews"],
     modelRange: "$250–$750 / month planning range",
   },
   operations: {
-    audience: "One site or department using TerraSatch operationally",
+    audience: "An operating layer for your department",
     summary:
-      "A recurring annual deployment for organizations using TerraSatch across shifts, crews, radios, routes, observations, and reporting with greater capacity, retention, administration, and support.",
+      "Connect crews and shifts across one site. Add capacity, longer history, administration, and support around the way your department works.",
     why:
       "Built for a department or site where TerraSatch becomes part of the regular operating workflow rather than a single-user tool.",
     examples: [
@@ -168,9 +86,9 @@ const planPositioning: Record<
     modelRange: "$25K–$60K / year planning range",
   },
   enterprise: {
-    audience: "Multiple teams, sites, systems, or higher-assurance operations",
+    audience: "Connected operations across your organization",
     summary:
-      "A scoped deployment for organizations that need multi-site coordination, integrations, extended retention, private infrastructure, security controls, or broader operational support.",
+      "Coordinate sites and departments with scoped integrations, private infrastructure, security controls, extended retention, and custom workflows.",
     why:
       "Built for organizations that need TerraSatch connected to larger operational systems, data sources, sensors, mapping, or approved automation workflows.",
     examples: ["Agencies", "Multi-site operators", "Large field organizations", "Government & defense"],
@@ -199,18 +117,6 @@ const planPrice = (plan: BillingPlan) => {
   return { amount: "Custom", cadence: "annual scope" };
 };
 
-const catalogMatchesPitchModel = (catalog: BillingPlan[]) => {
-  const byCode = Object.fromEntries(catalog.map((plan) => [plan.code, plan])) as Partial<
-    Record<PlanCode, BillingPlan>
-  >;
-  return (
-    byCode.field?.monthly_amount_cents === 4_900 &&
-    byCode.team?.monthly_amount_cents === 50_000 &&
-    byCode.operations?.annual_amount_cents === 5_000_000 &&
-    byCode.enterprise?.annual_amount_cents === 12_500_000
-  );
-};
-
 const PricingEstimator = () => {
   const [plans, setPlans] = useState<BillingPlan[]>(FALLBACK_PLANS);
   const [catalogOnline, setCatalogOnline] = useState(false);
@@ -226,8 +132,9 @@ const PricingEstimator = () => {
       .then((catalog) => {
         if (!active) return;
         if (catalogMatchesPitchModel(catalog)) {
-          setPlans(catalog);
-          setCatalogOnline(true);
+          // The published model stays stable; API availability gates checkout only.
+          setPlans(FALLBACK_PLANS);
+          setCatalogOnline(import.meta.env.VITE_TERRASATCH_CHECKOUT_ENABLED === "true");
         } else {
           setPlans(FALLBACK_PLANS);
           setCatalogOnline(false);
@@ -284,7 +191,7 @@ const PricingEstimator = () => {
   };
 
   return (
-    <section id="cost" className="content-auto relative overflow-hidden py-24 sm:py-28">
+    <section id="cost" className="pricing-section relative scroll-mt-24 overflow-hidden py-24 sm:py-28">
       <div className="absolute inset-0 bg-gradient-to-b from-terrain-deep via-terrain-surface to-background" />
       <div className="absolute inset-0 topo-overlay opacity-30" />
 
@@ -297,7 +204,7 @@ const PricingEstimator = () => {
             Take Satchy into the field<span className="text-primary">.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-frost-dim sm:text-lg">
-            Every TerraSatch plan starts with the same idea: speak into a radio or voice input, keep moving, and let Satchy turn what you report into organized field intelligence.
+            Every TerraSatch plan starts with the same idea: speak into a radio or voice input, keep moving, and let Satchy turn what you report into map-aware observations and useful next steps.
           </p>
           <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
             Your plan determines how many people, radios, channels, sites, and operational workflows can share that experience.
@@ -309,7 +216,7 @@ const PricingEstimator = () => {
             { icon: Radio, label: "1. Speak", copy: "Radio or voice input from the field" },
             { icon: Sparkles, label: "2. Satchy", copy: "Understands and structures what you report" },
             { icon: MapPinned, label: "3. Map it", copy: "Adds route, time, location, and observation context" },
-            { icon: Check, label: "4. Use it", copy: "Search, summarize, share, report, or act on the record" },
+            { icon: Check, label: "4. Use it", copy: "Review, assign, share, report, and track what happens next" },
           ].map(({ icon: Icon, label, copy }) => (
             <div key={label} className="rounded-lg border border-border/70 bg-background/72 p-4 text-left backdrop-blur-sm">
               <Icon className="size-4 text-primary" aria-hidden="true" />
@@ -319,9 +226,17 @@ const PricingEstimator = () => {
           ))}
         </div>
 
+        <div className="mx-auto mt-8 max-w-5xl rounded-xl border border-primary/30 bg-background p-6 sm:p-8">
+          <p className="font-mono text-xs uppercase tracking-widest text-primary">One observation. More useful work.</p>
+          <blockquote className="mt-3 font-display text-2xl font-semibold sm:text-3xl">“Fresh elk tracks heading northeast. Two sets.”</blockquote>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Keep the original words. Add time, location, route position, and an editable wildlife observation. Find it again when you need it.</p>
+          <a href="/workspace-preview" className="mt-5 inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline underline-offset-4">Explore the sample field workspace <ArrowRight className="size-4" aria-hidden="true" /></a>
+          <p className="mt-2 text-xs text-muted-foreground">Illustrative workflow · sample data · no live radio or mapping connection</p>
+        </div>
+
         {!catalogOnline && !catalogChecking && (
           <div className="mx-auto mt-6 max-w-3xl rounded-lg border border-primary/20 bg-primary/5 px-5 py-4 text-center text-xs leading-relaxed text-muted-foreground">
-            Pricing is shown from the current TerraSatch plan model. Secure self-service checkout is not enabled in this preview yet, so Individual and Team trial requests route through the evaluation path until billing is connected.
+            Trial access is by request while secure checkout is being prepared. Explore the plans below; requesting access does not charge your card.
           </div>
         )}
 
@@ -362,29 +277,29 @@ const PricingEstimator = () => {
 
                 <div className="mt-5">
                   <h3 className="font-display text-2xl font-bold uppercase leading-tight">{plan.name}</h3>
-                  <p className="mt-2 text-sm font-semibold leading-relaxed text-foreground/80">{positioning.audience}</p>
-                  <p className="mt-3 min-h-28 text-sm leading-relaxed text-muted-foreground">{positioning.summary}</p>
+                  <p className="mt-2 min-h-10 text-sm font-semibold leading-relaxed text-foreground/80">{positioning.audience}</p>
+                  <p className="mt-3 min-h-24 xl:min-h-32 text-sm leading-relaxed text-muted-foreground">{positioning.summary}</p>
                 </div>
 
-                <div className="mt-6 rounded-lg border border-border/70 bg-terrain-deep/55 p-4">
+                <div className="mt-6 min-h-44 rounded-lg border border-border/70 bg-terrain-deep/55 p-4">
                   <div className="flex items-end gap-2">
-                    <span className="font-display text-4xl font-bold text-primary">{price.amount}</span>
+                    <span className="font-display text-3xl font-bold text-primary">{price.amount}</span>
                     <span className="pb-1 text-xs font-medium text-muted-foreground">{price.cadence}</span>
                   </div>
                   <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">{positioning.modelRange}</p>
                   {isSelfServicePlan(plan) ? (
                     <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
-                      <strong className="text-foreground">$0 today</strong> · {plan.trial_days}-day trial · card required once secure checkout is enabled
+                      {catalogOnline ? "$0 today" : "Planned trial"} · {plan.trial_days} days · card required at checkout. Charges begin after the trial unless canceled.
                     </p>
                   ) : (
                     <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
-                      Planning-model base price. Final annual scope is set from deployment requirements.
+                      Annual base. Final scope is agreed around your deployment.
                     </p>
                   )}
                 </div>
 
-                <div className="mt-6">
-                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Included scale</p>
+                <details className="mt-6">
+                  <summary className="cursor-pointer text-sm font-semibold text-foreground">Capacity &amp; plan details</summary>
                   <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                     <div className="border-b border-border/50 pb-2">
                       <dt className="text-xs text-muted-foreground">Sites</dt>
@@ -403,7 +318,6 @@ const PricingEstimator = () => {
                       <dd className="mt-0.5 font-semibold text-foreground">{formatCapacity(entitlement.max_channels, "Up to ")}</dd>
                     </div>
                   </dl>
-                </div>
 
                 <div className="mt-5 space-y-2 text-sm text-foreground/80">
                   <div className="flex items-start gap-2">
@@ -436,9 +350,10 @@ const PricingEstimator = () => {
                   )}
                 </div>
 
+                </details>
                 <div className="mt-6 border-t border-border/60 pt-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground">Made for</p>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{positioning.why}</p>
+
                   <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{positioning.examples.join(" · ")}</p>
                 </div>
 
@@ -467,7 +382,7 @@ const PricingEstimator = () => {
         </div>
 
         <p className="mx-auto mt-7 max-w-3xl text-center text-xs leading-relaxed text-muted-foreground">
-          Prices use the current TerraSatch pitch and financial planning model. Site and enterprise scope remains flexible as deployments validate onboarding, infrastructure, support, and renewal requirements.
+          The experience stays connected as your scale grows: people, radios, channels, sites, retention, workflows, administration, integrations, and support. Availability and final scope are confirmed during evaluation.
         </p>
       </div>
 

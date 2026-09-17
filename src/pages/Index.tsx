@@ -42,7 +42,7 @@ const Index = () => {
       <div className="amber-line" />
       <ScrollReveal><PilotSection /></ScrollReveal>
       <div className="amber-line" />
-      <ScrollReveal><PricingEstimator /></ScrollReveal>
+      <PricingEstimator />
       <Footer />
     </div>
   );
