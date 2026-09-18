@@ -39,4 +39,16 @@ for (const event of events.slice(0, 10)) {
   console.log(
     `[resend-check] id=${event.id} type=${event.type} status=${event.status} created_at=${event.created_at}`,
   );
+  const attemptsResponse = await fetch(
+    `https://api.resend.com/webhooks/${webhookId}/events/${event.id}/attempts?limit=10`,
+    { headers, signal: AbortSignal.timeout(10_000) },
+  );
+  if (!attemptsResponse.ok) continue;
+  const attemptsPayload = await attemptsResponse.json();
+  const attempts = Array.isArray(attemptsPayload?.data) ? attemptsPayload.data : [];
+  for (const attempt of attempts) {
+    console.log(
+      `[resend-check] event_id=${event.id} http_status=${attempt.http_status_code ?? "none"} response=${String(attempt.response ?? "").slice(0, 160)}`,
+    );
+  }
 }
