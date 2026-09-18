@@ -11,3 +11,6 @@
   .workspace-layout { grid-template-columns: 164px minmax(0, 1fr) 320px; }
   .workspace-nav { grid-column: auto; }
 }
+
+@media (min-width: 1024px) { .workspace-without-satchy { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 1280px) { .workspace-without-satchy { grid-template-columns: 164px minmax(0, 1fr); } }
