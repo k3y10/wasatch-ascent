@@ -231,8 +231,8 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   }
 
   const apiKey = process.env.RESEND_API_KEY ?? "";
-  const from = process.env.TERRASATCH_BILLING_FROM ?? process.env.TERRASATCH_INQUIRY_FROM;
-  if (!apiKey || !from) {
+  const from = process.env.TERRASATCH_BILLING_FROM ?? "";
+  if (!apiKey.startsWith("re_") || !from) {
     return response.status(503).json({ ok: false, error: "Billing email is not configured." });
   }
   if (!from.toLowerCase().includes("@terrasatch.com")) {
