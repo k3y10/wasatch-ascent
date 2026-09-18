@@ -270,6 +270,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
 
   const apiKey = process.env.RESEND_API_KEY ?? "";
   const from = process.env.TERRASATCH_BILLING_FROM ?? "";
+  const replyTo = process.env.TERRASATCH_BILLING_REPLY_TO ?? "";
   if (!apiKey.startsWith("re_") || !from) {
     return response.status(503).json({ ok: false, error: "Billing email is not configured." });
   }
@@ -311,6 +312,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         subject: email.subject,
         text: email.text,
         html: email.html,
+        ...(replyTo ? { reply_to: replyTo } : {}),
       }),
     });
 
