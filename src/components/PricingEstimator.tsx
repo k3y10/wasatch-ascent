@@ -169,13 +169,25 @@ const PricingEstimator = () => {
   const submitTrial = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedPlan || !isSelfServicePlan(selectedPlan)) return;
+
+    const displayName = form.displayName.trim();
+    const organizationName =
+      selectedPlan.code === "field"
+        ? `${displayName || "My"} Workspace`
+        : form.organizationName.trim();
+
+    if (selectedPlan.code === "team" && !organizationName) {
+      setError("Add your team or organization name.");
+      return;
+    }
+
     setSubmitting(true);
     setError("");
     try {
       const checkout = await createBillingCheckout({
-        display_name: form.displayName,
-        email: form.email,
-        organization_name: form.organizationName,
+        display_name: displayName,
+        email: form.email.trim(),
+        organization_name: organizationName,
         plan_code: selectedPlan.code,
         billing_interval: "monthly",
       });
@@ -415,6 +427,28 @@ const PricingEstimator = () => {
             </DialogDescription>
           </DialogHeader>
 
+          <div className="grid grid-cols-3 overflow-hidden rounded-lg border border-border/70 bg-terrain-surface/45 text-center">
+            {[
+              ["1", "Account"],
+              ["2", "Stripe"],
+              ["3", "Workspace"],
+            ].map(([step, label], index) => (
+              <div
+                key={step}
+                className={cn(
+                  "px-3 py-3",
+                  index < 2 && "border-r border-border/70",
+                  index === 0 && "bg-primary/5",
+                )}
+              >
+                <span className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-primary">
+                  {step}
+                </span>
+                <span className="mt-1 block text-xs font-semibold">{label}</span>
+              </div>
+            ))}
+          </div>
+
           <div className="rounded-lg border border-border/70 bg-terrain-surface/50 p-4 text-sm">
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted-foreground">Today</span>
@@ -438,7 +472,7 @@ const PricingEstimator = () => {
               />
             </label>
             <label className="block text-sm font-medium">
-              Email
+              Email for this TerraSatch account
               <input
                 className={cn(inputClass, "mt-2")}
                 required
@@ -448,16 +482,18 @@ const PricingEstimator = () => {
                 onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
               />
             </label>
-            <label className="block text-sm font-medium">
-              Organization or use case
-              <input
-                className={cn(inputClass, "mt-2")}
-                required
-                autoComplete="organization"
-                value={form.organizationName}
-                onChange={(event) => setForm((current) => ({ ...current, organizationName: event.target.value }))}
-              />
-            </label>
+            {selectedPlan?.code === "team" && (
+              <label className="block text-sm font-medium">
+                Team or organization name
+                <input
+                  className={cn(inputClass, "mt-2")}
+                  required
+                  autoComplete="organization"
+                  value={form.organizationName}
+                  onChange={(event) => setForm((current) => ({ ...current, organizationName: event.target.value }))}
+                />
+              </label>
+            )}
 
             {error && (
               <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">
@@ -467,10 +503,10 @@ const PricingEstimator = () => {
 
             <Button type="submit" size="lg" className="w-full" disabled={submitting}>
               {submitting ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
-              {submitting ? "Opening secure Checkout" : "Continue to secure Checkout"}
+              {submitting ? "Opening Stripe…" : "Continue to Stripe"}
             </Button>
             <p className="text-center text-[11px] leading-relaxed text-muted-foreground">
-              By continuing, you authorize Stripe to store your payment method for the monthly subscription. Cancel during the trial to avoid the first charge.
+              Next: secure Stripe checkout. After payment details are saved, TerraSatch finishes account access and opens your workspace.
             </p>
           </form>
         </DialogContent>
