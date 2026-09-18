@@ -29,27 +29,6 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-const listResponse = await fetch("https://api.resend.com/webhooks", {
-  headers,
-  signal: AbortSignal.timeout(10_000),
-});
-if (!listResponse.ok) {
-  throw new Error(
-    `[resend-bootstrap] list webhooks failed with HTTP ${listResponse.status}`,
-  );
-}
-
-const listPayload = await listResponse.json();
-const existing = Array.isArray(listPayload?.data)
-  ? listPayload.data.find((webhook) => webhook?.endpoint === endpoint)
-  : null;
-
-if (existing?.id) {
-  console.log(`[resend-bootstrap] webhook already exists: ${existing.id}`);
-  console.log(`[resend-bootstrap] endpoint: ${endpoint}`);
-  process.exit(0);
-}
-
 const createResponse = await fetch("https://api.resend.com/webhooks", {
   method: "POST",
   headers,
@@ -58,8 +37,12 @@ const createResponse = await fetch("https://api.resend.com/webhooks", {
 });
 if (!createResponse.ok) {
   const body = await createResponse.text();
+  if (createResponse.status === 409 || body.toLowerCase().includes("already")) {
+    console.log("[resend-bootstrap] staging webhook already exists");
+    process.exit(0);
+  }
   throw new Error(
-    `[resend-bootstrap] create webhook failed with HTTP ${createResponse.status}: ${body.slice(0, 300)}`,
+    `[resend-bootstrap] create webhook failed with HTTP ${createResponse.status}: ${body.slice(0, 500)}`,
   );
 }
 
