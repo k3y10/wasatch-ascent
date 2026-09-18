@@ -59,7 +59,7 @@ const records = Array.isArray(detail.records) ? detail.records : [];
 console.log(`[resend-domain] record_count=${records.length}`);
 for (const record of records) {
   console.log(
-    `[resend-domain-record] type=${record.record ?? record.type ?? "unknown"} name=${record.name ?? ""} value=${record.value ?? ""} priority=${record.priority ?? ""} status=${record.status ?? ""}`,
+    `[resend-domain-record] capability=${record.record ?? ""} dns_type=${record.type ?? ""} name=${record.name ?? ""} value=${record.value ?? ""} priority=${record.priority ?? ""} status=${record.status ?? ""}`,
   );
 }
 
