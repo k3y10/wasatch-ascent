@@ -7,6 +7,10 @@ const allowedKinds = new Set([
   "trial_started",
   "trial_ending",
   "payment_failed",
+  "payment_confirmed",
+  "subscription_updated",
+  "activation_resend",
+  "password_reset",
   "cancellation_scheduled",
   "subscription_ended",
 ]);
@@ -207,6 +211,40 @@ const buildEmail = (payload: BillingEmailPayload) => {
           subject,
           `<p>Hi ${name},</p><p>The TerraSatch subscription for <strong>${organization}</strong> has ended.</p><p>Existing operational history is not automatically deleted. Contact TerraSatch if you need to reactivate the organization.</p>`,
         ),
+      };
+    }
+    case "payment_confirmed": {
+      const subject = "TerraSatch payment received";
+      return {
+        subject,
+        text: `Hi ${payload.displayName || "there"},\n\nStripe confirmed your TerraSatch payment${price ? ` for ${price}` : ""}. Your ${payload.planName || "TerraSatch"} subscription remains active.`,
+        html: shell(subject, `<p>Hi ${name},</p><p>Stripe confirmed your TerraSatch payment${price ? ` for ${escapeHtml(price)}` : ""}.</p><p>Your <strong>${plan}</strong> subscription remains active.</p>`),
+      };
+    }
+    case "subscription_updated": {
+      const subject = "Your TerraSatch subscription was updated";
+      return {
+        subject,
+        text: `Hi ${payload.displayName || "there"},\n\nYour TerraSatch subscription is now ${payload.planName || "TerraSatch"}${price ? ` at ${price}` : ""}. You can review billing from your TerraSatch workspace.`,
+        html: shell(subject, `<p>Hi ${name},</p><p>Your TerraSatch subscription is now <strong>${plan}</strong>${price ? ` at ${escapeHtml(price)}` : ""}.</p><p>You can review billing from your TerraSatch workspace.</p>`),
+      };
+    }
+    case "activation_resend": {
+      const subject = "Finish setting up your TerraSatch account";
+      const action = payload.activationUrl ? button(payload.activationUrl, "Finish TerraSatch setup") : "";
+      return {
+        subject,
+        text: `Hi ${payload.displayName || "there"},\n\nYour TerraSatch workspace is ready.${payload.activationUrl ? `\nFinish setup: ${payload.activationUrl}` : ""}\n\nIf you did not request this message, you can ignore it.`,
+        html: shell(subject, `<p>Hi ${name},</p><p>Your TerraSatch workspace for <strong>${organization}</strong> is ready.</p>${action}<p>If you did not request this message, you can ignore it.</p>`),
+      };
+    }
+    case "password_reset": {
+      const subject = "Reset your TerraSatch password";
+      const action = payload.activationUrl ? button(payload.activationUrl, "Reset password") : "";
+      return {
+        subject,
+        text: `Hi ${payload.displayName || "there"},\n\nA password reset was requested for your TerraSatch account.${payload.activationUrl ? `\nReset password: ${payload.activationUrl}` : ""}\n\nThis link is single-use and expires shortly. If you did not request it, no action is needed.`,
+        html: shell(subject, `<p>Hi ${name},</p><p>A password reset was requested for your TerraSatch account.</p>${action}<p>This link is single-use and expires shortly. If you did not request it, no action is needed.</p>`),
       };
     }
     default:
