@@ -230,16 +230,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     return response.status(401).json({ ok: false, error: "Unauthorized." });
   }
 
-  const sendKey = process.env.RESEND_API_KEY ?? "";
-  const previewAdminKey =
-    process.env.VERCEL_ENV === "preview"
-      ? process.env.RESEND_ADMIN_API_KEY ?? ""
-      : "";
-  const apiKey = sendKey.startsWith("re_")
-    ? sendKey
-    : previewAdminKey.startsWith("re_")
-      ? previewAdminKey
-      : "";
+  const apiKey = process.env.RESEND_API_KEY ?? "";
   const from = process.env.TERRASATCH_BILLING_FROM ?? process.env.TERRASATCH_INQUIRY_FROM;
   if (!apiKey || !from) {
     return response.status(503).json({ ok: false, error: "Billing email is not configured." });
