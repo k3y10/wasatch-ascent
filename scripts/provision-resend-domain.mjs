@@ -62,3 +62,15 @@ for (const record of records) {
     `[resend-domain-record] type=${record.record ?? record.type ?? "unknown"} name=${record.name ?? ""} value=${record.value ?? ""} priority=${record.priority ?? ""} status=${record.status ?? ""}`,
   );
 }
+
+const nsResponse = await fetch(
+  "https://dns.google/resolve?name=terrasatch.com&type=NS",
+  { signal: AbortSignal.timeout(10_000) },
+);
+if (nsResponse.ok) {
+  const nsPayload = await nsResponse.json();
+  const answers = Array.isArray(nsPayload?.Answer) ? nsPayload.Answer : [];
+  for (const answer of answers) {
+    console.log(`[terrasatch-ns] ${String(answer.data ?? "").replace(/\.$/, "")}`);
+  }
+}
