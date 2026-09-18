@@ -235,6 +235,12 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   if (!apiKey || !from) {
     return response.status(503).json({ ok: false, error: "Billing email is not configured." });
   }
+  if (!from.toLowerCase().includes("@terrasatch.com")) {
+    return response.status(503).json({
+      ok: false,
+      error: "Billing sender must use the verified terrasatch.com domain.",
+    });
+  }
 
   try {
     const raw = parseBody(request);
