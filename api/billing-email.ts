@@ -275,7 +275,14 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       return response.status(502).json({ ok: false, error: "Email delivery failed." });
     }
 
-    return response.status(200).json({ ok: true });
+    const resendPayload = (await resendResponse.json().catch(() => ({}))) as {
+      id?: string;
+    };
+    return response.status(200).json({
+      ok: true,
+      provider: "resend",
+      messageId: clean(resendPayload.id, 255) || null,
+    });
   } catch {
     console.error("TerraSatch billing email processing failed");
     return response.status(400).json({ ok: false, error: "Billing email could not be processed." });
