@@ -1,57 +1,51 @@
-import { Apple, CheckCircle2, Download, Github, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
+import { CheckCircle2, Download, Github, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const EDGE_SOURCE_VERSION = "0.2.3";
+const EDGE_SOURCE_VERSION = "0.2.4";
 const EDGE_SOURCE_REPOSITORY = "https://github.com/k3y10/terrasatch-edge";
 const EDGE_SOURCE_COMMIT =
-  "https://github.com/k3y10/terrasatch-edge/commit/87961cea7d2cdd8ad57b8d48b0732f0c694b0c97";
+  "https://github.com/k3y10/terrasatch-edge/tree/v0.2.4";
 const EDGE_RELEASE_CHECKLIST =
   "https://github.com/k3y10/terrasatch-edge/blob/main/docs/PUBLIC_RELEASE_CHECKLIST.md";
+const EDGE_RELEASE_URL =
+  "https://github.com/k3y10/terrasatch-edge/releases/tag/v0.2.4";
 
-const WINDOWS_VERSION = "0.2.2";
-const LINUX_AMD64_VERSION = "0.2.2";
-const MACOS_ARM64_VERSION = "0.2.2";
-const MACOS_X64_VERSION = "0.2.2";
-const NATIVE_TEST_VERSION = "0.2.2";
+const WINDOWS_VERSION = "0.2.4";
+const LINUX_AMD64_VERSION = "0.2.4";
 
 const WINDOWS_X64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.2/TerraSatch-Edge-Setup-x64.exe";
-const WINDOWS_X64_SHA256 = "C5AACBA86EBFE7F69F64A094787DA785CC93CEB5FCE7D3A69B0A2FD28F3092DC";
-const MACOS_ARM64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-arm64.pkg";
-const MACOS_ARM64_SHA256 = "15C2461CAA7D18D4A91ADD773541C4357880DBEE03FEC7C8B360BA1BC598DF87";
-const MACOS_X64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-x64.pkg";
-const MACOS_X64_SHA256 = "ADAFC801978A6319A5BADF0117D8F9312807B9EE5977D8F3ECEE33FBE2F8DCAF";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/TerraSatch-Edge-Setup-x64.exe";
+const WINDOWS_X64_SHA256 = "fab1244e9ab0e18bc457313a5b40cd10f17ac7414b0d2f8b2530b57ac0183b37";
 const LINUX_AMD64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/linux/v0.2.2/terrasatch-edge_0.2.2_amd64.deb";
-const LINUX_AMD64_SHA256 = "f63d407d87a3caeb85f2dccef6cda3033e10dbdd34c08f413f577205356c520a";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/terrasatch-edge_0.2.4_amd64.deb";
+const LINUX_AMD64_SHA256 = "e93c026b4225d8ee7fdc33891da0564b53d7baf52464276fd0cdecbbc9c7cb49";
 
 const releaseUrls = {
-  windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) || WINDOWS_X64_RELEASE_URL,
-  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined) || MACOS_ARM64_RELEASE_URL,
-  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined) || MACOS_X64_RELEASE_URL,
-  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) || LINUX_AMD64_RELEASE_URL,
-  linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_URL as string | undefined,
+  windowsX64:
+    (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) ||
+    WINDOWS_X64_RELEASE_URL,
+  linuxAmd64:
+    (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) ||
+    LINUX_AMD64_RELEASE_URL,
 };
 
 const releaseChecksums = {
-  windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) || WINDOWS_X64_SHA256,
-  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_SHA256 as string | undefined) || MACOS_ARM64_SHA256,
-  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_SHA256 as string | undefined) || MACOS_X64_SHA256,
-  linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) || LINUX_AMD64_SHA256,
-  linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_SHA256 as string | undefined,
+  windowsX64:
+    (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) ||
+    WINDOWS_X64_SHA256,
+  linuxAmd64:
+    (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) ||
+    LINUX_AMD64_SHA256,
 };
 
-type Platform = "windows" | "macos" | "linux" | "unknown";
+type Platform = "windows" | "linux" | "unknown";
 
 const detectPlatform = (): Platform => {
   const value = navigator.userAgent.toLowerCase();
   if (value.includes("windows")) return "windows";
-  if (value.includes("macintosh") || value.includes("mac os")) return "macos";
   if (value.includes("linux")) return "linux";
   return "unknown";
 };
@@ -129,11 +123,11 @@ const Downloads = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Windows v{WINDOWS_VERSION} · Linux AMD64 v{LINUX_AMD64_VERSION} · macOS ARM64 / Intel pilot v{MACOS_ARM64_VERSION}
+                Windows x64 v{WINDOWS_VERSION} · Linux AMD64 v{LINUX_AMD64_VERSION}
               </p>
             </div>
 
-            <div className="mt-12 grid border-y border-border/70 lg:grid-cols-3">
+            <div className="mt-12 grid border-y border-border/70 lg:grid-cols-2">
               <article className={`border-b border-border/70 py-9 lg:border-b-0 lg:border-r lg:pr-8 ${platform === "windows" ? "lg:bg-primary/[0.035]" : ""}`}>
                 <Laptop className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">Windows</h3>
@@ -148,64 +142,29 @@ const Downloads = () => {
                     <p className="uppercase tracking-[0.14em] text-primary">Windows x64 · v{WINDOWS_VERSION}</p>
                     {releaseChecksums.windowsX64 ? <p className="break-all">SHA-256 {releaseChecksums.windowsX64}</p> : null}
                     <p>
-                      v{EDGE_SOURCE_VERSION} source is published for review. Its Windows binary will replace this package only after the exact signed installer passes clean-machine validation and receives a new immutable Blob URL and SHA-256.
+                      Unsigned compatibility build from the v{EDGE_SOURCE_VERSION} release. Windows SmartScreen may warn because this public package is not Authenticode-signed.
                     </p>
                   </div>
                 ) : null}
                 {platform === "windows" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
               </article>
 
-              <article className={`border-b border-border/70 py-9 lg:border-b-0 lg:border-r lg:px-8 ${platform === "macos" ? "lg:bg-primary/[0.035]" : ""}`}>
-                <Apple className="size-7 text-primary" aria-hidden="true" />
-                <h3 className="mt-6 font-display text-3xl font-bold uppercase">macOS</h3>
-                <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Controlled pilot packages for Apple Silicon and Intel Macs with the same pairing, device health, and Edge service.
-                </p>
-                <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction
-                    href={releaseUrls.macosArm64}
-                    label={`Download v${MACOS_ARM64_VERSION} Apple Silicon .pkg`}
-                    pendingLabel="Apple Silicon · package unavailable"
-                  />
-                  <DownloadAction
-                    href={releaseUrls.macosX64}
-                    label={`Download v${MACOS_X64_VERSION} Intel .pkg`}
-                    pendingLabel="Intel · package unavailable"
-                  />
-                </div>
-                <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
-                  <p className="uppercase tracking-[0.14em] text-primary">Apple Silicon ARM64 · v{MACOS_ARM64_VERSION} · controlled pilot</p>
-                  {releaseChecksums.macosArm64 ? <p className="break-all">SHA-256 {releaseChecksums.macosArm64}</p> : null}
-                  <p className="uppercase tracking-[0.14em] text-primary">Intel x64 · v{MACOS_X64_VERSION} · controlled pilot</p>
-                  {releaseChecksums.macosX64 ? <p className="break-all">SHA-256 {releaseChecksums.macosX64}</p> : null}
-                  <p>
-                    These pilot packages are unsigned and may require manual approval in macOS until Developer ID signing and notarization are completed.
-                  </p>
-                </div>
-                {platform === "macos" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
-              </article>
-
               <article className={`py-9 lg:pl-8 ${platform === "linux" ? "lg:bg-primary/[0.035]" : ""}`}>
                 <Terminal className="size-7 text-primary" aria-hidden="true" />
                 <h3 className="mt-6 font-display text-3xl font-bold uppercase">Linux</h3>
                 <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-                  Debian/Ubuntu packages for AMD64 and ARM64 field computers, rugged PCs, and small edge nodes.
+                  Debian/Ubuntu AMD64 package for field computers, rugged PCs, and Linux edge nodes.
                 </p>
-                <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                <div className="mt-7">
                   <DownloadAction
                     href={releaseUrls.linuxAmd64}
                     label={`Download v${LINUX_AMD64_VERSION} .deb`}
-                    pendingLabel="Validated · upload pending"
                   />
-                  <DownloadAction href={releaseUrls.linuxArm64} label={`v${NATIVE_TEST_VERSION} ARM64 .deb`} />
                 </div>
                 <div className="mt-4 space-y-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
-                  <p className="uppercase tracking-[0.14em] text-primary">AMD64 · v{LINUX_AMD64_VERSION} · validated</p>
-                  {releaseUrls.linuxAmd64 && releaseChecksums.linuxAmd64 ? (
-                    <p className="break-all">SHA-256 {releaseChecksums.linuxAmd64}</p>
-                  ) : (
-                    <p>Public artifact and checksum pending publication.</p>
-                  )}
+                  <p className="uppercase tracking-[0.14em] text-primary">AMD64 · v{LINUX_AMD64_VERSION} · compatibility release</p>
+                  <p className="break-all">SHA-256 {releaseChecksums.linuxAmd64}</p>
+                  <p>Install the distribution <span className="text-foreground">rtl-sdr</span> package when using RTL-SDR / Nooelec receive hardware.</p>
                 </div>
                 {platform === "linux" ? <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Detected on this browser</p> : null}
               </article>
@@ -222,7 +181,7 @@ const Downloads = () => {
                     TerraSatch Edge v{EDGE_SOURCE_VERSION} is publicly reviewable. The repository exposes the device runtime, API bridge, Operator Console, BCA/FRS receive-only adapter, packaging scripts, tests, and the release checklist used before a native artifact is published.
                   </p>
                   <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                    Public binaries are versioned rather than silently overwritten, and this page publishes the SHA-256 for each exact artifact so a downloaded file can be checked independently.
+                    Public binaries are versioned rather than silently overwritten, and this page publishes the SHA-256 for each exact Windows/Linux artifact so a downloaded file can be checked independently.
                   </p>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
@@ -237,9 +196,14 @@ const Downloads = () => {
                       Review v{EDGE_SOURCE_VERSION} source
                     </a>
                   </Button>
+                  <Button asChild variant="outline" className="justify-center">
+                    <a href={EDGE_RELEASE_URL} target="_blank" rel="noreferrer">
+                      Open v{EDGE_SOURCE_VERSION} release
+                    </a>
+                  </Button>
                   <Button asChild variant="ghost" className="justify-center">
                     <a href={EDGE_RELEASE_CHECKLIST} target="_blank" rel="noreferrer">
-                      Read release verification checklist
+                      Read release checklist
                     </a>
                   </Button>
                 </div>
@@ -272,7 +236,7 @@ const Downloads = () => {
 
             <div className="mt-14 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                Public Edge source is currently v{EDGE_SOURCE_VERSION}. Windows x64 v{WINDOWS_VERSION} and Linux AMD64 v{LINUX_AMD64_VERSION} are the currently published validated downloads. macOS Apple Silicon and Intel v{MACOS_ARM64_VERSION} remain controlled pilot packages. The Windows v{EDGE_SOURCE_VERSION} download will be enabled only after the exact signed installer completes native validation, is uploaded to a new immutable Blob path, and its SHA-256 is verified after re-download.
+                TerraSatch Edge v{EDGE_SOURCE_VERSION} is the current public compatibility release for the merged Satchy control-plane generation. Public downloads are focused on Windows x64 and Linux AMD64. The Windows package is unsigned; the Linux package is a Debian/Ubuntu .deb.
               </p>
             </div>
           </div>
