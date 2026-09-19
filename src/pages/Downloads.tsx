@@ -1,50 +1,34 @@
-import { Apple, CheckCircle2, Download, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
+import { CheckCircle2, Download, Laptop, Radio, ShieldCheck, Terminal } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const WINDOWS_VERSION = "0.2.2";
-const LINUX_AMD64_VERSION = "0.2.2";
-const MACOS_ARM64_VERSION = "0.2.2";
-const MACOS_X64_VERSION = "0.2.2";
-const NATIVE_TEST_VERSION = "0.2.2";
+const WINDOWS_VERSION = "0.2.4";
+const LINUX_AMD64_VERSION = "0.2.4";
 
 const WINDOWS_X64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/windows/v0.2.2/TerraSatch-Edge-Setup-x64.exe";
-const WINDOWS_X64_SHA256 = "C5AACBA86EBFE7F69F64A094787DA785CC93CEB5FCE7D3A69B0A2FD28F3092DC";
-const MACOS_ARM64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-arm64.pkg";
-const MACOS_ARM64_SHA256 = "15C2461CAA7D18D4A91ADD773541C4357880DBEE03FEC7C8B360BA1BC598DF87";
-const MACOS_X64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/macos/v0.2.2/TerraSatch-Edge-0.2.2-macOS-x64.pkg";
-const MACOS_X64_SHA256 = "ADAFC801978A6319A5BADF0117D8F9312807B9EE5977D8F3ECEE33FBE2F8DCAF";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/TerraSatch-Edge-Setup-x64.exe";
+const WINDOWS_X64_SHA256 = "fab1244e9ab0e18bc457313a5b40cd10f17ac7414b0d2f8b2530b57ac0183b37";
 const LINUX_AMD64_RELEASE_URL =
-  "https://kf9uf43ft8n0jxps.public.blob.vercel-storage.com/edge/linux/v0.2.2/terrasatch-edge_0.2.2_amd64.deb";
-const LINUX_AMD64_SHA256 = "f63d407d87a3caeb85f2dccef6cda3033e10dbdd34c08f413f577205356c520a";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/terrasatch-edge_0.2.4_amd64.deb";
+const LINUX_AMD64_SHA256 = "e93c026b4225d8ee7fdc33891da0564b53d7baf52464276fd0cdecbbc9c7cb49";
 
 const releaseUrls = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) || WINDOWS_X64_RELEASE_URL,
-  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_URL as string | undefined) || MACOS_ARM64_RELEASE_URL,
-  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_URL as string | undefined) || MACOS_X64_RELEASE_URL,
   linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) || LINUX_AMD64_RELEASE_URL,
-  linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_URL as string | undefined,
 };
 
 const releaseChecksums = {
   windowsX64: (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) || WINDOWS_X64_SHA256,
-  macosArm64: (import.meta.env.VITE_EDGE_MACOS_ARM64_SHA256 as string | undefined) || MACOS_ARM64_SHA256,
-  macosX64: (import.meta.env.VITE_EDGE_MACOS_X64_SHA256 as string | undefined) || MACOS_X64_SHA256,
   linuxAmd64: (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) || LINUX_AMD64_SHA256,
-  linuxArm64: import.meta.env.VITE_EDGE_LINUX_ARM64_SHA256 as string | undefined,
 };
 
-type Platform = "windows" | "macos" | "linux" | "unknown";
+type Platform = "windows" | "linux" | "unknown";
 
 const detectPlatform = (): Platform => {
   const value = navigator.userAgent.toLowerCase();
   if (value.includes("windows")) return "windows";
-  if (value.includes("macintosh") || value.includes("mac os")) return "macos";
   if (value.includes("linux")) return "linux";
   return "unknown";
 };
@@ -110,9 +94,16 @@ const Edge = () => {
                   Connect radios, SDRs, GPS, sensors, and field computers to TerraSatch without changing the tools crews already carry.
                 </p>
               </div>
-              <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-right">
-                Pick the operating system, install Edge, pair the device, and let the site pull its approved configuration from <span className="text-foreground">api.terrasatch.com</span>.
-              </p>
+              <div className="space-y-4 lg:justify-self-end">
+                <img
+                  src="/satchy-approved-current.webp"
+                  alt="Current TerraSatch and Satchy Approved brand mark"
+                  className="w-full max-w-[420px] rounded-xl border border-border/70 object-cover shadow-sm"
+                />
+                <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-right">
+                  Pick the operating system, install Edge, pair the device, and let the site pull its approved configuration from <span className="text-foreground">api.terrasatch.com</span>.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -129,11 +120,11 @@ const Edge = () => {
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Windows · macOS · Linux
+                Windows x64 · Linux AMD64
               </p>
             </div>
 
-            <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            <div className="mt-10 grid gap-5 lg:grid-cols-2">
               <article className={`relative overflow-hidden rounded-xl border p-6 sm:p-7 ${platform === "windows" ? "border-primary/70 bg-primary/[0.055]" : "border-border/70 bg-card/30"}`}>
                 {platform === "windows" ? (
                   <span className="absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Detected</span>
@@ -152,38 +143,9 @@ const Edge = () => {
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">Technical details</summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>Installer · .exe · validated release</p>
+                    <p>Installer · .exe · unsigned compatibility release</p>
                     <Checksum label="SHA-256" value={releaseChecksums.windowsX64} />
-                  </div>
-                </details>
-              </article>
-
-              <article className={`relative overflow-hidden rounded-xl border p-6 sm:p-7 ${platform === "macos" ? "border-primary/70 bg-primary/[0.055]" : "border-border/70 bg-card/30"}`}>
-                {platform === "macos" ? (
-                  <span className="absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Detected</span>
-                ) : null}
-                <Apple className="size-7 text-primary" aria-hidden="true" />
-                <div className="mt-5 flex items-end justify-between gap-4">
-                  <h3 className="font-display text-3xl font-bold uppercase">macOS</h3>
-                  <span className="font-mono text-[10px] text-muted-foreground">v{MACOS_ARM64_VERSION}</span>
-                </div>
-                <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Controlled pilot packages for Apple Silicon and Intel Macs with the same pairing and device-health workflow.
-                </p>
-                <div className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction href={releaseUrls.macosArm64} label="Apple Silicon" pendingLabel="Apple Silicon unavailable" />
-                  <DownloadAction href={releaseUrls.macosX64} label="Intel Mac" pendingLabel="Intel unavailable" />
-                </div>
-                <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
-                  <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">Technical details</summary>
-                  <div className="mt-3 space-y-3 font-mono text-[10px] leading-relaxed">
-                    <p>Apple Silicon ARM64 · .pkg · controlled pilot</p>
-                    <Checksum label="ARM64 SHA" value={releaseChecksums.macosArm64} />
-                    <p>Intel x64 · .pkg · controlled pilot</p>
-                    <Checksum label="Intel SHA" value={releaseChecksums.macosX64} />
-                    <p className="font-sans text-xs">
-                      Pilot packages are unsigned and may require manual approval until Developer ID signing and notarization are completed.
-                    </p>
+                    <p className="font-sans text-xs">Windows SmartScreen may warn because this release is not Authenticode-signed.</p>
                   </div>
                 </details>
               </article>
@@ -200,17 +162,15 @@ const Edge = () => {
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
                   Debian/Ubuntu packages for rugged PCs, field laptops, and small edge nodes.
                 </p>
-                <div className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                  <DownloadAction href={releaseUrls.linuxAmd64} label="AMD64" pendingLabel="AMD64 unavailable" />
-                  <DownloadAction href={releaseUrls.linuxArm64} label="ARM64" pendingLabel="ARM64 testing" />
+                <div className="mt-6">
+                  <DownloadAction href={releaseUrls.linuxAmd64} label="Linux AMD64" pendingLabel="AMD64 unavailable" />
                 </div>
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">Technical details</summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>AMD64 · .deb · validated release</p>
-                    <Checksum label="AMD64 SHA" value={releaseChecksums.linuxAmd64} />
-                    <p>ARM64 · v{NATIVE_TEST_VERSION} · native testing</p>
-                    <Checksum label="ARM64 SHA" value={releaseChecksums.linuxArm64} />
+                    <p>AMD64 · .deb · compatibility release</p>
+                    <Checksum label="SHA-256" value={releaseChecksums.linuxAmd64} />
+                    <p className="font-sans text-xs">Install the distribution rtl-sdr package when using RTL-SDR / Nooelec receive hardware.</p>
                   </div>
                 </details>
               </article>
