@@ -145,13 +145,12 @@ const DataFusionSection = () => (
         <div>
           <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">Connected field intelligence</p>
           <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold uppercase leading-[0.95] text-foreground sm:text-4xl lg:text-5xl">
-            Fragmented signals in. One operational picture out<span className="text-primary">.</span>
+            Connect the field. See the whole picture<span className="text-primary">.</span>
           </h2>
         </div>
         <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground lg:pb-1">
-          TerraSatch connects the communications, maps, weather, sensors, and software your teams already use.
-          Satchy keeps the original source traceable, turns those fragmented field signals into shared operational
-          context, and routes reviewed outputs into the tools your organization already works from.
+          TerraSatch brings radio, maps, weather, sensors, and existing tools together. Satchy turns those signals
+          into shared context your team can search, review, and act on.
         </p>
       </div>
 
