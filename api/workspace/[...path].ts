@@ -1,7 +1,7 @@
 // Same-origin member sessions; no service API key reaches the browser.
 type Request = { method?: string; url?: string; body?: unknown; headers: Record<string, string | string[] | undefined> };
 type Response = { setHeader(name: string, value: string | string[]): void; status(code: number): Response; json(value: unknown): void; end(value?: string): void };
-const allowed = /^(session|login|logout|organizations\/[0-9a-f-]{36}(\/(preferences|chat|billing|observations|integrations(?:\/catalog|\/[0-9a-f-]{36}\/(?:authorize|test|revoke))?|actions\/[0-9a-f-]{36}))?)$/i;
+const allowed = /^(session|login|logout|organizations\/[0-9a-f-]{36}(\/(preferences|chat|billing|observations|integrations(?:\/catalog|\/[0-9a-f-]{36}\/(?:authorize|test|revoke|slack\/messages|drive\/files))?|actions\/[0-9a-f-]{36}))?)$/i;
 export default async function handler(req: Request, res: Response) {
   res.setHeader('Cache-Control', 'no-store');
   const configured = process.env.TERRASATCH_WORKSPACE_API_URL;

@@ -10,6 +10,7 @@ import {
   workspaceRequest,
   type IntegrationAuthorization,
   type IntegrationConnection,
+  type IntegrationDelivery,
   type IntegrationRequestPayload,
   type MemberSession,
   type WorkspaceData,
@@ -94,6 +95,45 @@ export default function Workspace() {
       await refresh();
     });
   }
+  async function sendSlackIntegrationTest(connectionId: string) {
+    if (!session || !data) return;
+    await run(async () => {
+      const delivery = await workspaceRequest<IntegrationDelivery>(
+        `organizations/${organization}/integrations/${connectionId}/slack/messages`,
+        session.csrf_token,
+        {
+          request_id: crypto.randomUUID(),
+          text: 'TerraSatch integration test — the approved Slack connection is working.',
+        },
+      );
+      if (delivery.status !== 'delivered') {
+        throw new Error(delivery.last_error || 'Slack test message was not delivered.');
+      }
+      await refresh();
+    });
+  }
+  async function createDriveIntegrationTest(connectionId: string) {
+    if (!session || !data) return;
+    await run(async () => {
+      const delivery = await workspaceRequest<IntegrationDelivery>(
+        `organizations/${organization}/integrations/${connectionId}/drive/files`,
+        session.csrf_token,
+        {
+          request_id: crypto.randomUUID(),
+          name: 'terrasatch-integration-test.txt',
+          content: (
+            'TerraSatch integration test. This file confirms the connected '
+            + 'Google Drive workflow can receive approved exports.'
+          ),
+          mime_type: 'text/plain',
+        },
+      );
+      if (delivery.status !== 'delivered') {
+        throw new Error(delivery.last_error || 'Google Drive test export was not created.');
+      }
+      await refresh();
+    });
+  }
   async function revokeIntegration(connectionId: string) {
     if (!session || !data) return;
     await run(async () => {
@@ -130,6 +170,8 @@ export default function Workspace() {
       onRequest={requestIntegration}
       onAuthorize={authorizeIntegration}
       onTest={testIntegration}
+      onSendSlackTest={sendSlackIntegrationTest}
+      onCreateDriveTest={createDriveIntegrationTest}
       onRevoke={revokeIntegration}
     /> : activeView === 'Account' ? <div className="space-y-3"><p>{session.user.email}</p><p>Your role: {data.role}</p><p>Service access: {data.subscription.service_access}</p><p>Trial ends: {data.subscription.trial_ends_at ? new Date(data.subscription.trial_ends_at).toLocaleDateString() : 'Not in trial'}</p><p>Sites: {data.sites.map(s => s.name).join(', ') || 'No sites configured'}</p></div> : activeView === 'Workflows' ? <div className="space-y-4">{!data.actions.length && <p>No workflow proposals have been recorded yet.</p>}{data.actions.map(action => <article className="p-4 rounded-lg border space-y-3" key={action.id}><h2 className="font-display text-xl">{action.type.replace(/_/g,' ')}</h2><p>{action.reason}</p>{action.message && <blockquote>{action.message}</blockquote>}<p>Status: {action.status}</p><p className="text-xs break-all">Source: {action.source_id}</p>{action.status === 'awaiting_approval' && canWrite && <div className="flex gap-3"><Button disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'approve'}); await refresh(); })}>Approve</Button><Button variant="outline" disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'reject'}); await refresh(); })}>Reject</Button></div>}<p className="text-xs text-muted-foreground">Approval records your decision. It does not claim execution or completion.</p></article>)}</div> : <>
     {canWrite && data.sites.length > 0 && <details className="border rounded-lg p-4"><summary className="cursor-pointer font-display text-xl">Add a field observation</summary><form className="space-y-3 mt-4" onSubmit={e => { e.preventDefault(); const element = e.currentTarget; const fields = new FormData(element); run(async () => { await workspaceRequest(`organizations/${organization}/observations`, session.csrf_token, {site_id: fields.get('site'), request_id: noteKey, text: fields.get('text'), latitude: fields.get('latitude') ? Number(fields.get('latitude')) : null, longitude: fields.get('longitude') ? Number(fields.get('longitude')) : null}); setNoteKey(crypto.randomUUID()); element.reset(); await refresh(); }); }}><label className="block">Site<select name="site" className="block bg-card border p-2 rounded">{data.sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}</select></label><label className="block">Original observation<Textarea name="text" required maxLength={10000} /></label><div className="grid grid-cols-2 gap-3"><label>Latitude (optional)<Input name="latitude" type="number" step="any" min={-90} max={90} /></label><label>Longitude (optional)<Input name="longitude" type="number" step="any" min={-180} max={180} /></label></div><p className="text-xs text-muted-foreground">Coordinates are recorded as supplied by you. Saving preserves your words; it does not invent an AI interpretation.</p><Button type="submit" disabled={busy}>Save observation</Button></form></details>}

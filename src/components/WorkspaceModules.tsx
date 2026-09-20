@@ -75,6 +75,8 @@ export function WorkspaceIntegrations({
   onRequest,
   onAuthorize,
   onTest,
+  onSendSlackTest,
+  onCreateDriveTest,
   onRevoke,
 }: {
   data: WorkspaceData;
@@ -83,6 +85,8 @@ export function WorkspaceIntegrations({
   onRequest: (payload: IntegrationRequestPayload) => Promise<IntegrationConnection | null>;
   onAuthorize: (connectionId: string) => Promise<IntegrationAuthorization | null>;
   onTest: (connectionId: string) => Promise<void>;
+  onSendSlackTest: (connectionId: string) => Promise<void>;
+  onCreateDriveTest: (connectionId: string) => Promise<void>;
   onRevoke: (connectionId: string) => Promise<void>;
 }) {
   const sources = [...new Set(data.records.map(record => record.source))];
@@ -282,6 +286,22 @@ export function WorkspaceIntegrations({
                   onClick={() => onTest(connection.id)}
                 >
                   Test connection
+                </Button>}
+                {connection.status === 'connected' && connection.provider === 'slack' && <Button
+                  type="button"
+                  variant="outline"
+                  disabled={busy}
+                  onClick={() => onSendSlackTest(connection.id)}
+                >
+                  Send test message
+                </Button>}
+                {connection.status === 'connected' && connection.provider === 'google_drive' && <Button
+                  type="button"
+                  variant="outline"
+                  disabled={busy}
+                  onClick={() => onCreateDriveTest(connection.id)}
+                >
+                  Create test export
                 </Button>}
                 <Button
                   type="button"

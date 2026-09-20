@@ -50,6 +50,30 @@ it('allows the scoped integration request authorize test and revoke routes while
   expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations/${connection}/test`);
 
   fetcher.mockClear();
+  fetcher.mockResolvedValue({status:201,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"delivered"}'});
+  const slack=response();
+  await handler({
+    method:'POST',
+    url:`/api/workspace/organizations/${organization}/integrations/${connection}/slack/messages`,
+    headers:{origin:'https://preview.example.com',host:'preview.example.com','x-csrf-token':'csrf'},
+    body:{request_id:'33333333-3333-4333-8333-333333333333',text:'Integration test'}
+  },slack);
+  expect(slack.code).toBe(201);
+  expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations/${connection}/slack/messages`);
+
+  fetcher.mockClear();
+  fetcher.mockResolvedValue({status:201,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"delivered"}'});
+  const drive=response();
+  await handler({
+    method:'POST',
+    url:`/api/workspace/organizations/${organization}/integrations/${connection}/drive/files`,
+    headers:{origin:'https://preview.example.com',host:'preview.example.com','x-csrf-token':'csrf'},
+    body:{request_id:'44444444-4444-4444-8444-444444444444',name:'test.txt',content:'test',mime_type:'text/plain'}
+  },drive);
+  expect(drive.code).toBe(201);
+  expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations/${connection}/drive/files`);
+
+  fetcher.mockClear();
   fetcher.mockResolvedValue({status:200,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"revoked"}'});
   const revoke=response();
   await handler({

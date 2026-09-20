@@ -59,6 +59,19 @@ export type IntegrationAuthorization = {
   expires_at: string;
 };
 
+export type IntegrationDelivery = {
+  id: string;
+  connection_id: string;
+  request_id: string;
+  operation: 'slack_message' | 'drive_export';
+  status: 'pending' | 'delivered' | 'failed';
+  external_id: string | null;
+  response_metadata: Record<string, unknown>;
+  last_error: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type IntegrationRequestPayload = {
   provider: string;
   scope: IntegrationScope;
