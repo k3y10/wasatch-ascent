@@ -275,8 +275,12 @@ const DataFusionSection = () => (
               </div>
             </div>
           ))}
-          <div className="flex min-h-[66px] items-center justify-center px-2 text-center">
-            <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-primary/80">And more →</span>
+          <div className="flex min-h-[66px] flex-col items-center justify-center gap-1.5 border border-border/70 bg-card/30 px-2 py-2 text-center">
+            <Network className="size-5 text-primary" aria-hidden="true" />
+            <div className="leading-none">
+              <p className="font-display text-[8px] font-bold text-foreground sm:text-[9px]">Custom connectors</p>
+              <p className="mt-0.5 text-[7px] text-muted-foreground">Scoped by deployment</p>
+            </div>
           </div>
         </div>
       </div>
