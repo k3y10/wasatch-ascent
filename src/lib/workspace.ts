@@ -32,6 +32,7 @@ export type IntegrationProvider = {
   auth: string;
   setup_status: 'managed' | 'planned' | 'available';
   scopes: IntegrationScope[];
+  capabilities: string[];
   description: string;
 };
 
@@ -63,7 +64,7 @@ export type IntegrationDelivery = {
   id: string;
   connection_id: string;
   request_id: string;
-  operation: 'slack_message' | 'drive_export';
+  operation: 'slack_message' | 'drive_export' | 'document.create' | 'notification.send';
   status: 'pending' | 'delivered' | 'failed';
   external_id: string | null;
   response_metadata: Record<string, unknown>;

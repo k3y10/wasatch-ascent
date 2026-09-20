@@ -74,6 +74,18 @@ it('allows the scoped integration request authorize test and revoke routes while
   expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations/${connection}/drive/files`);
 
   fetcher.mockClear();
+  fetcher.mockResolvedValue({status:201,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"delivered","operation":"document.create"}'});
+  const execute=response();
+  await handler({
+    method:'POST',
+    url:`/api/workspace/organizations/${organization}/integrations/execute`,
+    headers:{origin:'https://preview.example.com',host:'preview.example.com','x-csrf-token':'csrf'},
+    body:{request_id:'55555555-5555-4555-8555-555555555555',capability:'document.create',payload:{name:'test.txt',content:'test',mime_type:'text/plain'}}
+  },execute);
+  expect(execute.code).toBe(201);
+  expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations/execute`);
+
+  fetcher.mockClear();
   fetcher.mockResolvedValue({status:200,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"revoked"}'});
   const revoke=response();
   await handler({
