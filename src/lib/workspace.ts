@@ -108,11 +108,17 @@ export type WorkspaceData = {
   records: FieldRecord[];
   actions: {
     id: string;
-    source_id: string;
+    source_id: string | null;
     type: string;
     reason: string;
     message: string | null;
     status: string;
+    integration_execution?: {
+      status?: string;
+      capability?: string;
+      delivery_id?: string;
+      detail?: string;
+    };
   }[];
   messages: { id: string; role: string; content: string }[];
 };
