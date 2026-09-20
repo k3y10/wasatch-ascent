@@ -71,12 +71,12 @@ export type WorkspaceData = {
       agent_version: string | null;
     }[];
     engine: { provider: string; model: string };
-    catalog: IntegrationProvider[];
-    connections: IntegrationConnection[];
+    catalog?: IntegrationProvider[];
+    connections?: IntegrationConnection[];
   };
   role: string;
   sites: { id: string; name: string }[];
-  teams: { id: string; name: string; site_id: string | null }[];
+  teams?: { id: string; name: string; site_id: string | null }[];
   subscription: {
     status: string;
     plan_code: string | null;
