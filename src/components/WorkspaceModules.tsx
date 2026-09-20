@@ -50,7 +50,7 @@ export function WorkspaceModules({ modules, busy, onSave }: {
 function scopeLabel(scope: IntegrationScope, teamId: string | null, data: WorkspaceData) {
   if (scope === 'user') return 'Personal';
   if (scope === 'organization') return 'Organization';
-  return data.teams.find(team => team.id === teamId)?.name || 'Team';
+  return (data.teams ?? []).find(team => team.id === teamId)?.name || 'Team';
 }
 
 export function WorkspaceIntegrations({
@@ -67,9 +67,12 @@ export function WorkspaceIntegrations({
   onRevoke: (connectionId: string) => Promise<void>;
 }) {
   const sources = [...new Set(data.records.map(record => record.source))];
+  const catalog = data.integrations.catalog ?? [];
+  const connections = data.integrations.connections ?? [];
+  const teams = data.teams ?? [];
   const requestable = useMemo(
-    () => data.integrations.catalog.filter(provider => provider.setup_status !== 'managed'),
-    [data.integrations.catalog],
+    () => catalog.filter(provider => provider.setup_status !== 'managed'),
+    [catalog],
   );
   const isAdmin = ['owner', 'admin'].includes(data.role);
   const initialProvider = requestable[0]?.key || '';
@@ -174,11 +177,11 @@ export function WorkspaceIntegrations({
             className="w-full rounded border bg-card p-2"
             value={teamId}
             required
-            disabled={busy || !canWrite || data.teams.length === 0}
+            disabled={busy || !canWrite || teams.length === 0}
             onChange={event => setTeamId(event.target.value)}
           >
             <option value="">Choose a team</option>
-            {data.teams.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}
+            {teams.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}
           </select>
         </label>}
 
@@ -218,7 +221,7 @@ export function WorkspaceIntegrations({
       </p>}
 
       <div className="space-y-3">
-        {data.integrations.connections.length === 0 ? <p>No external provider connections have been requested yet.</p> : data.integrations.connections.map(connection => {
+        {connections.length === 0 ? <p>No external provider connections have been requested yet.</p> : connections.map(connection => {
           const canRevoke = isAdmin || connection.scope === 'user';
           return <div key={connection.id} className="rounded border p-3">
             <div className="flex flex-wrap items-start justify-between gap-3">
