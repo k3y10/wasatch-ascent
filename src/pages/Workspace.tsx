@@ -5,7 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import FieldMap from '@/components/FieldMap';
 import { WorkspaceModules, WorkspaceIntegrations } from '@/components/WorkspaceModules';
-import { STARTER_MODULES, workspaceRequest, type MemberSession, type WorkspaceData } from '@/lib/workspace';
+import {
+  STARTER_MODULES,
+  workspaceRequest,
+  type IntegrationRequestPayload,
+  type MemberSession,
+  type WorkspaceData,
+} from '@/lib/workspace';
 import './workspace-preview.css';
 
 export default function Workspace() {
@@ -42,6 +48,24 @@ export default function Workspace() {
       await refresh();
     });
   }
+  async function requestIntegration(payload: IntegrationRequestPayload) {
+    if (!session || !data) return;
+    await run(async () => {
+      await workspaceRequest(`organizations/${organization}/integrations`, session.csrf_token, payload);
+      await refresh();
+    });
+  }
+  async function revokeIntegration(connectionId: string) {
+    if (!session || !data) return;
+    await run(async () => {
+      await workspaceRequest(
+        `organizations/${organization}/integrations/${connectionId}/revoke`,
+        session.csrf_token,
+        {},
+      );
+      await refresh();
+    });
+  }
   const canWrite = data && data.role !== 'viewer' && data.subscription.service_access !== 'restricted';
   return <div className="field-workspace min-h-screen bg-background text-foreground">
     <header className="flex flex-wrap items-center justify-between gap-4 border-b p-5"><Link to="/" className="font-display text-xl font-bold">TERRASATCH</Link><span className="text-primary font-display">FIELD WORKSPACE</span>{session?.user && <div className="flex items-center gap-3"><span>{session.user.name}</span><Button variant="outline" disabled={busy} onClick={() => run(async () => { await workspaceRequest('logout', session.csrf_token, {}); setData(null); await loadSession(); })}>Sign out</Button></div>}</header>
@@ -54,7 +78,13 @@ export default function Workspace() {
     {data && <div className={`workspace-layout ${modules.includes('Satchy') ? '' : 'workspace-without-satchy'}`}><nav className="workspace-nav p-4 border-b flex flex-wrap xl:flex-col gap-2" aria-label="Workspace views">{[...modules.filter(m => m !== 'Satchy'), 'Integrations', 'Account'].map(item => <Button key={item} variant={activeView === item ? 'secondary' : 'ghost'} aria-pressed={activeView === item} onClick={() => setView(item)}>{item}</Button>)}<Button variant="outline" disabled={busy} onClick={() => run(refresh)}>Refresh records</Button></nav>
     <main className="min-w-0 p-5 space-y-5"><h1 className="text-3xl font-display">{activeView}</h1><WorkspaceModules modules={modules} busy={busy} onSave={saveModules} /><p className="text-sm text-muted-foreground">Latest {data.records.length} records from your workspace.</p>
     {activeView === 'Map' && <FieldMap records={data.records} onSelect={selectRecord} />}
-    {activeView === 'Integrations' ? <WorkspaceIntegrations data={data} /> : activeView === 'Account' ? <div className="space-y-3"><p>{session.user.email}</p><p>Your role: {data.role}</p><p>Service access: {data.subscription.service_access}</p><p>Trial ends: {data.subscription.trial_ends_at ? new Date(data.subscription.trial_ends_at).toLocaleDateString() : 'Not in trial'}</p><p>Sites: {data.sites.map(s => s.name).join(', ') || 'No sites configured'}</p></div> : activeView === 'Workflows' ? <div className="space-y-4">{!data.actions.length && <p>No workflow proposals have been recorded yet.</p>}{data.actions.map(action => <article className="p-4 rounded-lg border space-y-3" key={action.id}><h2 className="font-display text-xl">{action.type.replace(/_/g,' ')}</h2><p>{action.reason}</p>{action.message && <blockquote>{action.message}</blockquote>}<p>Status: {action.status}</p><p className="text-xs break-all">Source: {action.source_id}</p>{action.status === 'awaiting_approval' && canWrite && <div className="flex gap-3"><Button disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'approve'}); await refresh(); })}>Approve</Button><Button variant="outline" disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'reject'}); await refresh(); })}>Reject</Button></div>}<p className="text-xs text-muted-foreground">Approval records your decision. It does not claim execution or completion.</p></article>)}</div> : <>
+    {activeView === 'Integrations' ? <WorkspaceIntegrations
+      data={data}
+      busy={busy}
+      canWrite={Boolean(canWrite)}
+      onRequest={requestIntegration}
+      onRevoke={revokeIntegration}
+    /> : activeView === 'Account' ? <div className="space-y-3"><p>{session.user.email}</p><p>Your role: {data.role}</p><p>Service access: {data.subscription.service_access}</p><p>Trial ends: {data.subscription.trial_ends_at ? new Date(data.subscription.trial_ends_at).toLocaleDateString() : 'Not in trial'}</p><p>Sites: {data.sites.map(s => s.name).join(', ') || 'No sites configured'}</p></div> : activeView === 'Workflows' ? <div className="space-y-4">{!data.actions.length && <p>No workflow proposals have been recorded yet.</p>}{data.actions.map(action => <article className="p-4 rounded-lg border space-y-3" key={action.id}><h2 className="font-display text-xl">{action.type.replace(/_/g,' ')}</h2><p>{action.reason}</p>{action.message && <blockquote>{action.message}</blockquote>}<p>Status: {action.status}</p><p className="text-xs break-all">Source: {action.source_id}</p>{action.status === 'awaiting_approval' && canWrite && <div className="flex gap-3"><Button disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'approve'}); await refresh(); })}>Approve</Button><Button variant="outline" disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'reject'}); await refresh(); })}>Reject</Button></div>}<p className="text-xs text-muted-foreground">Approval records your decision. It does not claim execution or completion.</p></article>)}</div> : <>
     {canWrite && data.sites.length > 0 && <details className="border rounded-lg p-4"><summary className="cursor-pointer font-display text-xl">Add a field observation</summary><form className="space-y-3 mt-4" onSubmit={e => { e.preventDefault(); const element = e.currentTarget; const fields = new FormData(element); run(async () => { await workspaceRequest(`organizations/${organization}/observations`, session.csrf_token, {site_id: fields.get('site'), request_id: noteKey, text: fields.get('text'), latitude: fields.get('latitude') ? Number(fields.get('latitude')) : null, longitude: fields.get('longitude') ? Number(fields.get('longitude')) : null}); setNoteKey(crypto.randomUUID()); element.reset(); await refresh(); }); }}><label className="block">Site<select name="site" className="block bg-card border p-2 rounded">{data.sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}</select></label><label className="block">Original observation<Textarea name="text" required maxLength={10000} /></label><div className="grid grid-cols-2 gap-3"><label>Latitude (optional)<Input name="latitude" type="number" step="any" min={-90} max={90} /></label><label>Longitude (optional)<Input name="longitude" type="number" step="any" min={-180} max={180} /></label></div><p className="text-xs text-muted-foreground">Coordinates are recorded as supplied by you. Saving preserves your words; it does not invent an AI interpretation.</p><Button type="submit" disabled={busy}>Save observation</Button></form></details>}
     {!visibleRecords.length && <div className="rounded-lg border p-6"><h2 className="font-display text-xl">Your field history starts here.</h2><p>No observations have arrived yet. Records received through your connected TerraSatch sources will appear here.</p></div>}
     <div className="flex gap-2 overflow-x-auto pb-2" aria-label="Recent records">{visibleRecords.map(r => <button className={`rounded border px-3 py-2 shrink-0 text-sm ${r.id === selected ? 'border-primary' : ''}`} key={r.id} aria-pressed={r.id === selected} onClick={() => setSelected(r.id)}>{new Date(r.timestamp).toLocaleString()} · {r.source}</button>)}</div>
