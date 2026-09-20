@@ -5,7 +5,16 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import FieldMap from '@/components/FieldMap';
 import { WorkspaceModules, WorkspaceIntegrations } from '@/components/WorkspaceModules';
-import { STARTER_MODULES, workspaceRequest, type MemberSession, type WorkspaceData } from '@/lib/workspace';
+import {
+  STARTER_MODULES,
+  workspaceRequest,
+  type IntegrationAuthorization,
+  type IntegrationConnection,
+  type IntegrationDelivery,
+  type IntegrationRequestPayload,
+  type MemberSession,
+  type WorkspaceData,
+} from '@/lib/workspace';
 import './workspace-preview.css';
 
 export default function Workspace() {
@@ -16,8 +25,13 @@ export default function Workspace() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
-  const [view, setView] = useState('Map');
+  const callbackParams = new URLSearchParams(window.location.search);
+  const callbackView = callbackParams.get('view');
+  const integrationOutcome = callbackParams.get('integration');
+  const integrationProvider = callbackParams.get('provider');
+  const [view, setView] = useState(callbackView === 'Integrations' ? 'Integrations' : 'Map');
   const [noteKey, setNoteKey] = useState(() => crypto.randomUUID());
+  const [chatKey, setChatKey] = useState(() => crypto.randomUUID());
   const selectRecord = useCallback((id: string) => setSelected(id), []);
   const loadSession = useCallback(async () => {
     const next = await workspaceRequest<MemberSession>('session'); setSession(next);
@@ -30,7 +44,18 @@ export default function Workspace() {
     setData(next); setSelected(current => next.records.some(r => r.id === current) ? current : next.records[0]?.id || '');
   }, [organization]);
   useEffect(() => { let current = true; setData(null); setSelected(''); if (organization) workspaceRequest<WorkspaceData>(`organizations/${organization}`).then(next => { if (current) { setData(next); setSelected(next.records[0]?.id || ''); } }).catch(e => { if (current) setError(e.message); }); return () => { current = false; }; }, [organization]);
-  async function run(action: () => Promise<void>) { setBusy(true); setError(''); try { await action(); } catch(e) { setError(e instanceof Error ? e.message : 'Request failed.'); } finally { setBusy(false); } }
+  async function run<T>(action: () => Promise<T>): Promise<T | undefined> {
+    setBusy(true);
+    setError('');
+    try {
+      return await action();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Request failed.');
+      return undefined;
+    } finally {
+      setBusy(false);
+    }
+  }
   const modules = data?.modules ?? STARTER_MODULES;
   const activeView = ['Account', 'Integrations'].includes(view) || modules.includes(view) ? view : 'Integrations';
   const visibleRecords = data?.records.filter(r => activeView !== 'Radio Log' || r.source !== 'workspace_note') ?? [];
@@ -39,6 +64,85 @@ export default function Workspace() {
     if (!session || !data) return;
     await run(async () => {
       await workspaceRequest(`organizations/${organization}/preferences`, session.csrf_token, { modules: next });
+      await refresh();
+    });
+  }
+  async function requestIntegration(payload: IntegrationRequestPayload): Promise<IntegrationConnection | null> {
+    if (!session || !data) return null;
+    const connection = await run(() => workspaceRequest<IntegrationConnection>(
+      `organizations/${organization}/integrations`,
+      session.csrf_token,
+      payload,
+    ));
+    if (connection) await refresh();
+    return connection ?? null;
+  }
+  async function authorizeIntegration(connectionId: string): Promise<IntegrationAuthorization | null> {
+    if (!session || !data) return null;
+    return (await run(() => workspaceRequest<IntegrationAuthorization>(
+      `organizations/${organization}/integrations/${connectionId}/authorize`,
+      session.csrf_token,
+      {},
+    ))) ?? null;
+  }
+  async function testIntegration(connectionId: string) {
+    if (!session || !data) return;
+    await run(async () => {
+      await workspaceRequest(
+        `organizations/${organization}/integrations/${connectionId}/test`,
+        session.csrf_token,
+        {},
+      );
+      await refresh();
+    });
+  }
+  async function sendSlackIntegrationTest(connectionId: string) {
+    if (!session || !data) return;
+    await run(async () => {
+      const delivery = await workspaceRequest<IntegrationDelivery>(
+        `organizations/${organization}/integrations/${connectionId}/slack/messages`,
+        session.csrf_token,
+        {
+          request_id: crypto.randomUUID(),
+          text: 'TerraSatch integration test — the approved Slack connection is working.',
+        },
+      );
+      if (delivery.status !== 'delivered') {
+        throw new Error(delivery.last_error || 'Slack test message was not delivered.');
+      }
+      await refresh();
+    });
+  }
+  async function createDriveIntegrationTest(connectionId: string) {
+    if (!session || !data) return;
+    await run(async () => {
+      const delivery = await workspaceRequest<IntegrationDelivery>(
+        `organizations/${organization}/integrations/${connectionId}/drive/files`,
+        session.csrf_token,
+        {
+          request_id: crypto.randomUUID(),
+          name: 'terrasatch-integration-test.txt',
+          content: (
+            'TerraSatch integration test. This file confirms the connected '
+            + 'Google Drive workflow can receive approved exports.'
+          ),
+          mime_type: 'text/plain',
+        },
+      );
+      if (delivery.status !== 'delivered') {
+        throw new Error(delivery.last_error || 'Google Drive test export was not created.');
+      }
+      await refresh();
+    });
+  }
+  async function revokeIntegration(connectionId: string) {
+    if (!session || !data) return;
+    await run(async () => {
+      await workspaceRequest(
+        `organizations/${organization}/integrations/${connectionId}/revoke`,
+        session.csrf_token,
+        {},
+      );
       await refresh();
     });
   }
@@ -52,13 +156,29 @@ export default function Workspace() {
     {!organization && <p className="p-6">No active workspace membership is available for this account.</p>}
     {organization && !data && !error && <p role="status" className="p-6">Loading your field records…</p>}
     {data && <div className={`workspace-layout ${modules.includes('Satchy') ? '' : 'workspace-without-satchy'}`}><nav className="workspace-nav p-4 border-b flex flex-wrap xl:flex-col gap-2" aria-label="Workspace views">{[...modules.filter(m => m !== 'Satchy'), 'Integrations', 'Account'].map(item => <Button key={item} variant={activeView === item ? 'secondary' : 'ghost'} aria-pressed={activeView === item} onClick={() => setView(item)}>{item}</Button>)}<Button variant="outline" disabled={busy} onClick={() => run(refresh)}>Refresh records</Button></nav>
-    <main className="min-w-0 p-5 space-y-5"><h1 className="text-3xl font-display">{activeView}</h1><WorkspaceModules modules={modules} busy={busy} onSave={saveModules} /><p className="text-sm text-muted-foreground">Latest {data.records.length} records from your workspace.</p>
+    <main className="min-w-0 p-5 space-y-5"><h1 className="text-3xl font-display">{activeView}</h1>
+    {activeView === 'Integrations' && integrationOutcome && <div role="status" className="rounded-lg border p-4">
+      {integrationOutcome === 'connected'
+        ? `${integrationProvider ? integrationProvider.replace(/_/g, ' ') : 'Provider'} connected successfully.`
+        : 'The provider connection was not completed. Review the connection status below and try again.'}
+    </div>}
+    <WorkspaceModules modules={modules} busy={busy} onSave={saveModules} /><p className="text-sm text-muted-foreground">Latest {data.records.length} records from your workspace.</p>
     {activeView === 'Map' && <FieldMap records={data.records} onSelect={selectRecord} />}
-    {activeView === 'Integrations' ? <WorkspaceIntegrations data={data} /> : activeView === 'Account' ? <div className="space-y-3"><p>{session.user.email}</p><p>Your role: {data.role}</p><p>Service access: {data.subscription.service_access}</p><p>Trial ends: {data.subscription.trial_ends_at ? new Date(data.subscription.trial_ends_at).toLocaleDateString() : 'Not in trial'}</p><p>Sites: {data.sites.map(s => s.name).join(', ') || 'No sites configured'}</p></div> : activeView === 'Workflows' ? <div className="space-y-4">{!data.actions.length && <p>No workflow proposals have been recorded yet.</p>}{data.actions.map(action => <article className="p-4 rounded-lg border space-y-3" key={action.id}><h2 className="font-display text-xl">{action.type.replace(/_/g,' ')}</h2><p>{action.reason}</p>{action.message && <blockquote>{action.message}</blockquote>}<p>Status: {action.status}</p><p className="text-xs break-all">Source: {action.source_id}</p>{action.status === 'awaiting_approval' && canWrite && <div className="flex gap-3"><Button disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'approve'}); await refresh(); })}>Approve</Button><Button variant="outline" disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'reject'}); await refresh(); })}>Reject</Button></div>}<p className="text-xs text-muted-foreground">Approval records your decision. It does not claim execution or completion.</p></article>)}</div> : <>
+    {activeView === 'Integrations' ? <WorkspaceIntegrations
+      data={data}
+      busy={busy}
+      canWrite={Boolean(canWrite)}
+      onRequest={requestIntegration}
+      onAuthorize={authorizeIntegration}
+      onTest={testIntegration}
+      onSendSlackTest={sendSlackIntegrationTest}
+      onCreateDriveTest={createDriveIntegrationTest}
+      onRevoke={revokeIntegration}
+    /> : activeView === 'Account' ? <div className="space-y-3"><p>{session.user.email}</p><p>Your role: {data.role}</p><p>Service access: {data.subscription.service_access}</p><p>Trial ends: {data.subscription.trial_ends_at ? new Date(data.subscription.trial_ends_at).toLocaleDateString() : 'Not in trial'}</p><p>Sites: {data.sites.map(s => s.name).join(', ') || 'No sites configured'}</p></div> : activeView === 'Workflows' ? <div className="space-y-4">{!data.actions.length && <p>No workflow proposals have been recorded yet.</p>}{data.actions.map(action => <article className="p-4 rounded-lg border space-y-3" key={action.id}><h2 className="font-display text-xl">{action.type.replace(/_/g,' ')}</h2><p>{action.reason}</p>{action.message && <blockquote className="whitespace-pre-wrap">{action.message}</blockquote>}<p>Status: {action.status}</p>{action.integration_execution?.status && <p className="text-sm">Integration: {action.integration_execution.status}{action.integration_execution.capability ? ` · ${action.integration_execution.capability}` : ''}</p>}<p className="text-xs break-all">Source: {action.source_id || 'Workspace Satchy request'}</p>{action.status === 'awaiting_approval' && canWrite && <div className="flex gap-3"><Button disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'approve'}); await refresh(); })}>Approve</Button><Button variant="outline" disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'reject'}); await refresh(); })}>Reject</Button></div>}<p className="text-xs text-muted-foreground">Satchy only executes an integration action after an authorized human approves it. Delivery status appears here after execution.</p></article>)}</div> : <>
     {canWrite && data.sites.length > 0 && <details className="border rounded-lg p-4"><summary className="cursor-pointer font-display text-xl">Add a field observation</summary><form className="space-y-3 mt-4" onSubmit={e => { e.preventDefault(); const element = e.currentTarget; const fields = new FormData(element); run(async () => { await workspaceRequest(`organizations/${organization}/observations`, session.csrf_token, {site_id: fields.get('site'), request_id: noteKey, text: fields.get('text'), latitude: fields.get('latitude') ? Number(fields.get('latitude')) : null, longitude: fields.get('longitude') ? Number(fields.get('longitude')) : null}); setNoteKey(crypto.randomUUID()); element.reset(); await refresh(); }); }}><label className="block">Site<select name="site" className="block bg-card border p-2 rounded">{data.sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}</select></label><label className="block">Original observation<Textarea name="text" required maxLength={10000} /></label><div className="grid grid-cols-2 gap-3"><label>Latitude (optional)<Input name="latitude" type="number" step="any" min={-90} max={90} /></label><label>Longitude (optional)<Input name="longitude" type="number" step="any" min={-180} max={180} /></label></div><p className="text-xs text-muted-foreground">Coordinates are recorded as supplied by you. Saving preserves your words; it does not invent an AI interpretation.</p><Button type="submit" disabled={busy}>Save observation</Button></form></details>}
     {!visibleRecords.length && <div className="rounded-lg border p-6"><h2 className="font-display text-xl">Your field history starts here.</h2><p>No observations have arrived yet. Records received through your connected TerraSatch sources will appear here.</p></div>}
     <div className="flex gap-2 overflow-x-auto pb-2" aria-label="Recent records">{visibleRecords.map(r => <button className={`rounded border px-3 py-2 shrink-0 text-sm ${r.id === selected ? 'border-primary' : ''}`} key={r.id} aria-pressed={r.id === selected} onClick={() => setSelected(r.id)}>{new Date(r.timestamp).toLocaleString()} · {r.source}</button>)}</div>
     {record && <article className="rounded-lg border bg-card p-5 space-y-5"><div><h2 className="font-display text-xl text-primary">Original input · preserved</h2><blockquote className="text-lg mt-2 whitespace-pre-wrap">{record.original || 'Transcript not available.'}</blockquote><p className="text-sm text-muted-foreground mt-2">{record.source} · {record.speaker || 'Source identity unavailable'} · {new Date(record.timestamp).toLocaleString()}</p></div><div><h3 className="font-display text-xl">Satchy interpretation</h3>{record.interpretations.length ? record.interpretations.map(e => <div className="py-2" key={e.id}><p>{e.summary}</p><p className="text-sm text-muted-foreground">{e.location || 'Location not resolved'} · confidence {Math.round(e.confidence * 100)}%</p></div>) : <p>No interpretation has been recorded.</p>}</div><p className="text-xs break-all">Record {record.id}</p></article>}</>}
-    </main>{modules.includes('Satchy') && <aside id="satchy-panel" className="border-l p-5 space-y-4"><h2 className="font-display text-3xl text-primary">SATCHY</h2><p className="text-sm text-muted-foreground">Ask about your recent field records. Answers are AI interpretations; review the original source before acting.</p><div role="log" aria-label="Satchy conversation" className="space-y-4">{data.messages.map(m => <div key={m.id} className="rounded-lg border p-3"><strong className="text-sm">{m.role === 'user' ? 'You' : 'Satchy'}</strong><p className="whitespace-pre-wrap break-words">{m.content}</p></div>)}</div><form className="space-y-3" onSubmit={e => { e.preventDefault(); run(async () => { await workspaceRequest(`organizations/${organization}/chat`, session.csrf_token, {message}); setMessage(''); await refresh(); }); }}><label htmlFor="satchy-message">Ask Satchy</label><Textarea id="satchy-message" value={message} onChange={e => setMessage(e.target.value)} maxLength={4000} required disabled={!canWrite || busy} /><Button disabled={!canWrite || busy || !message.trim()} type="submit">{busy ? 'Working…' : 'Send to Satchy'}</Button></form><p className="text-xs text-muted-foreground">Chat is private to your account within this workspace. Use Workflows to review recorded action proposals.</p></aside>}</div>}</>}
+    </main>{modules.includes('Satchy') && <aside id="satchy-panel" className="border-l p-5 space-y-4"><h2 className="font-display text-3xl text-primary">SATCHY</h2><p className="text-sm text-muted-foreground">Ask about your recent field records. Answers are AI interpretations; review the original source before acting.</p><div role="log" aria-label="Satchy conversation" className="space-y-4">{data.messages.map(m => <div key={m.id} className="rounded-lg border p-3"><strong className="text-sm">{m.role === 'user' ? 'You' : 'Satchy'}</strong><p className="whitespace-pre-wrap break-words">{m.content}</p></div>)}</div><form className="space-y-3" onSubmit={e => { e.preventDefault(); run(async () => { const result = await workspaceRequest<{answer: string; action_id?: string | null; action_status?: string | null}>(`organizations/${organization}/chat`, session.csrf_token, {request_id: chatKey, message}); setMessage(''); setChatKey(crypto.randomUUID()); if (result.action_id) setView('Workflows'); await refresh(); }); }}><label htmlFor="satchy-message">Ask Satchy</label><Textarea id="satchy-message" value={message} onChange={e => setMessage(e.target.value)} maxLength={4000} required disabled={!canWrite || busy} /><Button disabled={!canWrite || busy || !message.trim()} type="submit">{busy ? 'Working…' : 'Send to Satchy'}</Button></form><p className="text-xs text-muted-foreground">Chat is private to your account within this workspace. Requests to notify, send, export, or create reports become approval-gated Workflows; Satchy does not execute them from chat alone.</p></aside>}</div>}</>}
   </div>;
 }
