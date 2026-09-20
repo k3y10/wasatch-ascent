@@ -3,16 +3,13 @@ import {
   CloudSun,
   Database,
   FileCheck2,
-  Globe2,
   Map,
   MapPinned,
   MessageSquareText,
-  Mountain,
   Network,
   Radio,
   Satellite,
   ShieldCheck,
-  Snowflake,
   Waypoints,
 } from "lucide-react";
 
@@ -53,43 +50,22 @@ const outputs = [
   { label: "Connected workflows", detail: "Send to your existing tools and systems.", icon: MessageSquareText },
 ];
 
-const OnXMark = () => (
-  <div className="flex size-8 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03] font-display text-[9px] font-black tracking-[-0.08em] text-white">
-    onX
-  </div>
-);
-
-const CalTopoMark = () => (
-  <div className="flex size-8 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03]">
-    <div className="relative size-5 rounded-full border-2 border-orange-500/90">
-      <span className="absolute left-1/2 top-1/2 block h-[2px] w-4 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-orange-500" />
-    </div>
-  </div>
-);
-
-const GaiaMark = () => (
-  <div className="flex size-8 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03]">
-    <Mountain className="size-5 text-lime-400" strokeWidth={2.4} />
-  </div>
-);
-
-const EsriMark = () => (
-  <div className="flex size-8 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03]">
-    <Globe2 className="size-5 text-sky-400" strokeWidth={1.9} />
-  </div>
-);
-
-const MapboxMark = () => (
-  <div className="flex size-8 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03]">
-    <div className="flex size-5 items-center justify-center rounded-full bg-blue-500">
-      <MapPinned className="size-3.5 text-white" strokeWidth={2.2} />
-    </div>
+const BrandImage = ({ src, className = "" }: { src: string; className?: string }) => (
+  <div className="flex h-8 min-w-8 items-center justify-center">
+    <img
+      src={src}
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+      className={`max-h-7 max-w-[68px] object-contain ${className}`}
+    />
   </div>
 );
 
 const GoogleDriveMark = () => (
-  <div className="flex size-8 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03]">
-    <svg viewBox="0 0 32 28" className="size-5" aria-hidden="true">
+  <div className="flex h-8 min-w-8 items-center justify-center">
+    <svg viewBox="0 0 32 28" className="size-6" aria-hidden="true">
       <path fill="#F9AB00" d="M11 1h10l10 17h-10z" />
       <path fill="#0F9D58" d="M11 1 1 18l5 9 10-17z" />
       <path fill="#4285F4" d="M6 27h20l5-9H11z" />
@@ -98,7 +74,7 @@ const GoogleDriveMark = () => (
 );
 
 const MicrosoftMark = () => (
-  <div className="grid size-8 grid-cols-2 gap-[2px] rounded-sm border border-white/10 bg-white/[0.03] p-[7px]" aria-hidden="true">
+  <div className="grid size-6 grid-cols-2 gap-[2px]" aria-hidden="true">
     <span className="bg-[#f25022]" />
     <span className="bg-[#7fba00]" />
     <span className="bg-[#00a4ef]" />
@@ -106,31 +82,58 @@ const MicrosoftMark = () => (
   </div>
 );
 
-const SlackMark = () => (
-  <div className="relative size-8 rounded-sm border border-white/10 bg-white/[0.03]" aria-hidden="true">
-    <span className="absolute left-[7px] top-[5px] h-[9px] w-[4px] rounded-full bg-[#36C5F0]" />
-    <span className="absolute left-[5px] top-[11px] h-[4px] w-[9px] rounded-full bg-[#2EB67D]" />
-    <span className="absolute right-[7px] bottom-[5px] h-[9px] w-[4px] rounded-full bg-[#ECB22E]" />
-    <span className="absolute right-[5px] bottom-[11px] h-[4px] w-[9px] rounded-full bg-[#E01E5A]" />
-  </div>
-);
-
-const SnowflakeMark = () => (
-  <div className="flex size-8 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03]">
-    <Snowflake className="size-5 text-cyan-300" strokeWidth={2} />
-  </div>
-);
-
 const integrations = [
-  { label: "onX", sublabel: "Backcountry", mark: OnXMark },
-  { label: "CalTopo", mark: CalTopoMark },
-  { label: "Gaia GPS", mark: GaiaMark },
-  { label: "Esri ArcGIS", mark: EsriMark },
-  { label: "Mapbox", mark: MapboxMark },
+  {
+    label: "onX",
+    sublabel: "Backcountry",
+    mark: () => (
+      <BrandImage
+        src="https://www.onxmaps.com/assets/images/backcountry/logo-light.svg"
+        className="max-h-6 max-w-[72px]"
+      />
+    ),
+  },
+  {
+    label: "CalTopo",
+    mark: () => (
+      <BrandImage
+        src="https://blog.caltopo.com/wp-content/uploads/2019/10/caltopoLogo_menu1.png"
+        className="max-h-7 max-w-[72px] rounded-sm bg-white px-1"
+      />
+    ),
+  },
+  {
+    label: "Gaia GPS",
+    mark: () => (
+      <BrandImage
+        src="https://i0.wp.com/blog.gaiagps.com/wp-content/uploads/2016/06/Gaia-GPS_Logo-Horizontal_390.png?resize=400%2C117&ssl=1"
+        className="max-h-7 max-w-[74px]"
+      />
+    ),
+  },
+  {
+    label: "Esri ArcGIS",
+    mark: () => <BrandImage src="https://cdn.simpleicons.org/esri/007AC2" className="max-h-6 max-w-6" />,
+  },
+  {
+    label: "Mapbox",
+    mark: () => <BrandImage src="https://cdn.simpleicons.org/mapbox/FFFFFF" className="max-h-6 max-w-6" />,
+  },
   { label: "Google Drive", mark: GoogleDriveMark },
   { label: "Microsoft 365", mark: MicrosoftMark },
-  { label: "Slack", mark: SlackMark },
-  { label: "Snowflake", mark: SnowflakeMark },
+  {
+    label: "Slack",
+    mark: () => (
+      <BrandImage
+        src="https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png"
+        className="max-h-6 max-w-6"
+      />
+    ),
+  },
+  {
+    label: "Snowflake",
+    mark: () => <BrandImage src="https://cdn.simpleicons.org/snowflake/29B5E8" className="max-h-6 max-w-6" />,
+  },
 ];
 
 const DataFusionSection = () => (
@@ -138,6 +141,20 @@ const DataFusionSection = () => (
     <div className="absolute inset-0 topo-overlay opacity-20" />
 
     <div className="container relative mx-auto px-4 sm:px-6">
+      <div className="mb-8 grid gap-5 lg:grid-cols-[1fr_0.78fr] lg:items-end">
+        <div>
+          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">Connected field intelligence</p>
+          <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold uppercase leading-[0.95] text-foreground sm:text-4xl lg:text-5xl">
+            Fragmented signals in. One operational picture out<span className="text-primary">.</span>
+          </h2>
+        </div>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground lg:pb-1">
+          TerraSatch connects the communications, maps, weather, sensors, and software your teams already use.
+          Satchy keeps the original source traceable, turns those fragmented field signals into shared operational
+          context, and routes reviewed outputs into the tools your organization already works from.
+        </p>
+      </div>
+
       <div className="grid overflow-hidden border-y border-border/70 xl:grid-cols-[0.96fr_1fr_0.96fr]">
         <div className="border-b border-border/70 px-0 py-6 xl:border-b-0 xl:border-r xl:pr-6">
           <div className="flex items-start gap-3">
