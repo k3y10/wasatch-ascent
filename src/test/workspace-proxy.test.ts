@@ -8,7 +8,7 @@ it('rejects cross-origin writes before forwarding a session', async () => { proc
 it('does not proxy arbitrary API or admin paths', async () => { process.env.TERRASATCH_WORKSPACE_API_URL='https://staging.example.com';const fetcher=vi.fn();vi.stubGlobal('fetch',fetcher);const res=response();await handler({method:'GET',url:'/api/workspace/admin',headers:{}},res);expect(res.code).toBe(404);expect(fetcher).not.toHaveBeenCalled(); });
 it('forwards only member cookie and CSRF to the configured origin and never caches', async () => { process.env.TERRASATCH_WORKSPACE_API_URL='https://staging.example.com';const fetcher=vi.fn().mockResolvedValue({status:200,headers:{getSetCookie:()=>['session=signed; HttpOnly; Secure; SameSite=Lax']},text:async()=>'{"user":null}'});vi.stubGlobal('fetch',fetcher);const res=response();await handler({method:'GET',url:'/api/workspace/session',headers:{cookie:'session=old',authorization:'Bearer do-not-forward'}},res);expect(String(fetcher.mock.calls[0][0])).toBe('https://staging.example.com/api/v1/workspace/session');expect(fetcher.mock.calls[0][1].headers.Authorization).toBeUndefined();expect(res.headers['Cache-Control']).toBe('no-store');expect(res.headers['Set-Cookie']).toEqual(['session=signed; HttpOnly; Secure; SameSite=Lax']); });
 
-it('allows the scoped integration request and revoke routes while still using same-origin protection', async () => {
+it('allows the scoped integration request authorize test and revoke routes while still using same-origin protection', async () => {
   process.env.TERRASATCH_WORKSPACE_API_URL='https://staging.example.com';
   const fetcher=vi.fn().mockResolvedValue({status:201,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"requested"}'});
   vi.stubGlobal('fetch',fetcher);
@@ -23,10 +23,35 @@ it('allows the scoped integration request and revoke routes while still using sa
   expect(res.code).toBe(201);
   expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations`);
 
+
+  fetcher.mockClear();
+  fetcher.mockResolvedValue({status:200,headers:{getSetCookie:()=>[]},text:async()=>'{"url":"https://accounts.google.com/o/oauth2/v2/auth"}'});
+  const authorize=response();
+  const connection='22222222-2222-4222-8222-222222222222';
+  await handler({
+    method:'POST',
+    url:`/api/workspace/organizations/${organization}/integrations/${connection}/authorize`,
+    headers:{origin:'https://preview.example.com',host:'preview.example.com','x-csrf-token':'csrf'},
+    body:{}
+  },authorize);
+  expect(authorize.code).toBe(200);
+  expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations/${connection}/authorize`);
+
+  fetcher.mockClear();
+  fetcher.mockResolvedValue({status:200,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"connected"}'});
+  const check=response();
+  await handler({
+    method:'POST',
+    url:`/api/workspace/organizations/${organization}/integrations/${connection}/test`,
+    headers:{origin:'https://preview.example.com',host:'preview.example.com','x-csrf-token':'csrf'},
+    body:{}
+  },check);
+  expect(check.code).toBe(200);
+  expect(String(fetcher.mock.calls[0][0])).toBe(`https://staging.example.com/api/v1/workspace/organizations/${organization}/integrations/${connection}/test`);
+
   fetcher.mockClear();
   fetcher.mockResolvedValue({status:200,headers:{getSetCookie:()=>[]},text:async()=>'{"status":"revoked"}'});
   const revoke=response();
-  const connection='22222222-2222-4222-8222-222222222222';
   await handler({
     method:'POST',
     url:`/api/workspace/organizations/${organization}/integrations/${connection}/revoke`,

@@ -8,6 +8,8 @@ import { WorkspaceModules, WorkspaceIntegrations } from '@/components/WorkspaceM
 import {
   STARTER_MODULES,
   workspaceRequest,
+  type IntegrationAuthorization,
+  type IntegrationConnection,
   type IntegrationRequestPayload,
   type MemberSession,
   type WorkspaceData,
@@ -22,7 +24,11 @@ export default function Workspace() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
-  const [view, setView] = useState('Map');
+  const callbackParams = new URLSearchParams(window.location.search);
+  const callbackView = callbackParams.get('view');
+  const integrationOutcome = callbackParams.get('integration');
+  const integrationProvider = callbackParams.get('provider');
+  const [view, setView] = useState(callbackView === 'Integrations' ? 'Integrations' : 'Map');
   const [noteKey, setNoteKey] = useState(() => crypto.randomUUID());
   const selectRecord = useCallback((id: string) => setSelected(id), []);
   const loadSession = useCallback(async () => {
@@ -36,7 +42,18 @@ export default function Workspace() {
     setData(next); setSelected(current => next.records.some(r => r.id === current) ? current : next.records[0]?.id || '');
   }, [organization]);
   useEffect(() => { let current = true; setData(null); setSelected(''); if (organization) workspaceRequest<WorkspaceData>(`organizations/${organization}`).then(next => { if (current) { setData(next); setSelected(next.records[0]?.id || ''); } }).catch(e => { if (current) setError(e.message); }); return () => { current = false; }; }, [organization]);
-  async function run(action: () => Promise<void>) { setBusy(true); setError(''); try { await action(); } catch(e) { setError(e instanceof Error ? e.message : 'Request failed.'); } finally { setBusy(false); } }
+  async function run<T>(action: () => Promise<T>): Promise<T | undefined> {
+    setBusy(true);
+    setError('');
+    try {
+      return await action();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Request failed.');
+      return undefined;
+    } finally {
+      setBusy(false);
+    }
+  }
   const modules = data?.modules ?? STARTER_MODULES;
   const activeView = ['Account', 'Integrations'].includes(view) || modules.includes(view) ? view : 'Integrations';
   const visibleRecords = data?.records.filter(r => activeView !== 'Radio Log' || r.source !== 'workspace_note') ?? [];
@@ -48,10 +65,32 @@ export default function Workspace() {
       await refresh();
     });
   }
-  async function requestIntegration(payload: IntegrationRequestPayload) {
+  async function requestIntegration(payload: IntegrationRequestPayload): Promise<IntegrationConnection | null> {
+    if (!session || !data) return null;
+    const connection = await run(() => workspaceRequest<IntegrationConnection>(
+      `organizations/${organization}/integrations`,
+      session.csrf_token,
+      payload,
+    ));
+    if (connection) await refresh();
+    return connection ?? null;
+  }
+  async function authorizeIntegration(connectionId: string): Promise<IntegrationAuthorization | null> {
+    if (!session || !data) return null;
+    return (await run(() => workspaceRequest<IntegrationAuthorization>(
+      `organizations/${organization}/integrations/${connectionId}/authorize`,
+      session.csrf_token,
+      {},
+    ))) ?? null;
+  }
+  async function testIntegration(connectionId: string) {
     if (!session || !data) return;
     await run(async () => {
-      await workspaceRequest(`organizations/${organization}/integrations`, session.csrf_token, payload);
+      await workspaceRequest(
+        `organizations/${organization}/integrations/${connectionId}/test`,
+        session.csrf_token,
+        {},
+      );
       await refresh();
     });
   }
@@ -76,13 +115,21 @@ export default function Workspace() {
     {!organization && <p className="p-6">No active workspace membership is available for this account.</p>}
     {organization && !data && !error && <p role="status" className="p-6">Loading your field records…</p>}
     {data && <div className={`workspace-layout ${modules.includes('Satchy') ? '' : 'workspace-without-satchy'}`}><nav className="workspace-nav p-4 border-b flex flex-wrap xl:flex-col gap-2" aria-label="Workspace views">{[...modules.filter(m => m !== 'Satchy'), 'Integrations', 'Account'].map(item => <Button key={item} variant={activeView === item ? 'secondary' : 'ghost'} aria-pressed={activeView === item} onClick={() => setView(item)}>{item}</Button>)}<Button variant="outline" disabled={busy} onClick={() => run(refresh)}>Refresh records</Button></nav>
-    <main className="min-w-0 p-5 space-y-5"><h1 className="text-3xl font-display">{activeView}</h1><WorkspaceModules modules={modules} busy={busy} onSave={saveModules} /><p className="text-sm text-muted-foreground">Latest {data.records.length} records from your workspace.</p>
+    <main className="min-w-0 p-5 space-y-5"><h1 className="text-3xl font-display">{activeView}</h1>
+    {activeView === 'Integrations' && integrationOutcome && <div role="status" className="rounded-lg border p-4">
+      {integrationOutcome === 'connected'
+        ? `${integrationProvider ? integrationProvider.replace(/_/g, ' ') : 'Provider'} connected successfully.`
+        : 'The provider connection was not completed. Review the connection status below and try again.'}
+    </div>}
+    <WorkspaceModules modules={modules} busy={busy} onSave={saveModules} /><p className="text-sm text-muted-foreground">Latest {data.records.length} records from your workspace.</p>
     {activeView === 'Map' && <FieldMap records={data.records} onSelect={selectRecord} />}
     {activeView === 'Integrations' ? <WorkspaceIntegrations
       data={data}
       busy={busy}
       canWrite={Boolean(canWrite)}
       onRequest={requestIntegration}
+      onAuthorize={authorizeIntegration}
+      onTest={testIntegration}
       onRevoke={revokeIntegration}
     /> : activeView === 'Account' ? <div className="space-y-3"><p>{session.user.email}</p><p>Your role: {data.role}</p><p>Service access: {data.subscription.service_access}</p><p>Trial ends: {data.subscription.trial_ends_at ? new Date(data.subscription.trial_ends_at).toLocaleDateString() : 'Not in trial'}</p><p>Sites: {data.sites.map(s => s.name).join(', ') || 'No sites configured'}</p></div> : activeView === 'Workflows' ? <div className="space-y-4">{!data.actions.length && <p>No workflow proposals have been recorded yet.</p>}{data.actions.map(action => <article className="p-4 rounded-lg border space-y-3" key={action.id}><h2 className="font-display text-xl">{action.type.replace(/_/g,' ')}</h2><p>{action.reason}</p>{action.message && <blockquote>{action.message}</blockquote>}<p>Status: {action.status}</p><p className="text-xs break-all">Source: {action.source_id}</p>{action.status === 'awaiting_approval' && canWrite && <div className="flex gap-3"><Button disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'approve'}); await refresh(); })}>Approve</Button><Button variant="outline" disabled={busy} onClick={() => run(async () => { await workspaceRequest(`organizations/${organization}/actions/${action.id}`, session.csrf_token, {decision:'reject'}); await refresh(); })}>Reject</Button></div>}<p className="text-xs text-muted-foreground">Approval records your decision. It does not claim execution or completion.</p></article>)}</div> : <>
     {canWrite && data.sites.length > 0 && <details className="border rounded-lg p-4"><summary className="cursor-pointer font-display text-xl">Add a field observation</summary><form className="space-y-3 mt-4" onSubmit={e => { e.preventDefault(); const element = e.currentTarget; const fields = new FormData(element); run(async () => { await workspaceRequest(`organizations/${organization}/observations`, session.csrf_token, {site_id: fields.get('site'), request_id: noteKey, text: fields.get('text'), latitude: fields.get('latitude') ? Number(fields.get('latitude')) : null, longitude: fields.get('longitude') ? Number(fields.get('longitude')) : null}); setNoteKey(crypto.randomUUID()); element.reset(); await refresh(); }); }}><label className="block">Site<select name="site" className="block bg-card border p-2 rounded">{data.sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}</select></label><label className="block">Original observation<Textarea name="text" required maxLength={10000} /></label><div className="grid grid-cols-2 gap-3"><label>Latitude (optional)<Input name="latitude" type="number" step="any" min={-90} max={90} /></label><label>Longitude (optional)<Input name="longitude" type="number" step="any" min={-180} max={180} /></label></div><p className="text-xs text-muted-foreground">Coordinates are recorded as supplied by you. Saving preserves your words; it does not invent an AI interpretation.</p><Button type="submit" disabled={busy}>Save observation</Button></form></details>}

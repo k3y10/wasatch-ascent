@@ -46,10 +46,17 @@ export type IntegrationConnection = {
   status: 'requested' | 'awaiting_authorization' | 'connected' | 'error' | 'disabled' | 'revoked';
   configuration: Record<string, unknown>;
   provider_account_label: string | null;
+  provider_account_id: string | null;
   last_synced_at: string | null;
   last_error: string | null;
   enabled: boolean;
   created_at: string;
+};
+
+export type IntegrationAuthorization = {
+  connection: IntegrationConnection;
+  url: string;
+  expires_at: string;
 };
 
 export type IntegrationRequestPayload = {

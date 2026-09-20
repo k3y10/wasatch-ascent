@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   STARTER_MODULES,
+  type IntegrationAuthorization,
+  type IntegrationConnection,
   type IntegrationRequestPayload,
   type IntegrationScope,
   type WorkspaceData,
@@ -53,17 +55,34 @@ function scopeLabel(scope: IntegrationScope, teamId: string | null, data: Worksp
   return (data.teams ?? []).find(team => team.id === teamId)?.name || 'Team';
 }
 
+function oauthDestination(provider: string, raw: string): string {
+  const url = new URL(raw);
+  const expectedHost = provider === 'google_drive'
+    ? 'accounts.google.com'
+    : provider === 'slack'
+      ? 'slack.com'
+      : '';
+  if (url.protocol !== 'https:' || !expectedHost || url.hostname !== expectedHost) {
+    throw new Error('TerraSatch returned an invalid provider authorization destination.');
+  }
+  return url.href;
+}
+
 export function WorkspaceIntegrations({
   data,
   busy,
   canWrite,
   onRequest,
+  onAuthorize,
+  onTest,
   onRevoke,
 }: {
   data: WorkspaceData;
   busy: boolean;
   canWrite: boolean;
-  onRequest: (payload: IntegrationRequestPayload) => Promise<void>;
+  onRequest: (payload: IntegrationRequestPayload) => Promise<IntegrationConnection | null>;
+  onAuthorize: (connectionId: string) => Promise<IntegrationAuthorization | null>;
+  onTest: (connectionId: string) => Promise<void>;
   onRevoke: (connectionId: string) => Promise<void>;
 }) {
   const sources = [...new Set(data.records.map(record => record.source))];
@@ -85,7 +104,6 @@ export function WorkspaceIntegrations({
   const allowedScopes = provider
     ? provider.scopes.filter(candidate => candidate === 'user' || isAdmin)
     : [];
-
   const effectiveScope = allowedScopes.includes(scope)
     ? scope
     : allowedScopes[0] || 'user';
@@ -98,17 +116,27 @@ export function WorkspaceIntegrations({
     setTeamId('');
   }
 
+  async function startAuthorization(connection: IntegrationConnection) {
+    const authorization = await onAuthorize(connection.id);
+    if (!authorization) return;
+    window.location.assign(oauthDestination(connection.provider, authorization.url));
+  }
+
   async function submitRequest(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!provider || !allowedScopes.length) return;
-    await onRequest({
+    const connection = await onRequest({
       provider: provider.key,
       scope: effectiveScope,
       team_id: effectiveScope === 'team' ? teamId || null : null,
       display_name: displayName.trim() || undefined,
       configuration: {},
     });
+    if (!connection) return;
     setDisplayName('');
+    if (provider.setup_status === 'available') {
+      await startAuthorization(connection);
+    }
   }
 
   return <section className="space-y-5" aria-label="Connected integrations">
@@ -134,8 +162,8 @@ export function WorkspaceIntegrations({
       <div>
         <h2 className="font-display text-xl">Provider connections</h2>
         <p className="text-sm text-muted-foreground">
-          Request the provider and scope here. TerraSatch never asks you to paste provider passwords, API keys, private keys,
-          or OAuth tokens into this form. Provider authorization is completed server-side when that connector is enabled.
+          TerraSatch sends you to the provider for authorization. Do not paste passwords, API keys, OAuth tokens,
+          private keys, or webhook URLs into this workspace.
         </p>
       </div>
 
@@ -208,11 +236,9 @@ export function WorkspaceIntegrations({
               (effectiveScope === 'team' && !teamId)
             }
           >
-            {provider?.setup_status === 'planned' ? 'Request connection' : 'Connect provider'}
+            {provider?.setup_status === 'available' ? 'Connect provider' : 'Request connection'}
           </Button>
-          {provider && <span className="text-sm text-muted-foreground">
-            {provider.description}
-          </span>}
+          {provider && <span className="text-sm text-muted-foreground">{provider.description}</span>}
         </div>
       </form>}
 
@@ -222,7 +248,10 @@ export function WorkspaceIntegrations({
 
       <div className="space-y-3">
         {connections.length === 0 ? <p>No external provider connections have been requested yet.</p> : connections.map(connection => {
-          const canRevoke = isAdmin || connection.scope === 'user';
+          const canManage = isAdmin || connection.scope === 'user';
+          const definition = catalog.find(item => item.key === connection.provider);
+          const canAuthorize = definition?.setup_status === 'available'
+            && ['requested', 'awaiting_authorization', 'error'].includes(connection.status);
           return <div key={connection.id} className="rounded border p-3">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -234,18 +263,35 @@ export function WorkspaceIntegrations({
                   Provider account: {connection.provider_account_label}
                 </p>}
                 {connection.last_synced_at && <p className="text-sm text-muted-foreground">
-                  Last sync: {new Date(connection.last_synced_at).toLocaleString()}
+                  Last checked: {new Date(connection.last_synced_at).toLocaleString()}
                 </p>}
                 {connection.last_error && <p className="text-sm text-destructive">{connection.last_error}</p>}
               </div>
-              {connection.status !== 'revoked' && canRevoke && canWrite && <Button
-                type="button"
-                variant="outline"
-                disabled={busy}
-                onClick={() => onRevoke(connection.id)}
-              >
-                Revoke
-              </Button>}
+              {connection.status !== 'revoked' && canManage && canWrite && <div className="flex flex-wrap gap-2">
+                {canAuthorize && <Button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => startAuthorization(connection)}
+                >
+                  {connection.status === 'error' ? 'Reconnect' : 'Authorize'}
+                </Button>}
+                {connection.status === 'connected' && <Button
+                  type="button"
+                  variant="outline"
+                  disabled={busy}
+                  onClick={() => onTest(connection.id)}
+                >
+                  Test connection
+                </Button>}
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={busy}
+                  onClick={() => onRevoke(connection.id)}
+                >
+                  Revoke
+                </Button>
+              </div>}
             </div>
           </div>;
         })}
