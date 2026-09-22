@@ -8,8 +8,9 @@ type BeforeInstallPromptEvent = Event & { prompt: () => Promise<void>; userChoic
 const navItems = [
   { label: "TerraListen", href: "/#how-it-works" },
   { label: "Terrain", href: "/#terrain-intelligence" },
+  { label: "Integrations", href: "/#integrations" },
   { label: "Teams", href: "/#use-cases" },
-  { label: "Pilot", href: "/#pilot" },
+  { label: "30-day beta", href: "/#pilot" },
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
   { label: "Demo", href: "/demos" },
