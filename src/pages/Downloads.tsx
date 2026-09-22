@@ -15,31 +15,42 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const EDGE_SOURCE_VERSION = "0.2.4";
+const EDGE_SOURCE_VERSION = "0.2.5";
 const EDGE_SOURCE_REPOSITORY = "https://github.com/k3y10/terrasatch-edge";
-const EDGE_SOURCE_COMMIT = "https://github.com/k3y10/terrasatch-edge/tree/v0.2.4";
+const EDGE_SOURCE_COMMIT = "https://github.com/k3y10/terrasatch-edge/tree/v0.2.5";
 const EDGE_RELEASE_CHECKLIST =
   "https://github.com/k3y10/terrasatch-edge/blob/main/docs/PUBLIC_RELEASE_CHECKLIST.md";
-const EDGE_RELEASE_URL = "https://github.com/k3y10/terrasatch-edge/releases/tag/v0.2.4";
+const EDGE_RELEASE_URL = "https://github.com/k3y10/terrasatch-edge/releases/tag/v0.2.5";
 const DEFAULT_EDGE_CHECKSUMS_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/SHA256SUMS.txt";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.5/SHA256SUMS.txt";
 
-const WINDOWS_VERSION = "0.2.4";
-const LINUX_AMD64_VERSION = "0.2.4";
+const WINDOWS_VERSION = "0.2.5";
+const LINUX_AMD64_VERSION = "0.2.5";
 
 const WINDOWS_X64_RELEASE_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/TerraSatch-Edge-Setup-x64.exe";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.5/TerraSatch-Edge_0.2.5_x64.msix";
+const WINDOWS_CERT_URL =
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.5/TerraSatch-MSIX-Dev.cer";
+const WINDOWS_TRUST_URL =
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.5/WINDOWS-MSIX-TRUST.txt";
+const WINDOWS_INSTALL_URL =
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.5/WINDOWS-MSIX-INSTALL.txt";
 const WINDOWS_X64_SHA256 =
-  "fab1244e9ab0e18bc457313a5b40cd10f17ac7414b0d2f8b2530b57ac0183b37";
+  "f8e858b390b3a3a3f7e356183c7495205a49b6f1308a634f22cb3e6d21f1570d";
+const WINDOWS_CERT_SHA256 =
+  "250148e90a46d2c38ce6528997f36c557c4aceaaed4a8d5ae9e6fec06fd90974";
+const WINDOWS_CERT_THUMBPRINT = "D44DDFC99F4302712743F1F46A54987BE9A53C1D";
+const WINDOWS_CERT_EXPIRES = "September 29, 2026 04:44 UTC";
 const LINUX_AMD64_RELEASE_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/terrasatch-edge_0.2.4_amd64.deb";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.5/terrasatch-edge_0.2.5_amd64.deb";
 const LINUX_AMD64_SHA256 =
-  "e93c026b4225d8ee7fdc33891da0564b53d7baf52464276fd0cdecbbc9c7cb49";
+  "61b0c943623c9c2d114a525c8eb47158bbde2c1eb33db822712e2482f3d91467";
 
 const releaseUrls = {
   windowsX64:
     (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) ||
     WINDOWS_X64_RELEASE_URL,
+  windowsCert: WINDOWS_CERT_URL,
   linuxAmd64:
     (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) ||
     LINUX_AMD64_RELEASE_URL,
@@ -53,6 +64,7 @@ const releaseChecksums = {
   windowsX64:
     (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) ||
     WINDOWS_X64_SHA256,
+  windowsCert: WINDOWS_CERT_SHA256,
   linuxAmd64:
     (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) ||
     LINUX_AMD64_SHA256,
@@ -203,26 +215,43 @@ const Downloads = () => {
                 </div>
 
                 <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  Windows 10/11 x64 installer with the TerraSatch Edge service and staged RTL-SDR
-                  tooling for compatible Nooelec / RTL receive hardware.
+                  Windows 10/11 x64 MSIX with the responsive Satchy field-gateway console, secure
+                  QR workspace pairing, guided device connections, and staged RTL-SDR receive tooling.
                 </p>
 
-                <div className="mt-8">
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <DownloadAction
                     href={releaseUrls.windowsX64}
-                    label={`Download Windows v${WINDOWS_VERSION}`}
+                    label={`Download Windows MSIX v${WINDOWS_VERSION}`}
                   />
+                  <Button asChild variant="outline" size="lg" className="w-full justify-center sm:w-auto">
+                    <a href={releaseUrls.windowsCert}>
+                      <ShieldCheck data-icon="inline-start" />
+                      Download test certificate
+                    </a>
+                  </Button>
                 </div>
 
                 <div className="mt-6 border-l border-primary pl-5 font-mono text-[10px] leading-relaxed text-muted-foreground">
                   <p className="uppercase tracking-[0.16em] text-primary">
-                    Beta compatibility release · SHA verified · unsigned publisher
+                    Development-signed MSIX · exact certificate pair · SHA verified
                   </p>
-                  <p className="mt-2 break-all">SHA-256 {releaseChecksums.windowsX64}</p>
+                  <p className="mt-2 break-all">MSIX SHA-256 {releaseChecksums.windowsX64}</p>
+                  <p className="mt-2 break-all">Certificate SHA-256 {releaseChecksums.windowsCert}</p>
+                  <p className="mt-2 break-all">Certificate thumbprint {WINDOWS_CERT_THUMBPRINT}</p>
                   <p className="mt-2">
-                    SHA-256 verifies these exact release bytes, but this v0.2.4 beta installer is not
-                    Authenticode-signed. Windows SmartScreen may therefore still display a warning.
+                    Direct beta installs require the matching TerraSatch development certificate in
+                    Windows TrustedPeople. It is valid through {WINDOWS_CERT_EXPIRES}. This is not the
+                    Microsoft Store production signature, and no private key/PFX is published.
                   </p>
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+                    <a className="text-primary underline underline-offset-4" href={WINDOWS_INSTALL_URL}>
+                      Install instructions
+                    </a>
+                    <a className="text-primary underline underline-offset-4" href={WINDOWS_TRUST_URL}>
+                      Certificate details
+                    </a>
+                  </div>
                 </div>
 
                 {platform === "windows" ? (
@@ -253,8 +282,8 @@ const Downloads = () => {
                 </div>
 
                 <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  Debian/Ubuntu AMD64 package for rugged PCs, field laptops, and Linux edge nodes
-                  using the same TerraSatch API and Satchy control-plane generation.
+                  Debian/Ubuntu AMD64 package for rugged PCs, field laptops, and Linux Edge nodes
+                  using the same v0.2.5 Satchy field-gateway runtime and TerraSatch API generation.
                 </p>
 
                 <div className="mt-8">
@@ -291,9 +320,10 @@ const Downloads = () => {
                     Verify before install<span className="text-primary">.</span>
                   </h3>
                   <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                    Every release publishes an exact SHA-256 manifest. Match the downloaded file
-                    before installing it. SHA-256 confirms integrity; it does not identify the
-                    Windows publisher or replace Authenticode signing.
+                    This prerelease publishes exact hashes for the Windows MSIX, matching
+                    development certificate, and Linux package. Verify the downloaded bytes before
+                    installing. The Windows certificate is only for this direct beta trust lane;
+                    Microsoft Store production signing remains separate.
                   </p>
                   <Button asChild variant="outline" className="mt-6">
                     <a href={releaseChecksumManifest} target="_blank" rel="noreferrer">
@@ -309,10 +339,16 @@ const Downloads = () => {
                       Windows PowerShell
                     </p>
                     <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
-                      Get-FileHash .\TerraSatch-Edge-Setup-x64.exe -Algorithm SHA256
+                      Get-FileHash .\TerraSatch-Edge_0.2.5_x64.msix -Algorithm SHA256
                     </code>
                     <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
-                      Expected: {releaseChecksums.windowsX64}
+                      Expected MSIX: {releaseChecksums.windowsX64}
+                    </p>
+                    <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
+                      Get-FileHash .\TerraSatch-MSIX-Dev.cer -Algorithm SHA256
+                    </code>
+                    <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
+                      Expected certificate: {releaseChecksums.windowsCert}
                     </p>
                   </div>
 
@@ -321,7 +357,7 @@ const Downloads = () => {
                       Linux
                     </p>
                     <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
-                      sha256sum terrasatch-edge_0.2.4_amd64.deb
+                      sha256sum terrasatch-edge_0.2.5_amd64.deb
                     </code>
                     <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
                       Expected: {releaseChecksums.linuxAmd64}
@@ -331,11 +367,11 @@ const Downloads = () => {
               </div>
 
               <p className="mt-8 border-l border-primary pl-5 text-sm leading-relaxed text-muted-foreground">
-                v0.2.4 remains the direct-download beta compatibility build and stays clearly
-                labeled unsigned. v0.2.5 is being validated as the free Microsoft Store/MSIX path,
-                where Microsoft applies the trusted production package signature after certification.
-                We will not present the Store package as available until that exact build passes
-                TerraSatch install, pairing, radio, and Store certification checks.
+                v0.2.5 is now published as the current Windows/Linux beta generation. Windows uses
+                the exact MSIX + development-certificate pair that passed TerraSatch MSIX QA; Linux
+                is built from the same release generation with GitHub provenance. The direct Windows
+                certificate is temporary beta trust only. Microsoft Store certification/signing is
+                still the production trust path.
               </p>
             </div>
           </div>
@@ -397,7 +433,9 @@ const Downloads = () => {
                   </h2>
                   <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
                     Review the same v{EDGE_SOURCE_VERSION} generation used by these Windows and
-                    Linux packages. Release files are versioned and published with their exact SHA-256 checksums. The v0.2.5 Windows lane is now being validated as a Satchy-branded Microsoft Store/MSIX package, while direct GitHub artifacts continue to use checksums and build provenance.
+                    Linux packages. The prerelease includes the Windows MSIX, its matching public
+                    development certificate, Linux AMD64 package, install/trust notes, and exact
+                    SHA-256 checksums. Microsoft Store signing remains the production Windows path.
                   </p>
                 </div>
 
@@ -430,9 +468,9 @@ const Downloads = () => {
 
             <div className="mt-12 border-l border-primary pl-6">
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                TerraSatch Edge v{EDGE_SOURCE_VERSION} is the current public compatibility release
-                for the merged Satchy control-plane generation. Public native downloads are focused
-                on Windows x64 and Linux AMD64.
+                TerraSatch Edge v{EDGE_SOURCE_VERSION} is the current public beta generation for
+                the Satchy field gateway. Native downloads are focused on Windows x64 and Linux AMD64,
+                with platform trust and installation details published beside each artifact.
               </p>
             </div>
           </div>
