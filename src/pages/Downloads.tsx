@@ -331,10 +331,11 @@ const Downloads = () => {
               </div>
 
               <p className="mt-8 border-l border-primary pl-5 text-sm leading-relaxed text-muted-foreground">
-                The next Edge release lane is configured to publish immutable release assets with
-                SHA-256 checksums and GitHub build provenance, and to require Authenticode for the
-                Windows installer unless an unsigned beta is explicitly requested. v0.2.4 remains
-                labeled unsigned until a certificate-backed Windows build is actually published.
+                v0.2.4 remains the direct-download beta compatibility build and stays clearly
+                labeled unsigned. v0.2.5 is being validated as the free Microsoft Store/MSIX path,
+                where Microsoft applies the trusted production package signature after certification.
+                We will not present the Store package as available until that exact build passes
+                TerraSatch install, pairing, radio, and Store certification checks.
               </p>
             </div>
           </div>
@@ -396,7 +397,7 @@ const Downloads = () => {
                   </h2>
                   <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
                     Review the same v{EDGE_SOURCE_VERSION} generation used by these Windows and
-                    Linux packages. Release files are versioned and published with their exact SHA-256 checksums. The v0.2.5 release lane also adds build-provenance attestations and certificate-backed Windows signing when configured.
+                    Linux packages. Release files are versioned and published with their exact SHA-256 checksums. The v0.2.5 Windows lane is now being validated as a Satchy-branded Microsoft Store/MSIX package, while direct GitHub artifacts continue to use checksums and build provenance.
                   </p>
                 </div>
 
