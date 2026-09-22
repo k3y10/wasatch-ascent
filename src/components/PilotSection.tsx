@@ -9,9 +9,9 @@ import { submitInquiry } from "@/lib/inquiry";
 
 const pilotLimits = [
   "One small team with up to five participants",
-  "One authorized workflow and one primary language",
-  "Up to two hours of approved sample radio audio",
-  "No hardware, custom integration, or production SLA",
+  "30 days of free beta access with guided onboarding",
+  "Radio, mobile, and already-supported integration workflows where configured",
+  "No custom provider engineering or production SLA during beta",
 ];
 
 const PilotSection = () => {
@@ -37,7 +37,7 @@ const PilotSection = () => {
     try {
       const { result } = await submitInquiry({
         mode: "pilot",
-        scope: "30 days; one small team; one workflow; up to two hours of approved sample audio; no custom integration or production SLA",
+        scope: "free 30-day beta trial; one small team; guided onboarding; radio, mobile, and supported integrations where configured; no custom provider engineering or production SLA",
         ...pilot,
       });
       if (result.fallbackMailto) {
@@ -46,7 +46,7 @@ const PilotSection = () => {
         return;
       }
       if (!result.ok) throw new Error(result.error || "Unable to submit inquiry.");
-      toast.success("Pilot request sent to Keaton.");
+      toast.success("30-day beta request sent to Keaton.");
       setSent(true);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Unable to submit pilot request.");
@@ -65,11 +65,11 @@ const PilotSection = () => {
             <Radio className="size-6 text-primary" aria-hidden="true" />
           </div>
           <h2 className="mt-6 font-display text-5xl font-bold uppercase leading-none lg:text-6xl">
-            Start small. Prove one workflow<span className="text-primary">.</span>
+            Try TerraSatch for 30 days<span className="text-primary">.</span>
           </h2>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-frost-dim">
-            A no-cost, 30-day discovery using approved sample data. We measure usefulness before custom engineering or
-            production operations create cost.
+            A free 30-day beta trial for one real field workflow. No card required. We help configure the supported
+            radio, mobile, mapping, data, or workflow connections needed for the test before custom engineering or production operations create cost.
           </p>
           <ul className="mt-8 flex flex-col gap-3">
             {pilotLimits.map((item) => (
@@ -84,7 +84,7 @@ const PilotSection = () => {
         {sent ? (
           <div className="flex min-h-80 flex-col items-center justify-center gap-4 border-y border-primary/30 py-10 text-center" role="status">
             <CheckCircle2 className="size-9 text-primary" aria-hidden="true" />
-            <h3 className="font-display text-3xl font-bold uppercase">Pilot request received</h3>
+            <h3 className="font-display text-3xl font-bold uppercase">Beta request received</h3>
             <p className="text-sm text-muted-foreground">Keaton will review the scope and follow up directly.</p>
           </div>
         ) : (
@@ -115,7 +115,7 @@ const PilotSection = () => {
               <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={pilot.website} onChange={(event) => setPilot({ ...pilot, website: event.target.value })} />
               <Button type="submit" size="lg" disabled={pending}>
                 {pending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                {pending ? "Sending request..." : "Apply for the limited pilot"}
+                {pending ? "Sending request..." : "Start the 30-day beta"}
               </Button>
             </FieldGroup>
           </form>
