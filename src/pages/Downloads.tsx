@@ -483,8 +483,8 @@ const Edge = () => {
                   Get Edge. Deploy with confidence<span className="text-primary">.</span>
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Your detected platform is highlighted. Windows trust details and exact checksums
-                  stay under Technical details without crowding the primary install path.
+                  Your detected platform is highlighted. Versions and checksums stay available
+                  under Technical details without crowding the download controls.
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
@@ -513,33 +513,29 @@ const Edge = () => {
                   </span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Windows 10/11 x64 MSIX with the current Satchy field-gateway UI, secure QR
-                  workspace pairing, guided device connections, and RTL-SDR receive support.
+                  Windows 10/11 x64 MSIX with the current Satchy field-gateway UI and RTL-SDR
+                  support for compatible field hardware.
                 </p>
-                <div className="mt-6 grid gap-2 sm:grid-cols-2">
-                  <DownloadAction href={releaseUrls.windowsX64} label="Windows MSIX" />
-                  <Button asChild variant="outline" className="w-full justify-center">
-                    <a href={releaseUrls.windowsCert}>
-                      <ShieldCheck data-icon="inline-start" aria-hidden="true" />
-                      Test certificate
-                    </a>
-                  </Button>
+                <div className="mt-6">
+                  <DownloadAction href={releaseUrls.windowsX64} label="Windows x64" />
                 </div>
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">
                     Technical details
                   </summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>MSIX · development-signed beta · exact certificate pair</p>
+                    <p>MSIX · development-signed beta</p>
                     <Checksum label="MSIX SHA-256" value={releaseChecksums.windowsX64} />
                     <Checksum label="Cert SHA-256" value={releaseChecksums.windowsCert} />
                     <p className="break-all">Cert SHA-1 · {WINDOWS_CERT_THUMBPRINT}</p>
                     <p className="font-sans text-xs">
                       Direct beta installs require the matching public TerraSatch development
-                      certificate. This is temporary test trust, not Microsoft Store production
-                      signing. No PFX/private key is published.
+                      certificate. Microsoft Store production signing remains separate.
                     </p>
                     <div className="flex flex-wrap gap-x-4 gap-y-2 font-sans text-xs">
+                      <a className="text-primary hover:underline" href={releaseUrls.windowsCert}>
+                        Download certificate
+                      </a>
                       <a className="text-primary hover:underline" href={WINDOWS_INSTALL_URL}>
                         Install instructions
                       </a>
@@ -608,8 +604,7 @@ const Edge = () => {
                 <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
                 <h3 className="mt-3 font-display text-lg font-bold uppercase">Traceable install</h3>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  SHA-256 checksums remain available for Windows, its public test certificate,
-                  and Linux.
+                  SHA-256 checksums remain available for both public artifacts.
                 </p>
               </div>
               <div>
