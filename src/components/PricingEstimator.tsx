@@ -15,15 +15,15 @@ type PricingPlan = {
 
 const pricingPlans: PricingPlan[] = [
   {
-    name: "Limited pilot",
+    name: "30-day beta",
     price: "$0",
-    cadence: "30-day discovery",
-    description: "A founder-reviewed test designed to prove one useful workflow without creating a production burden.",
+    cadence: "Free beta · no card required",
+    description: "A free 30-day beta designed to prove one useful field workflow before any paid rollout or production commitment.",
     points: [
-      "One small team and one workflow",
-      "Up to two hours of approved sample audio",
-      "One primary language and one findings summary",
-      "No custom hardware, integration, or production SLA",
+      "One small team and one real workflow",
+      "Radio, mobile, and supported integrations where configured",
+      "Guided onboarding and one findings summary",
+      "No card, custom provider engineering, or production SLA",
     ],
     icon: Radio,
     featured: true,
@@ -32,7 +32,7 @@ const pricingPlans: PricingPlan[] = [
     name: "Team rollout",
     price: "Scoped quote",
     cadence: "Monthly or annual",
-    description: "Defined after a successful pilot, using measured traffic and the minimum operational scope needed.",
+    description: "Defined only after a successful beta, using measured traffic and the minimum operational scope needed.",
     points: [
       "Active radios, teams, and channels",
       "Processed audio and retention volume",
@@ -146,14 +146,14 @@ const PricingEstimator = () => (
         <div>
           <p className="font-display text-2xl font-bold uppercase">No invented precision.</p>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Paid pricing is confirmed only after discovery shows real processing volume and requirements. The limited
-            pilot remains $0 because its sample data, workflow, users, and support are explicitly capped.
+            Paid pricing is confirmed only after the beta shows real processing volume and requirements. The 30-day
+            beta remains $0 with no card required because its workflow, users, integrations, and support are explicitly capped.
           </p>
         </div>
         <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
           <Button asChild size="lg">
             <a href="#pilot">
-              Apply for the limited pilot
+              Start the 30-day beta
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
