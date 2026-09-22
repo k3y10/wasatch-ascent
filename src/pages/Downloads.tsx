@@ -21,6 +21,8 @@ const EDGE_SOURCE_COMMIT = "https://github.com/k3y10/terrasatch-edge/tree/v0.2.4
 const EDGE_RELEASE_CHECKLIST =
   "https://github.com/k3y10/terrasatch-edge/blob/main/docs/PUBLIC_RELEASE_CHECKLIST.md";
 const EDGE_RELEASE_URL = "https://github.com/k3y10/terrasatch-edge/releases/tag/v0.2.4";
+const DEFAULT_EDGE_CHECKSUMS_URL =
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.4/SHA256SUMS.txt";
 
 const WINDOWS_VERSION = "0.2.4";
 const LINUX_AMD64_VERSION = "0.2.4";
@@ -42,6 +44,10 @@ const releaseUrls = {
     (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) ||
     LINUX_AMD64_RELEASE_URL,
 };
+
+const releaseChecksumManifest =
+  (import.meta.env.VITE_EDGE_SHA256SUMS_URL as string | undefined) ||
+  DEFAULT_EDGE_CHECKSUMS_URL;
 
 const releaseChecksums = {
   windowsX64:
@@ -142,6 +148,61 @@ const Downloads = () => {
                 fetchPriority="high"
               />
             </div>
+
+            <div className="mt-12 border-y border-border/70 py-10">
+              <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
+                <div>
+                  <ShieldCheck className="size-7 text-primary" aria-hidden="true" />
+                  <h3 className="mt-5 font-display text-3xl font-bold uppercase sm:text-4xl">
+                    Verify before install<span className="text-primary">.</span>
+                  </h3>
+                  <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                    Every release publishes an exact SHA-256 manifest. Match the downloaded file
+                    before installing it. SHA-256 confirms integrity; it does not identify the
+                    Windows publisher or replace Authenticode signing.
+                  </p>
+                  <Button asChild variant="outline" className="mt-6">
+                    <a href={releaseChecksumManifest} target="_blank" rel="noreferrer">
+                      Open SHA256SUMS.txt
+                      <ArrowUpRight data-icon="inline-end" />
+                    </a>
+                  </Button>
+                </div>
+
+                <div className="grid gap-5">
+                  <div className="border-l border-primary pl-5">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                      Windows PowerShell
+                    </p>
+                    <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
+                      Get-FileHash .\TerraSatch-Edge-Setup-x64.exe -Algorithm SHA256
+                    </code>
+                    <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
+                      Expected: {releaseChecksums.windowsX64}
+                    </p>
+                  </div>
+
+                  <div className="border-l border-primary pl-5">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                      Linux
+                    </p>
+                    <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
+                      sha256sum terrasatch-edge_0.2.4_amd64.deb
+                    </code>
+                    <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
+                      Expected: {releaseChecksums.linuxAmd64}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <p className="mt-8 border-l border-primary pl-5 text-sm leading-relaxed text-muted-foreground">
+                The next Edge release lane is configured to publish immutable release assets with
+                SHA-256 checksums and GitHub build provenance, and to require Authenticode for the
+                Windows installer unless an unsigned beta is explicitly requested. v0.2.4 remains
+                labeled unsigned until a certificate-backed Windows build is actually published.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -161,7 +222,7 @@ const Downloads = () => {
             <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
-                  Current public compatibility release
+                  Current public beta compatibility release
                 </p>
                 <h2 className="mt-4 max-w-4xl font-display text-5xl font-bold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
                   Take Satchy into the field<span className="text-primary">.</span>
@@ -208,12 +269,12 @@ const Downloads = () => {
 
                 <div className="mt-6 border-l border-primary pl-5 font-mono text-[10px] leading-relaxed text-muted-foreground">
                   <p className="uppercase tracking-[0.16em] text-primary">
-                    Compatibility release · unsigned
+                    Beta compatibility release · SHA verified · unsigned publisher
                   </p>
                   <p className="mt-2 break-all">SHA-256 {releaseChecksums.windowsX64}</p>
                   <p className="mt-2">
-                    Windows SmartScreen may display a warning because this public compatibility
-                    installer is not Authenticode-signed.
+                    SHA-256 verifies these exact release bytes, but this v0.2.4 beta installer is not
+                    Authenticode-signed. Windows SmartScreen may therefore still display a warning.
                   </p>
                 </div>
 
@@ -333,8 +394,7 @@ const Downloads = () => {
                   </h2>
                   <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
                     Review the same v{EDGE_SOURCE_VERSION} generation used by these Windows and
-                    Linux packages. Release files are versioned and published with their exact
-                    SHA-256 checksums.
+                    Linux packages. Release files are versioned and published with their exact SHA-256 checksums. The v0.2.5 release lane also adds build-provenance attestations and certificate-backed Windows signing when configured.
                   </p>
                 </div>
 
