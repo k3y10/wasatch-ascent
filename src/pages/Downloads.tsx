@@ -22,26 +22,26 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const WINDOWS_VERSION = "0.2.6";
-const LINUX_AMD64_VERSION = "0.2.6";
+const WINDOWS_VERSION = "0.2.7";
+const LINUX_AMD64_VERSION = "0.2.7";
 
 const WINDOWS_X64_RELEASE_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.6/TerraSatch-Edge_0.2.6_x64.msix";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/TerraSatch-Edge_0.2.7_x64.msix";
 const WINDOWS_CERT_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.6/TerraSatch-MSIX-Dev.cer";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/TerraSatch-MSIX-Dev.cer";
 const WINDOWS_INSTALL_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.6/WINDOWS-MSIX-INSTALL.txt";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/WINDOWS-MSIX-INSTALL.txt";
 const WINDOWS_TRUST_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.6/WINDOWS-MSIX-TRUST.txt";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/WINDOWS-MSIX-TRUST.txt";
 const WINDOWS_X64_SHA256 =
-  "027c3da41582aee8cd44cd5122e0ea6d436d49b5c21453ea61d914d20205b154";
+  "34fbf1e8943cad452a01c7b7ae56f07fed5c4be5243b9c6d16c65849b0b911ab";
 const WINDOWS_CERT_SHA256 =
-  "56ad00a44a5ac0c9e07fc818e33c881de4c5e2d94d5a70a72c0d00b5083a51e6";
-const WINDOWS_CERT_THUMBPRINT = "BFC10EF9555F44C1FE24D04388F0CCB7509E2AA0";
+  "61398cfbf45ee52e77dff0e392b05b2902fa7b19a8ce931740c45d6c91d9e15d";
+const WINDOWS_CERT_THUMBPRINT = "2B9ACCA401513722041596B9A9D6537056C726EC";
 const LINUX_AMD64_RELEASE_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.6/terrasatch-edge_0.2.6_amd64.deb";
+  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/terrasatch-edge_0.2.7_amd64.deb";
 const LINUX_AMD64_SHA256 =
-  "527ca89c75f03474a68b6a72a80060cbf23ba138b42502088abd33e848286485";
+  "6bcb762b831814747d84c119da753a05b08c61902cc149a6c9301d1e2c508509";
 
 const releaseUrls = {
   windowsX64:
@@ -581,7 +581,7 @@ const Edge = () => {
                     Technical details
                   </summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>AMD64 · .deb · v0.2.6 field-gateway beta</p>
+                    <p>AMD64 · .deb · v0.2.7 field-gateway beta</p>
                     <Checksum label="SHA-256" value={releaseChecksums.linuxAmd64} />
                     <p className="font-sans text-xs">
                       Install the distribution rtl-sdr package when using RTL-SDR / Nooelec
