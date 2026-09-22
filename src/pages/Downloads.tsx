@@ -149,60 +149,7 @@ const Downloads = () => {
               />
             </div>
 
-            <div className="mt-12 border-y border-border/70 py-10">
-              <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
-                <div>
-                  <ShieldCheck className="size-7 text-primary" aria-hidden="true" />
-                  <h3 className="mt-5 font-display text-3xl font-bold uppercase sm:text-4xl">
-                    Verify before install<span className="text-primary">.</span>
-                  </h3>
-                  <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                    Every release publishes an exact SHA-256 manifest. Match the downloaded file
-                    before installing it. SHA-256 confirms integrity; it does not identify the
-                    Windows publisher or replace Authenticode signing.
-                  </p>
-                  <Button asChild variant="outline" className="mt-6">
-                    <a href={releaseChecksumManifest} target="_blank" rel="noreferrer">
-                      Open SHA256SUMS.txt
-                      <ArrowUpRight data-icon="inline-end" />
-                    </a>
-                  </Button>
-                </div>
 
-                <div className="grid gap-5">
-                  <div className="border-l border-primary pl-5">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                      Windows PowerShell
-                    </p>
-                    <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
-                      Get-FileHash .\TerraSatch-Edge-Setup-x64.exe -Algorithm SHA256
-                    </code>
-                    <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
-                      Expected: {releaseChecksums.windowsX64}
-                    </p>
-                  </div>
-
-                  <div className="border-l border-primary pl-5">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                      Linux
-                    </p>
-                    <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
-                      sha256sum terrasatch-edge_0.2.4_amd64.deb
-                    </code>
-                    <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
-                      Expected: {releaseChecksums.linuxAmd64}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <p className="mt-8 border-l border-primary pl-5 text-sm leading-relaxed text-muted-foreground">
-                The next Edge release lane is configured to publish immutable release assets with
-                SHA-256 checksums and GitHub build provenance, and to require Authenticode for the
-                Windows installer unless an unsigned beta is explicitly requested. v0.2.4 remains
-                labeled unsigned until a certificate-backed Windows build is actually published.
-              </p>
-            </div>
           </div>
         </section>
 
@@ -334,6 +281,61 @@ const Downloads = () => {
                   </p>
                 ) : null}
               </article>
+            </div>
+
+            <div className="mt-12 border-y border-border/70 py-10">
+              <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
+                <div>
+                  <ShieldCheck className="size-7 text-primary" aria-hidden="true" />
+                  <h3 className="mt-5 font-display text-3xl font-bold uppercase sm:text-4xl">
+                    Verify before install<span className="text-primary">.</span>
+                  </h3>
+                  <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                    Every release publishes an exact SHA-256 manifest. Match the downloaded file
+                    before installing it. SHA-256 confirms integrity; it does not identify the
+                    Windows publisher or replace Authenticode signing.
+                  </p>
+                  <Button asChild variant="outline" className="mt-6">
+                    <a href={releaseChecksumManifest} target="_blank" rel="noreferrer">
+                      Open SHA256SUMS.txt
+                      <ArrowUpRight data-icon="inline-end" />
+                    </a>
+                  </Button>
+                </div>
+
+                <div className="grid gap-5">
+                  <div className="border-l border-primary pl-5">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                      Windows PowerShell
+                    </p>
+                    <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
+                      Get-FileHash .\TerraSatch-Edge-Setup-x64.exe -Algorithm SHA256
+                    </code>
+                    <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
+                      Expected: {releaseChecksums.windowsX64}
+                    </p>
+                  </div>
+
+                  <div className="border-l border-primary pl-5">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                      Linux
+                    </p>
+                    <code className="mt-3 block overflow-x-auto whitespace-nowrap bg-black/20 p-4 font-mono text-xs text-foreground">
+                      sha256sum terrasatch-edge_0.2.4_amd64.deb
+                    </code>
+                    <p className="mt-3 break-all font-mono text-[10px] leading-relaxed text-muted-foreground">
+                      Expected: {releaseChecksums.linuxAmd64}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <p className="mt-8 border-l border-primary pl-5 text-sm leading-relaxed text-muted-foreground">
+                The next Edge release lane is configured to publish immutable release assets with
+                SHA-256 checksums and GitHub build provenance, and to require Authenticode for the
+                Windows installer unless an unsigned beta is explicitly requested. v0.2.4 remains
+                labeled unsigned until a certificate-backed Windows build is actually published.
+              </p>
             </div>
           </div>
         </section>
