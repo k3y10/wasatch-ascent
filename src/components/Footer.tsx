@@ -1,31 +1,36 @@
 const Footer = () => {
   return (
-    <footer className="relative border-t border-border/50 py-16">
-      <div className="absolute inset-0 topo-overlay opacity-50" />
-      <div className="container relative z-10 mx-auto px-6">
-        <div className="grid gap-10 md:grid-cols-3">
-          <div className="flex items-start gap-3">
-            <img src="/terralisten-sasquatch.png" alt="Satchy" className="size-10 object-contain" />
-            <div>
-              <span className="font-display text-lg font-bold tracking-wide">TERRASATCH</span>
-              <p className="mt-2 text-xs text-muted-foreground">AI-powered field intelligence for remote operations.</p>
+    <>
+      <div className="hidden sm:block sm:h-[72px]" aria-hidden="true" />
+      <footer className="relative sm:fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/95 backdrop-blur-xl">
+        <div className="container mx-auto flex min-h-[104px] flex-col justify-center gap-2 px-4 py-3 sm:min-h-[72px] sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="flex items-center gap-3">
+            <img
+              src="/terralisten-sasquatch-listening.webp"
+              alt="TerraSatch"
+              className="size-8 rounded-lg object-contain"
+            />
+            <div className="leading-tight">
+              <span className="block font-display text-sm font-bold tracking-wide text-foreground">
+                TERRASATCH
+              </span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                Listen · Watch · Learn · Adapt
+              </span>
             </div>
           </div>
-          <div>
-            <h3 className="font-display uppercase">Products</h3>
-            <p className="mt-3 text-sm text-muted-foreground">TerraListen · AvyTS · PyroTS · Edge</p>
-          </div>
-          <div>
-            <h3 className="font-display uppercase">Resources</h3>
-            <p className="mt-3 text-sm text-muted-foreground">Demo · Documentation · Contact</p>
+
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10px] text-muted-foreground sm:justify-end">
+            <a href="/#pilot" className="transition-colors hover:text-primary">Evaluate</a>
+            <a href="/demos" className="transition-colors hover:text-primary">Demo</a>
+            <a href="/#integrations" className="transition-colors hover:text-primary">Integrations</a>
+            <a href="/api" className="transition-colors hover:text-primary">API</a>
+            <a href="/edge" className="transition-colors hover:text-primary">Edge</a>
+            <span>© 2026 TerraSatch</span>
           </div>
         </div>
-        <div className="mt-10 border-t border-border/30 pt-6 text-center text-[11px] text-muted-foreground">
-          <p>© 2026 TerraSatch Inc. · LISTEN · WATCH · LEARN · ADAPT</p>
-          <p className="mt-4">TerraSatch and AvyTS are decision-support tools, not replacements for training, education, or sound operational judgment.</p>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 };
 
