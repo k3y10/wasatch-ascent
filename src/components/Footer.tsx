@@ -6,9 +6,11 @@ const Footer = () => {
         <div className="container mx-auto flex min-h-[104px] flex-col justify-center gap-2 px-4 py-3 sm:min-h-[72px] sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-3">
             <img
-              src="/terralisten-sasquatch-listening.webp"
+              src="/terrasatch-logo.png"
               alt="TerraSatch"
-              className="size-8 rounded-lg object-contain"
+              className="size-8 rounded-lg"
+              width={1254}
+              height={1254}
             />
             <div className="leading-tight">
               <span className="block font-display text-sm font-bold tracking-wide text-foreground">
