@@ -51,6 +51,7 @@ describe("TerraSatch PWA", () => {
       "src/components/Footer.tsx": "3079f1b04919ef445fabeab2aec6310be5c04a1b",
       "src/components/HeroSection.tsx": "ff935bcd8a5f2e51d0ee031fa8cc90887972f717",
       "index.html": "dcb10827188b4444633ff3d095ab573cdec92a4a",
+      "src/index.css": "c5641321369a864adaafccd157c499fcea5b6dd2",
     } as const;
 
     for (const [path, sha] of Object.entries(expected)) {
