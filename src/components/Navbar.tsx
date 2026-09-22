@@ -85,9 +85,11 @@ const Navbar = () => {
       <div className="container mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
         <a href="/" className="flex min-w-0 items-center gap-3" aria-label="TerraSatch home">
           <img
-            src="/terralisten-sasquatch-listening.webp"
+            src="/terrasatch-logo.png"
             alt=""
-            className="size-10 rounded-lg object-contain"
+            className="size-10 rounded-lg"
+            width={1254}
+            height={1254}
           />
           <div className="min-w-0 leading-none">
             <span className="block whitespace-nowrap font-display text-lg font-bold tracking-wide">
