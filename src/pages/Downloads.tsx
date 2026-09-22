@@ -280,9 +280,9 @@ const Edge = () => {
               </div>
               <div className="space-y-4 lg:justify-self-end">
                 <img
-                  src="/satchy-approved-current.webp"
-                  alt="Current TerraSatch and Satchy Approved brand mark"
-                  className="w-full max-w-[420px] rounded-xl border border-border/70 object-cover shadow-sm"
+                  src="/terralisten-sasquatch-listening.webp"
+                  alt="Satchy, the TerraSatch field intelligence agent"
+                  className="ml-auto w-full max-w-[340px] object-contain"
                 />
                 <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-right">
                   Pick the operating system, install Edge, pair the device, and let the site pull
