@@ -7,27 +7,27 @@
   "scope": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
-  "background_color": "#111317",
-  "theme_color": "#111317",
+  "background_color": "#02050a",
+  "theme_color": "#071521",
   "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/terralisten-sasquatch.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/terralisten-sasquatch.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "/pwa-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "maskable"
     }
   ],
   "shortcuts": [
     {
-      "name": "Start the free 30-day beta",
-      "short_name": "30-day beta",
+      "name": "Start a free pilot",
+      "short_name": "Free pilot",
       "url": "/#pilot"
     },
     {
