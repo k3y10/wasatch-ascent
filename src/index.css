@@ -371,3 +371,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--amber-dim));
 }
+
+/* Keep plan descriptions readable on both existing site themes. */
+.pricing-section { --muted-foreground: 215 10% 67%; }
+.light .pricing-section { --muted-foreground: 220 10% 38%; }
