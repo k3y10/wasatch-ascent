@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
 import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
 import APISection from "@/components/APISection";
+import ConnectedStackSection from "@/components/ConnectedStackSection";
 import PricingEstimator from "@/components/PricingEstimator";
 import PilotSection from "@/components/PilotSection";
 import DocumentsSection from "@/components/DocumentsSection";
@@ -24,6 +25,8 @@ const Index = () => {
       <ScrollReveal><TerrainIntelligenceSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><APISection /></ScrollReveal>
+      <div className="amber-line" />
+      <ScrollReveal><ConnectedStackSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><PricingEstimator /></ScrollReveal>
       <div className="amber-line" />
