@@ -176,9 +176,11 @@ const Edge = () => {
               </div>
               <div className="space-y-4 lg:justify-self-end">
                 <img
-                  src="/satchy-approved-current.webp"
-                  alt="Current TerraSatch and Satchy Approved brand mark"
-                  className="w-full max-w-[420px] rounded-xl border border-border/70 object-cover shadow-sm"
+                  src="/terrasatch-logo.png"
+                  alt="Satchy, the TerraSatch field guide"
+                  width={128}
+                  height={128}
+                  className="size-24 object-contain sm:size-32 lg:ml-auto"
                 />
                 <p className="max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-right">
                   Pick the operating system, install Edge, pair the device, and let the site pull
@@ -248,7 +250,7 @@ const Edge = () => {
 
                 <div className="flex items-start gap-4">
                   <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-primary/60 bg-primary/[0.07]">
-                    <img src="/satchy-approved-current.webp" alt="Satchy Approved" className="size-10 rounded-full object-cover" />
+                    <img src="/terrasatch-logo.png" alt="Satchy" width={40} height={40} className="size-10 object-contain" />
                   </div>
                   <div>
                     <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">

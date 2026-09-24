@@ -74,7 +74,9 @@ describe("TerraSatch PWA", () => {
     expect(existsSync(resolve(process.cwd(), "src", "assets", "terrasatch-logo.png"))).toBe(false);
 
     const edgePage = readFileSync(resolve(process.cwd(), "src", "pages", "Downloads.tsx"), "utf8");
-    expect(edgePage).toContain('/satchy-approved-current.webp');
+    // Production's legacy WebP is truncated; use the complete canonical PNG.
+    expect(edgePage).not.toContain('/satchy-approved-current.webp');
+    expect(edgePage).toContain('/terrasatch-logo.png');
     expect(edgePage).not.toContain('/terralisten-sasquatch-listening.webp');
 
     const demoAccess = readFileSync(resolve(process.cwd(), "src", "pages", "DemoAccess.tsx"), "utf8");
