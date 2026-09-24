@@ -2,7 +2,8 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TerraListenSection from "@/components/TerraListenSection";
 import TerrainIntelligenceSection from "@/components/TerrainIntelligenceSection";
-import APISection from "@/components/APISection";
+import DataFusionSection from "@/components/DataFusionSection";
+import LearnAdaptSection from "@/components/LearnAdaptSection";
 import ConnectedStackSection from "@/components/ConnectedStackSection";
 import PricingEstimator from "@/components/PricingEstimator";
 import PilotSection from "@/components/PilotSection";
@@ -20,11 +21,13 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <div className="amber-line" />
+      <ScrollReveal><DataFusionSection /></ScrollReveal>
+      <div className="amber-line" />
       <ScrollReveal><TerraListenSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><TerrainIntelligenceSection /></ScrollReveal>
       <div className="amber-line" />
-      <ScrollReveal><APISection /></ScrollReveal>
+      <ScrollReveal><LearnAdaptSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><ConnectedStackSection /></ScrollReveal>
       <div className="amber-line" />

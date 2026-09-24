@@ -4,7 +4,11 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const gitBlobSha = (path: string) => {
-  const bytes = readFileSync(resolve(process.cwd(), path));
+  const file = readFileSync(resolve(process.cwd(), path));
+  // Git normalizes text on checkout; Windows CRLF must not look like brand drift.
+  const bytes = /\.(tsx|css|html|svg)$/.test(path)
+    ? Buffer.from(file.toString("utf8").replace(/\r\n/g, "\n"))
+    : file;
   return createHash("sha1")
     .update(Buffer.from(`blob ${bytes.length}\0`))
     .update(bytes)
@@ -47,8 +51,16 @@ describe("TerraSatch PWA", () => {
       "public/terralisten-sasquatch-listening.png": "e4aa0d37754d6da781f23c17b69a8ab3399af2e4",
       "public/satchy-approved-current.webp": "b361bcdffedd81b3f81c3099b64354119d6b6a6d",
       "public/social/terrasatch-share-hero-v2.png": "8a2dd384c1d89a3aafce9f04ab8bdb16c236546c",
-      "src/components/Navbar.tsx": "2089366f02fe5221b8e7ee7cb0e6a2bd96feb51c",
-      "src/components/Footer.tsx": "3079f1b04919ef445fabeab2aec6310be5c04a1b",
+      "public/showcase/avyts-regional-terrain.webp": "0475343e68afe0e135e5412f93d7b88679b7d388",
+      "public/showcase/terralisten-salt-lake.webp": "fb21b36360b3488df6159ca7ae7050913a819976",
+      "public/showcase/terralisten-vail-radio.webp": "d67d67dc8e520053d56a2abdd94d0689829cc3d3",
+      "public/showcase/wildfire-incident-intelligence.webp": "1da6c200ed078f8cb40c0343ac6981d469e5f37d",
+      "src/assets/hero-wasatch.jpg": "a8923274ce5aaf3f5c173bc864b8fa9cdea4d57c",
+      "src/assets/topo-texture.jpg": "4e027d52fac2cd4b9232ab23959bd998ba1d89e8",
+      "src/components/TerrainIntelligenceSection.tsx": "446bafd424c652f5758f0cf790c6964d17ccf66f",
+      "src/components/TerraListenSection.tsx": "7f16983814bf367dbe7eb7c3dc8df9bc577add36",
+      "src/components/OperationalSnapshot.tsx": "97436d48b7a63179478b345dd8547490b953ac52",
+      "src/components/LearnAdaptSection.tsx": "6025f2c681067063562b2e9c4839883fb79d7153",
       "src/components/HeroSection.tsx": "ff935bcd8a5f2e51d0ee031fa8cc90887972f717",
       "index.html": "dcb10827188b4444633ff3d095ab573cdec92a4a",
       "src/index.css": "c5641321369a864adaafccd157c499fcea5b6dd2",

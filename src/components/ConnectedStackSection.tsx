@@ -1,6 +1,6 @@
+import IntegrationLogo from "@/components/IntegrationLogo";
 import {
   Cable,
-  CheckCircle2,
   Clock3,
   Cloud,
   Map,
@@ -144,7 +144,7 @@ const ConnectedStackSection = () => (
           <div className="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
             {supportedWorkflows.map((item) => (
               <div key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden="true" />
+                <IntegrationLogo name={item} className="max-h-5 max-w-8" />
                 <span>{item}</span>
               </div>
             ))}
@@ -159,7 +159,7 @@ const ConnectedStackSection = () => (
           <div className="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
             {supportedFieldData.map((item) => (
               <div key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden="true" />
+                <IntegrationLogo name={item} className="max-h-5 max-w-8" />
                 <span>{item}</span>
               </div>
             ))}

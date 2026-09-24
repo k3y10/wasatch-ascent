@@ -1,11 +1,11 @@
-const SHELL_CACHE = "terrasatch-shell-v4";
-const STATIC_CACHE = "terrasatch-static-v4";
+const SHELL_CACHE = "terrasatch-shell-v5";
+const STATIC_CACHE = "terrasatch-static-v5";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/site.webmanifest",
   "/favicon.ico",
-  "/terralisten-sasquatch.png",
+  "/terrasatch-logo.png",
   "/robots.txt",
 ];
 const PRIVATE_PATHS = ["/api/", "/demo-access", "/demos"];

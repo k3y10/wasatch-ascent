@@ -1,3 +1,4 @@
+import IntegrationLogo, { featuredIntegrations } from "@/components/IntegrationLogo";
 import {
   ArrowRight,
   BrainCircuit,
@@ -22,94 +23,11 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const WINDOWS_VERSION = "0.2.7";
-const LINUX_AMD64_VERSION = "0.2.7";
-
-const WINDOWS_X64_RELEASE_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/TerraSatch-Edge_0.2.7_x64.msix";
-const WINDOWS_CERT_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/TerraSatch-MSIX-Dev.cer";
-const WINDOWS_INSTALL_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/WINDOWS-MSIX-INSTALL.txt";
-const WINDOWS_TRUST_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/WINDOWS-MSIX-TRUST.txt";
-const WINDOWS_X64_SHA256 =
-  "34fbf1e8943cad452a01c7b7ae56f07fed5c4be5243b9c6d16c65849b0b911ab";
-const WINDOWS_CERT_SHA256 =
-  "61398cfbf45ee52e77dff0e392b05b2902fa7b19a8ce931740c45d6c91d9e15d";
-const WINDOWS_CERT_THUMBPRINT = "2B9ACCA401513722041596B9A9D6537056C726EC";
-const LINUX_AMD64_RELEASE_URL =
-  "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.7/terrasatch-edge_0.2.7_amd64.deb";
-const LINUX_AMD64_SHA256 =
-  "6bcb762b831814747d84c119da753a05b08c61902cc149a6c9301d1e2c508509";
-
-const releaseUrls = {
-  windowsX64:
-    (import.meta.env.VITE_EDGE_WINDOWS_X64_URL as string | undefined) ||
-    WINDOWS_X64_RELEASE_URL,
-  windowsCert: WINDOWS_CERT_URL,
-  linuxAmd64:
-    (import.meta.env.VITE_EDGE_LINUX_AMD64_URL as string | undefined) ||
-    LINUX_AMD64_RELEASE_URL,
-};
-
-const releaseChecksums = {
-  windowsX64:
-    (import.meta.env.VITE_EDGE_WINDOWS_X64_SHA256 as string | undefined) ||
-    WINDOWS_X64_SHA256,
-  windowsCert: WINDOWS_CERT_SHA256,
-  linuxAmd64:
-    (import.meta.env.VITE_EDGE_LINUX_AMD64_SHA256 as string | undefined) ||
-    LINUX_AMD64_SHA256,
-};
-
-const providerTargets = [
-  {
-    name: "onX Backcountry",
-    mark: "onX",
-    icon: "https://www.google.com/s2/favicons?domain=onxmaps.com&sz=96",
-  },
-  {
-    name: "CalTopo",
-    mark: "CT",
-    icon: "https://www.google.com/s2/favicons?domain=caltopo.com&sz=96",
-  },
-  {
-    name: "Gaia GPS",
-    mark: "G",
-    icon: "https://www.google.com/s2/favicons?domain=gaiagps.com&sz=96",
-  },
-  {
-    name: "Esri ArcGIS",
-    mark: "ESRI",
-    icon: "https://www.google.com/s2/favicons?domain=esri.com&sz=96",
-  },
-  {
-    name: "Mapbox",
-    mark: "M",
-    icon: "https://cdn.simpleicons.org/mapbox/ffffff",
-  },
-  {
-    name: "Google Drive",
-    mark: "GD",
-    icon: "https://cdn.simpleicons.org/googledrive",
-  },
-  {
-    name: "Microsoft 365",
-    mark: "MS",
-    icon: "https://cdn.simpleicons.org/microsoft",
-  },
-  {
-    name: "Slack",
-    mark: "S",
-    icon: "https://cdn.simpleicons.org/slack",
-  },
-  {
-    name: "Snowflake",
-    mark: "SF",
-    icon: "https://cdn.simpleicons.org/snowflake",
-  },
-] as const;
+// Enable each distribution only after its public artifact has been validated.
+const WINDOWS_VERSION = "0.2.8";
+const LINUX_AMD64_VERSION = "0.2.8";
+const releaseUrls: { windowsX64?: string; linuxAmd64?: string } = {};
+const releaseChecksums: { linuxAmd64?: string } = {};
 
 type Platform = "windows" | "linux" | "unknown";
 
@@ -219,35 +137,9 @@ const OutcomeRow = ({
   </div>
 );
 
-const ProviderCard = ({
-  name,
-  mark,
-  icon,
-}: {
-  name: string;
-  mark: string;
-  icon: string;
-}) => (
+const ProviderCard = ({ name }: { name: string }) => (
   <div className="group flex min-h-24 flex-col items-center justify-center gap-3 border border-border/70 bg-card/20 px-4 py-4 text-center transition-colors hover:border-primary/45 hover:bg-primary/[0.035]">
-    <div className="flex size-9 items-center justify-center">
-      <img
-        src={icon}
-        alt=""
-        className="max-h-8 max-w-8 object-contain"
-        loading="lazy"
-        onError={(event) => {
-          event.currentTarget.style.display = "none";
-          const fallback = event.currentTarget.nextElementSibling as HTMLElement | null;
-          if (fallback) fallback.style.display = "flex";
-        }}
-      />
-      <span
-        className="hidden size-8 items-center justify-center rounded-sm border border-border/80 font-mono text-[10px] font-semibold text-foreground"
-        aria-hidden="true"
-      >
-        {mark}
-      </span>
-    </div>
+    <div className="flex h-9 w-20 items-center justify-center"><IntegrationLogo name={name} /></div>
     <span className="text-xs font-semibold text-foreground">{name}</span>
   </div>
 );
@@ -463,8 +355,8 @@ const Edge = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-9">
-                  {providerTargets.map((provider) => (
-                    <ProviderCard key={provider.name} {...provider} />
+                  {featuredIntegrations.map((name) => (
+                    <ProviderCard key={name} name={name} />
                   ))}
                 </div>
               </div>
@@ -483,8 +375,8 @@ const Edge = () => {
                   Get Edge. Deploy with confidence<span className="text-primary">.</span>
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Your detected platform is highlighted. Versions and checksums stay available
-                  under Technical details without crowding the download controls.
+                  Current builds include guided connections, QR workspace pairing, mobile
+                  observations, and receive-side radio setup. Public availability is shown below.
                 </p>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
@@ -517,32 +409,15 @@ const Edge = () => {
                   support for compatible field hardware.
                 </p>
                 <div className="mt-6">
-                  <DownloadAction href={releaseUrls.windowsX64} label="Windows x64" />
+                  <DownloadAction href={releaseUrls.windowsX64} label="Get Windows app" pendingLabel="Microsoft Store release pending" />
                 </div>
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">
                     Technical details
                   </summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>MSIX · development-signed beta</p>
-                    <Checksum label="MSIX SHA-256" value={releaseChecksums.windowsX64} />
-                    <Checksum label="Cert SHA-256" value={releaseChecksums.windowsCert} />
-                    <p className="break-all">Cert SHA-1 · {WINDOWS_CERT_THUMBPRINT}</p>
-                    <p className="font-sans text-xs">
-                      Direct beta installs require the matching public TerraSatch development
-                      certificate. Microsoft Store production signing remains separate.
-                    </p>
-                    <div className="flex flex-wrap gap-x-4 gap-y-2 font-sans text-xs">
-                      <a className="text-primary hover:underline" href={releaseUrls.windowsCert}>
-                        Download certificate
-                      </a>
-                      <a className="text-primary hover:underline" href={WINDOWS_INSTALL_URL}>
-                        Install instructions
-                      </a>
-                      <a className="text-primary hover:underline" href={WINDOWS_TRUST_URL}>
-                        Trust details
-                      </a>
-                    </div>
+                    <p>Windows 10/11 · x64 · v{WINDOWS_VERSION}</p>
+                    <p className="font-sans text-xs">The current Windows build is in validation. The public download will open here when the Microsoft Store release is available.</p>
                   </div>
                 </details>
               </article>
@@ -567,13 +442,13 @@ const Edge = () => {
                   </span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Debian/Ubuntu package for rugged PCs, field laptops, and Linux edge nodes.
+                  Debian/Ubuntu package for rugged PCs, field laptops, and Linux edge nodes. The v0.2.8 package has passed local build and source QA; publication is pending.
                 </p>
                 <div className="mt-6">
                   <DownloadAction
                     href={releaseUrls.linuxAmd64}
                     label="Linux AMD64"
-                    pendingLabel="AMD64 unavailable"
+                    pendingLabel="v0.2.8 release publication pending"
                   />
                 </div>
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
@@ -581,7 +456,7 @@ const Edge = () => {
                     Technical details
                   </summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
-                    <p>AMD64 · .deb · v0.2.7 field-gateway beta</p>
+                    <p>AMD64 · .deb · v{LINUX_AMD64_VERSION} field-gateway beta</p>
                     <Checksum label="SHA-256" value={releaseChecksums.linuxAmd64} />
                     <p className="font-sans text-xs">
                       Install the distribution rtl-sdr package when using RTL-SDR / Nooelec
@@ -604,7 +479,7 @@ const Edge = () => {
                 <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
                 <h3 className="mt-3 font-display text-lg font-bold uppercase">Traceable install</h3>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  SHA-256 checksums remain available for both public artifacts.
+                  Published direct downloads include the checksum of the exact validated package.
                 </p>
               </div>
               <div>

@@ -20,5 +20,12 @@
       "source": "/api",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/investors",
+      "destination": "/#founder-connect",
+      "permanent": false
+    }
   ]
 }

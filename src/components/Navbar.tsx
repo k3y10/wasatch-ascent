@@ -19,14 +19,14 @@ type NavItem =
 const exploreItems: NavItem[] = [
   { label: "How it works", section: "connect" },
   { label: "Pricing", section: "cost" },
-  { label: "Workspace", href: "/workspace" },
+  { label: "Integrations", section: "integrations" },
 ];
 
 const resourceItems: NavItem[] = [
   { label: "Demo access", href: "/demo-access" },
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
-  { label: "Investors", href: "/investors" },
+  { label: "Connect", section: "founder-connect" },
 ];
 
 const navItems = [...exploreItems, ...resourceItems];
