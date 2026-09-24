@@ -248,7 +248,7 @@ const Edge = () => {
 
                 <div className="flex items-start gap-4">
                   <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-primary/60 bg-primary/[0.07]">
-                    <span className="font-mono text-sm font-semibold text-primary">S</span>
+                    <img src="/satchy-approved-current.webp" alt="Satchy Approved" className="size-10 rounded-full object-cover" />
                   </div>
                   <div>
                     <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">
