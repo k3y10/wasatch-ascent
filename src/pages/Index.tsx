@@ -8,7 +8,6 @@ import ConnectedStackSection from "@/components/ConnectedStackSection";
 import PricingEstimator from "@/components/PricingEstimator";
 import PilotSection from "@/components/PilotSection";
 import DocumentsSection from "@/components/DocumentsSection";
-import PartnersSection from "@/components/PartnersSection";
 import EngagementSection from "@/components/EngagementSection";
 import Footer from "@/components/Footer";
 import AmbientParticles from "@/components/AmbientParticles";
@@ -36,8 +35,6 @@ const Index = () => {
       <ScrollReveal><PilotSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><EngagementSection /></ScrollReveal>
-      <div className="amber-line" />
-      <ScrollReveal><PartnersSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><DocumentsSection /></ScrollReveal>
       <Footer />
