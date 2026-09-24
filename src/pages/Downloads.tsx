@@ -415,7 +415,12 @@ const Edge = () => {
                   support for compatible field hardware.
                 </p>
                 <div className="mt-6">
-                  <DownloadAction href={releaseUrls.windowsX64} label="Get Windows app" pendingLabel="Microsoft Store release pending" />
+                  <Button asChild className="w-full justify-center">
+                    <a href="https://www.linkedin.com/in/keaton-m/" target="_blank" rel="noopener noreferrer">
+                      Request Windows download
+                      <ArrowRight data-icon="inline-end" aria-hidden="true" />
+                    </a>
+                  </Button>
                 </div>
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">
@@ -423,7 +428,7 @@ const Edge = () => {
                   </summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
                     <p>Windows 10/11 · x64 · v{WINDOWS_VERSION}</p>
-                    <p className="font-sans text-xs">The current Windows build is in validation. The public download will open here when the Microsoft Store release is available.</p>
+                    <p className="font-sans text-xs">Contact Keaton for the current Microsoft-signed Windows package.</p>
                   </div>
                 </details>
               </article>
