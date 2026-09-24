@@ -26,8 +26,12 @@ import { Button } from "@/components/ui/button";
 // Enable each distribution only after its public artifact has been validated.
 const WINDOWS_VERSION = "0.2.8";
 const LINUX_AMD64_VERSION = "0.2.8";
-const releaseUrls: { windowsX64?: string; linuxAmd64?: string } = {};
-const releaseChecksums: { linuxAmd64?: string } = {};
+const releaseUrls: { windowsX64?: string; linuxAmd64?: string } = {
+  linuxAmd64: "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.8/terrasatch-edge_0.2.8_amd64.deb",
+};
+const releaseChecksums: { linuxAmd64?: string } = {
+  linuxAmd64: "6fc31c01533fbf594a42f0fc767c47b2a1e610aa93ac79345cf7c15d305d22bb",
+};
 
 type Platform = "windows" | "linux" | "unknown";
 
@@ -442,12 +446,12 @@ const Edge = () => {
                   </span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Debian/Ubuntu package for rugged PCs, field laptops, and Linux edge nodes. The v0.2.8 package has passed local build and source QA; publication is pending.
+                  Ubuntu 24.04 AMD64 package for rugged PCs, field laptops, and Linux edge nodes. Edge v0.2.8 beta is available with verified build provenance and canonical TerraSatch artwork.
                 </p>
                 <div className="mt-6">
                   <DownloadAction
                     href={releaseUrls.linuxAmd64}
-                    label="Linux AMD64"
+                    label="Download Linux v0.2.8 beta"
                     pendingLabel="v0.2.8 release publication pending"
                   />
                 </div>
@@ -457,7 +461,12 @@ const Edge = () => {
                   </summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
                     <p>AMD64 · .deb · v{LINUX_AMD64_VERSION} field-gateway beta</p>
+                    <p className="font-sans text-xs">Validated on Ubuntu 24.04. Older distributions, including Ubuntu 22.04, are not supported by this build.</p>
                     <Checksum label="SHA-256" value={releaseChecksums.linuxAmd64} />
+                    <p className="flex flex-wrap gap-4 font-sans text-xs">
+                      <a className="text-primary underline" href="https://github.com/k3y10/terrasatch-edge/releases/tag/v0.2.8">Release notes</a>
+                      <a className="text-primary underline" href="https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.8/SHA256SUMS.txt">Checksum manifest</a>
+                    </p>
                     <p className="font-sans text-xs">
                       Install the distribution rtl-sdr package when using RTL-SDR / Nooelec
                       receive hardware.
