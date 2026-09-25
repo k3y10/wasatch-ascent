@@ -102,8 +102,9 @@ const ConnectedStackSection = () => (
             {["TerraSatch Edge", "Mapbox"].map((item) => (
               <span
                 key={item}
-                className="border border-primary/25 bg-primary/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground"
+                className="flex items-center gap-2 border border-primary/25 bg-primary/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground"
               >
+                <IntegrationLogo name={item} className="max-h-5 max-w-8" />
                 {item}
               </span>
             ))}

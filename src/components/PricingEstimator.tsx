@@ -110,7 +110,7 @@ const PricingEstimator = () => (
           Start small. Keep the same system<span className="text-primary">.</span>
         </h2>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-frost-dim">
-          Individual and Team are available for beta evaluation. Confirm the trial length, payment method,
+          Start with a guided 14-day evaluation of one workflow. For a subscription, confirm the trial length, payment method,
           renewal price, and cancellation terms at checkout before starting. Your organization, workspace, API identity,
           and paired Edge devices stay tied to the same TerraSatch account as billing changes.
         </p>
@@ -151,7 +151,7 @@ const PricingEstimator = () => (
               variant={featured ? "default" : "outline"}
             >
               <a href={checkoutUrl || "/#pilot"}>
-                {checkoutUrl ? cta : name === "Individual" || name === "Team" ? "Request trial" : cta}
+                {checkoutUrl ? cta : name === "Individual" || name === "Team" ? "Request evaluation" : cta}
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>

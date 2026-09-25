@@ -61,7 +61,7 @@ describe("TerraSatch PWA", () => {
       "src/components/TerraListenSection.tsx": "7f16983814bf367dbe7eb7c3dc8df9bc577add36",
       "src/components/OperationalSnapshot.tsx": "97436d48b7a63179478b345dd8547490b953ac52",
       "src/components/LearnAdaptSection.tsx": "6025f2c681067063562b2e9c4839883fb79d7153",
-      "src/components/HeroSection.tsx": "ff935bcd8a5f2e51d0ee031fa8cc90887972f717",
+      "src/components/HeroSection.tsx": "4ba2955507814c2b64f17f5e04db48d306db9aa6",
       "index.html": "dcb10827188b4444633ff3d095ab573cdec92a4a",
       "src/index.css": "c5641321369a864adaafccd157c499fcea5b6dd2",
     } as const;

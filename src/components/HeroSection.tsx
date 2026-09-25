@@ -8,22 +8,22 @@ import { cn } from "@/lib/utils";
 const capabilities = [
   {
     label: "Listen",
-    description: "Bring approved communication and field data into one flow, starting with radio and voice.",
+    description: "Capture approved field inputs, from radio calls to team updates.",
     icon: Radio,
   },
   {
     label: "Watch",
-    description: "Attach maps, terrain, weather, sensors, imagery, and location context to what the team is reporting.",
+    description: "Follow information across connected tools and put it in context.",
     icon: MapPinned,
   },
   {
     label: "Learn",
-    description: "Preserve source-linked operational memory across people, shifts, incidents, and connected systems.",
+    description: "Help identify missing context, repeated work, and slow handoffs.",
     icon: Files,
   },
   {
     label: "Adapt",
-    description: "Route reviewed intelligence into tasks, reports, handoffs, and the workflows teams already use.",
+    description: "Suggest simpler steps and prepare outputs for your team to review.",
     icon: ShieldCheck,
   },
 ];
@@ -38,7 +38,7 @@ const CapabilityRail = () => (
           <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
         </h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
-          One operating loop across the systems your field already depends on.
+          Start with one workflow. Find the friction. Review a simpler way forward.
         </p>
       </div>
 
@@ -83,10 +83,10 @@ const HeroSection = () => (
             TerraSatch field intelligence platform
           </p>
           <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
-            Turn field information into finished work<span className="text-primary">.</span>
+            Put Satchy to work<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            TerraSatch turns what happens in the field into what needs to happen next. Speak through radio or voice. Satchy connects your observations to maps, tasks, and reports while you keep moving.
+            Bring Satchy into the workflows your team already uses. Turn approved field information into clear context, useful next steps, and work your team can review.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -101,10 +101,10 @@ const HeroSection = () => (
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
               <a
-                href="#cost"
+                href="#pilot"
                 onClick={() => trackFunnelEvent({ stage: "validate", action: "compare-plans", source: "hero" })}
               >
-                Find your plan
+                Explore a two-week evaluation
                 <ArrowDown data-icon="inline-end" />
               </a>
             </Button>
