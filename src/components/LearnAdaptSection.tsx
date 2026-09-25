@@ -1,9 +1,9 @@
 import {
   ArrowRight,
-  BellRing,
   BookOpenCheck,
   Building2,
   FileText,
+  Gauge,
   History,
   Layers3,
   LifeBuoy,
@@ -16,15 +16,39 @@ import OperationalSnapshot from "@/components/OperationalSnapshot";
 import { trackFunnelEvent } from "@/lib/funnel-analytics";
 
 const learnInputs = [
-  { title: "Communication + observations", description: "Keep authorized calls, voice, field notes, and structured observations connected to their source and location.", icon: History },
-  { title: "Terrain + connected data", description: "Join terrain cells, weather, approved documents, sensor context, and shift records without flattening them into one opaque answer.", icon: Layers3 },
-  { title: "Durable memory", description: "Build a searchable operational history crews can review across a shift, incident, site, or recurring workflow.", icon: BookOpenCheck },
+  {
+    title: "Communication + observations",
+    description: "Keep authorized calls, voice, field notes, and structured observations connected to their source and location.",
+    icon: History,
+  },
+  {
+    title: "Terrain + connected data",
+    description: "Join terrain cells, weather, approved documents, sensor context, and workflow events without flattening them into one opaque answer.",
+    icon: Layers3,
+  },
+  {
+    title: "Durable memory",
+    description: "Build a searchable operational history Satchy can compare across a shift, incident, site, or recurring workflow.",
+    icon: BookOpenCheck,
+  },
 ];
 
 const adaptOutputs = [
-  { title: "Briefings", description: "Turn reviewed observations into concise shift or incident briefings with the source record still available underneath.", icon: FileText },
-  { title: "Alerts + handoffs", description: "Prepare reviewable alerts, handoffs, and follow-up queues for the right team without bypassing human approval.", icon: BellRing },
-  { title: "Approved action", description: "Support reports and operational outputs while keeping qualified operators responsible for what is published or acted on.", icon: ShieldCheck },
+  {
+    title: "Briefings + handoffs",
+    description: "Turn reviewed observations into concise shift, incident, or handoff summaries with the source record still available underneath.",
+    icon: FileText,
+  },
+  {
+    title: "Workflow opportunities",
+    description: "Identify repeated entry, waiting, context recovery, and avoidable handoff steps, then estimate the staff-time opportunity from observed work.",
+    icon: Gauge,
+  },
+  {
+    title: "Approved action",
+    description: "Prepare reports, routing, and workflow changes while keeping qualified operators responsible for what is published, automated, or acted on.",
+    icon: ShieldCheck,
+  },
 ];
 
 const useCases = [
@@ -46,7 +70,7 @@ const LearnAdaptSection = () => (
             </h2>
           </div>
           <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground lg:justify-self-end">
-            Satchy keeps communication, observations, terrain, weather, documents, and connected operational data linked so useful context does not disappear when the moment, shift, or system changes.
+            Satchy keeps communication, observations, terrain, weather, documents, and connected workflow events linked so useful context does not disappear when the moment, shift, or system changes. Over time, that source-linked history also shows where the same work is being repeated or delayed.
           </p>
         </div>
 
@@ -80,13 +104,13 @@ const LearnAdaptSection = () => (
       <div className="container relative mx-auto px-6">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Adapt · reviewed outputs</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Adapt · reviewed improvement</p>
             <h2 className="mt-4 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.95] sm:text-5xl lg:text-6xl">
               Turn context into something the team can use<span className="text-primary">.</span>
             </h2>
           </div>
           <p className="max-w-2xl text-lg leading-relaxed text-frost-dim lg:justify-self-end">
-            Prepare reviewable briefings, handoffs, reports, and follow-up actions while keeping the responsible operator in control.
+            Satchy can prepare briefings and reports, but it can also show where a workflow is wasting time through repeated entry, waiting, missing context, or unnecessary handoffs. The team reviews the evidence and controls what changes.
           </p>
         </div>
 
@@ -146,7 +170,7 @@ const LearnAdaptSection = () => (
           <div>
             <p className="font-display text-xl font-bold uppercase">Does this look relevant to your operation?</p>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Evaluate one real workflow with your team. No software account or production commitment is required.
+              Give Satchy two working weeks with one real workflow. The evaluation ends with reviewed findings, not an open-ended trial.
             </p>
           </div>
           <Button asChild variant="outline" className="shrink-0">

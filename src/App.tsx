@@ -12,6 +12,7 @@ const API = lazy(() => import("./pages/API.tsx"));
 const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
 const Demos = lazy(() => import("./pages/Demos.tsx"));
 const Downloads = lazy(() => import("./pages/Downloads.tsx"));
+const Whitepaper = lazy(() => import("./pages/Whitepaper.tsx"));
 const ProtectedDemoRoute = lazy(() => import("./components/ProtectedDemoRoute.tsx"));
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/api" element={<API />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/edge" element={<Downloads />} />
+            <Route path="/whitepaper" element={<Whitepaper />} />
             <Route path="/demo-access" element={<DemoAccess />} />
             <Route
               path="/demos"

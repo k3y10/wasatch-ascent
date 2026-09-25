@@ -375,3 +375,45 @@
 /* Keep plan descriptions readable on both existing site themes. */
 .pricing-section { --muted-foreground: 215 10% 67%; }
 .light .pricing-section { --muted-foreground: 220 10% 38%; }
+
+
+/* TerraSatch whitepaper print mode */
+@media print {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 220 15% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 12%;
+    --muted: 40 10% 94%;
+    --muted-foreground: 220 8% 38%;
+    --border: 220 10% 78%;
+    --terrain-deep: 40 20% 98%;
+    --terrain-surface: 40 15% 96%;
+    --frost-dim: 220 8% 32%;
+  }
+
+  [data-site-header],
+  footer,
+  .whitepaper-print-actions {
+    display: none !important;
+  }
+
+  body,
+  .whitepaper-page {
+    background: #fff !important;
+    color: #17191d !important;
+  }
+
+  .whitepaper-page main {
+    padding-top: 0 !important;
+  }
+
+  .whitepaper-page section {
+    break-inside: avoid;
+  }
+
+  .whitepaper-page a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}
