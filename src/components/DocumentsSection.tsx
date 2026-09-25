@@ -10,8 +10,7 @@ const DocumentsSection = () => (
           TerraSatch + Satchy whitepaper<span className="text-primary">.</span>
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-          One current document now explains the TerraSatch platform, Satchy agent, Listen · Watch · Learn · Adapt operating loop,
-          14-day workflow evaluation, deployment models, connected providers, and human approval model.
+          The current 31-page TerraSatch whitepaper explains the platform, Satchy agent, TerraListen workflow, Listen · Watch · Learn · Adapt operating loop, terrain modules, architecture, and human-review model.
         </p>
       </div>
 
