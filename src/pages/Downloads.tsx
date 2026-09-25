@@ -26,10 +26,14 @@ import { Button } from "@/components/ui/button";
 // Enable each distribution only after its public artifact has been validated.
 const WINDOWS_VERSION = "0.2.8";
 const LINUX_AMD64_VERSION = "0.2.8";
+const WINDOWS_RELEASE = "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.8-windows-beta";
 const releaseUrls: { windowsX64?: string; linuxAmd64?: string } = {
+  windowsX64: `${WINDOWS_RELEASE}/TerraSatch-Edge_0.2.8_x64.msix`,
   linuxAmd64: "https://github.com/k3y10/terrasatch-edge/releases/download/v0.2.8/terrasatch-edge_0.2.8_amd64.deb",
 };
-const releaseChecksums: { linuxAmd64?: string } = {
+const releaseChecksums = {
+  windowsX64: "12a86ef9dab92cb925b37376302d05d2ccad1185e1498f2cf27cfcd4a8250c49",
+  windowsCertificate: "9e23cc0525a7c0eba124c08bfd666425f627bdae1ac1dd358bdef32328d9a5d6",
   linuxAmd64: "6fc31c01533fbf594a42f0fc767c47b2a1e610aa93ac79345cf7c15d305d22bb",
 };
 
@@ -411,16 +415,19 @@ const Edge = () => {
                   </span>
                 </div>
                 <p className="mt-3 min-h-16 text-sm leading-relaxed text-muted-foreground">
-                  Windows 10/11 x64 MSIX with the current Satchy field-gateway UI and RTL-SDR
-                  support for compatible field hardware.
+                  Windows 10/11 x64 MSIX with guided workspace pairing and RTL-SDR support.
+                  Validated v0.2.8 development beta, signed by TerraSatch.
+                </p>
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                  Requires trusting the matching test certificate. This is not Microsoft Store signing.
+                  Certificate expires September 29, 2026 at 15:20 UTC.
                 </p>
                 <div className="mt-6">
-                  <Button asChild className="w-full justify-center">
-                    <a href="https://www.linkedin.com/in/keaton-m/" target="_blank" rel="noopener noreferrer">
-                      Request Windows download
-                      <ArrowRight data-icon="inline-end" aria-hidden="true" />
-                    </a>
-                  </Button>
+                  <DownloadAction href={releaseUrls.windowsX64} label="Download Windows v0.2.8 beta" />
+                </div>
+                <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs">
+                  <a className="text-primary underline" href={`${WINDOWS_RELEASE}/TerraSatch-MSIX-Dev.cer`}>Download test certificate</a>
+                  <a className="text-primary underline" href={`${WINDOWS_RELEASE}/WINDOWS-MSIX-INSTALL.txt`}>Installation instructions</a>
                 </div>
                 <details className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.14em] text-foreground">
@@ -428,7 +435,15 @@ const Edge = () => {
                   </summary>
                   <div className="mt-3 space-y-2 font-mono text-[10px] leading-relaxed">
                     <p>Windows 10/11 · x64 · v{WINDOWS_VERSION}</p>
-                    <p className="font-sans text-xs">Contact Keaton for the current Microsoft-signed Windows package.</p>
+                    <Checksum label="MSIX SHA-256" value={releaseChecksums.windowsX64} />
+                    <Checksum label="Cert SHA-256" value={releaseChecksums.windowsCertificate} />
+                    <Checksum label="Cert thumbprint" value="484D8FA17488FD2617EE9F04052D016FD8C8DBE3" />
+                    <p className="font-sans text-xs">For a desktop shortcut, press Win+R, enter shell:AppsFolder, then right-click TerraSatch Edge and choose Create shortcut.</p>
+                    <p className="font-sans text-xs">This validated package predates the artwork fix in Advanced gateway details.</p>
+                    <p className="flex flex-wrap gap-4 font-sans text-xs">
+                      <a className="text-primary underline" href="https://github.com/k3y10/terrasatch-edge/releases/tag/v0.2.8-windows-beta">Release notes</a>
+                      <a className="text-primary underline" href={`${WINDOWS_RELEASE}/SHA256SUMS-WINDOWS.txt`}>Windows checksums</a>
+                    </p>
                   </div>
                 </details>
               </article>
