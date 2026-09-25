@@ -41,7 +41,7 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
     setState("checking");
 
     const [healthResult, openApiResult] = await Promise.allSettled([
-      fetch(`${apiBase}/api/v1/health`, {
+      fetch(apiBase === "https://api.terrasatch.com" ? "/api/public-api?resource=health" : `${apiBase}/api/v1/health`, {
         method: "GET",
         headers: { Accept: "application/json" },
         cache: "no-store",
@@ -50,7 +50,7 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return (await response.json()) as ApiHealth;
       }),
-      fetch(`${apiBase}/openapi.json`, {
+      fetch(apiBase === "https://api.terrasatch.com" ? "/api/public-api?resource=schema" : `${apiBase}/openapi.json`, {
         method: "GET",
         headers: { Accept: "application/json" },
         cache: "no-store",
@@ -117,7 +117,7 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
               See the API running<span className="text-primary">.</span>
             </h2>
             <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              This panel reads TerraSatch&apos;s public health and OpenAPI surfaces directly. Workspace credentials,
+              This panel reads TerraSatch&apos;s public health and OpenAPI surfaces. Workspace credentials,
               organization data, API keys, billing secrets, and Edge device credentials are never exposed here.
             </p>
           </div>
@@ -252,7 +252,7 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
                     <p className="mt-3 font-display text-lg font-bold uppercase">OpenAPI preview unavailable</p>
                     <p className="mt-2 max-w-md text-xs leading-relaxed text-muted-foreground">
                       The website never substitutes private credentials. Use the public API reference or OpenAPI
-                      JSON link above if this browser cannot read the cross-origin schema.
+                      JSON link above if the live preview is temporarily unavailable.
                     </p>
                   </div>
                 </div>
