@@ -26,7 +26,8 @@ const resourceItems: NavItem[] = [
   { label: "Demo access", href: "/demo-access" },
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
-  { label: "Connect", section: "founder-connect" },
+  { label: "Whitepaper", href: "/documents/TerraSatch-Whitepaper.pdf" },
+  { label: "Investors & partners", href: "/investors" },
 ];
 
 const navItems = [...exploreItems, ...resourceItems];
@@ -186,7 +187,7 @@ const Navbar = () => {
         <div className="flex shrink-0 items-center gap-1.5">
           <Button asChild size="sm" className="hidden xl:inline-flex">
             <a href="/#pilot" onClick={handleEvaluateClick}>
-              Evaluate TerraSatch
+              Evaluate with Satchy
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
@@ -233,7 +234,7 @@ const Navbar = () => {
                   {exploreItems.map((item) => renderNavLink(item, true))}
                   <Button asChild className="mt-1 h-11 w-full justify-between px-3">
                     <a href="/#pilot" onClick={handleEvaluateClick}>
-                      Evaluate TerraSatch
+                      Evaluate with Satchy
                       <ArrowRight data-icon="inline-end" />
                     </a>
                   </Button>

@@ -13,17 +13,17 @@ const capabilities = [
   },
   {
     label: "Watch",
-    description: "Attach maps, terrain, weather, sensors, imagery, and location context to what the team is reporting.",
+    description: "Connect terrain, weather, maps, sensors, documents, and workflow events so Satchy can see how information moves.",
     icon: MapPinned,
   },
   {
     label: "Learn",
-    description: "Preserve source-linked operational memory across people, shifts, incidents, and connected systems.",
+    description: "Preserve source-linked operational memory and identify recurring handoff, context, and duplicate-work patterns.",
     icon: Files,
   },
   {
     label: "Adapt",
-    description: "Route reviewed intelligence into tasks, reports, handoffs, and the workflows teams already use.",
+    description: "Prepare reviewed outputs and workflow improvements while keeping operators responsible for what changes or gets acted on.",
     icon: ShieldCheck,
   },
 ];
@@ -38,7 +38,7 @@ const CapabilityRail = () => (
           <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
         </h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
-          One operating loop across the systems your field already depends on.
+          Deploy Satchy into one approved workflow, understand how work actually moves, then improve only what the evidence supports.
         </p>
       </div>
 
@@ -86,7 +86,7 @@ const HeroSection = () => (
             Turn field information into finished work<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            TerraSatch turns what happens in the field into what needs to happen next. Speak through radio or voice. Satchy connects your observations to maps, tasks, and reports while you keep moving.
+            Deploy Satchy into the workflows your team already uses. Satchy listens to approved field inputs, watches how information moves across connected systems, learns where context and time are being lost, and helps your team adapt with reviewable outputs and workflow improvements.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -101,10 +101,10 @@ const HeroSection = () => (
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
               <a
-                href="#cost"
-                onClick={() => trackFunnelEvent({ stage: "validate", action: "compare-plans", source: "hero" })}
+                href="#pilot"
+                onClick={() => trackFunnelEvent({ stage: "validate", action: "start-satchy-evaluation", source: "hero" })}
               >
-                Find your plan
+                Try Satchy for 14 days
                 <ArrowDown data-icon="inline-end" />
               </a>
             </Button>

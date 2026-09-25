@@ -37,9 +37,10 @@ const EngagementSection = () => (
 
       <div id="founder-connect" className="mt-16 grid scroll-mt-24 gap-8 border-t border-border/70 pt-12 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">A direct conversation</p>
+          <span id="investors" className="block scroll-mt-24" aria-hidden="true" />
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Investors · partners · operators</p>
           <h2 className="mt-4 font-display text-4xl font-bold uppercase leading-none sm:text-5xl">Connect with Keaton<span className="text-primary">.</span></h2>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-frost-dim">Have a field workflow in mind, a partnership idea, or a question about TerraSatch? Reach out to Keaton directly and find a time to talk.</p>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-frost-dim">Interested in TerraSatch as an investor, strategic partner, operator, or potential customer? Reach out to Keaton directly. Private materials and deeper company information can be shared with the right people after an initial conversation.</p>
         </div>
         <Button asChild size="lg">
           <a href="https://www.linkedin.com/in/keaton-m/" target="_blank" rel="noopener noreferrer">Connect with Keaton<ArrowUpRight data-icon="inline-end" /></a>

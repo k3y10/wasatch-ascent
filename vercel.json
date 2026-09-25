@@ -23,6 +23,11 @@
   ],
   "redirects": [
     {
+      "source": "/whitepaper",
+      "destination": "/documents/TerraSatch-Whitepaper.pdf",
+      "permanent": false
+    },
+    {
       "source": "/investors",
       "destination": "/#founder-connect",
       "permanent": false
