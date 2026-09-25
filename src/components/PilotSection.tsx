@@ -8,8 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { submitInquiry } from "@/lib/inquiry";
 
 const pilotLimits = [
-  "One small team with up to five participants",
-  "30 days of free beta access with guided onboarding",
+  "An evaluation scope agreed with you before access begins",
+  "Guided beta onboarding and a confirmed trial window",
   "Radio, mobile, and already-supported integration workflows where configured",
   "No custom provider engineering or production SLA during beta",
 ];
@@ -37,16 +37,16 @@ const PilotSection = () => {
     try {
       const { result } = await submitInquiry({
         mode: "pilot",
-        scope: "free 30-day beta trial; one small team; guided onboarding; radio, mobile, and supported integrations where configured; no custom provider engineering or production SLA",
+        scope: "beta evaluation request; scope and trial window to be confirmed; guided onboarding; radio, mobile, and supported integrations where configured; no custom provider engineering or production SLA",
         ...pilot,
       });
       if (result.fallbackMailto) {
-        toast("Opening your email app so the founder still receives the inquiry.");
+        toast("Your request has not been sent. Send the draft in your email app to contact Keaton.");
         window.location.assign(result.fallbackMailto);
         return;
       }
       if (!result.ok) throw new Error(result.error || "Unable to submit inquiry.");
-      toast.success("30-day beta request sent to Keaton.");
+      toast.success("Beta request sent to Keaton.");
       setSent(true);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Unable to submit pilot request.");
@@ -65,11 +65,12 @@ const PilotSection = () => {
             <Radio className="size-6 text-primary" aria-hidden="true" />
           </div>
           <h2 className="mt-6 font-display text-5xl font-bold uppercase leading-none lg:text-6xl">
-            Try TerraSatch for 30 days<span className="text-primary">.</span>
+            Request beta access<span className="text-primary">.</span>
           </h2>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-frost-dim">
-            A free 30-day beta trial for one real field workflow. No card required. We help configure the supported
-            radio, mobile, mapping, data, or workflow connections needed for the test before custom engineering or production operations create cost.
+            TerraSatch is in beta. We are testing real workflows and gathering feedback with early users.
+            This form requests guided access; it does not create an account, start a trial, or charge you.
+            We will confirm your scope, trial window, and setup steps before you begin.
           </p>
           <ul className="mt-8 flex flex-col gap-3">
             {pilotLimits.map((item) => (
@@ -115,7 +116,7 @@ const PilotSection = () => {
               <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={pilot.website} onChange={(event) => setPilot({ ...pilot, website: event.target.value })} />
               <Button type="submit" size="lg" disabled={pending}>
                 {pending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                {pending ? "Sending request..." : "Start the 30-day beta"}
+                {pending ? "Sending request..." : "Request beta access"}
               </Button>
             </FieldGroup>
           </form>

@@ -34,7 +34,7 @@ const pricingPlans: PricingPlan[] = [
   {
     name: "Individual",
     price: "$24",
-    cadence: "Per month · 14-day trial",
+    cadence: "Per month · beta trial",
     description:
       "Personal Satchy for one person in the field. Start with one real workflow and keep the same workspace if you continue.",
     points: [
@@ -45,12 +45,12 @@ const pricingPlans: PricingPlan[] = [
     ],
     icon: Radio,
     checkoutUrl: INDIVIDUAL_CHECKOUT_URL,
-    cta: "Start 14-day trial",
+    cta: "Start beta trial",
   },
   {
     name: "Team",
     price: "$399",
-    cadence: "Per month · 14-day trial",
+    cadence: "Per month · beta trial",
     description:
       "For a working crew sharing radios, channels, maps, logs, integrations, and operational context in one workspace.",
     points: [
@@ -62,7 +62,7 @@ const pricingPlans: PricingPlan[] = [
     icon: Users,
     featured: true,
     checkoutUrl: TEAM_CHECKOUT_URL,
-    cta: "Start 14-day trial",
+    cta: "Start beta trial",
   },
   {
     name: "Operations",
@@ -104,13 +104,14 @@ const PricingEstimator = () => (
     <div className="container relative mx-auto px-6">
       <div className="max-w-4xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-          Workspace plans
+          Beta workspace plans
         </p>
         <h2 className="mt-3 font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
           Start small. Keep the same system<span className="text-primary">.</span>
         </h2>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-frost-dim">
-          Individual and Team begin with a 14-day trial. The organization, workspace, API identity,
+          Individual and Team are available for beta evaluation. Confirm the trial length, payment method,
+          renewal price, and cancellation terms at checkout before starting. Your organization, workspace, API identity,
           and paired Edge devices stay tied to the same TerraSatch account as billing changes.
         </p>
       </div>
@@ -166,9 +167,8 @@ const PricingEstimator = () => (
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
             Stripe handles payment collection while TerraSatch keeps organization membership, plan entitlements,
-            API access, sites, and Edge device assignment on the server. Supported stablecoin payments can be
-            offered through Stripe invoice-based billing; automatic recurring wallet debit remains dependent on
-            Stripe account eligibility.
+            API access, sites, and Edge device assignment on the server. Stablecoin invoice billing is being validated and is not yet offered through this page.
+            When available, you will approve each invoice payment in your wallet; automatic wallet renewals are not promised.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">

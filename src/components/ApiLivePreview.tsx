@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Activity, ArrowUpRight, Braces, RefreshCw, ServerCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-type HealthState = "checking" | "healthy" | "unavailable";
+type HealthState = "checking" | "healthy" | "degraded" | "unavailable";
 
 type ApiHealth = {
   status?: string;
@@ -31,7 +31,13 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
   const [openApi, setOpenApi] = useState<OpenApiDocument | null>(null);
   const [checkedAt, setCheckedAt] = useState<Date | null>(null);
 
+  const activeRequest = useRef<AbortController | null>(null);
+
   const checkApi = useCallback(async () => {
+    activeRequest.current?.abort();
+    const controller = new AbortController();
+    activeRequest.current = controller;
+    const timeout = window.setTimeout(() => controller.abort(), 10_000);
     setState("checking");
 
     const [healthResult, openApiResult] = await Promise.allSettled([
@@ -39,6 +45,7 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
         method: "GET",
         headers: { Accept: "application/json" },
         cache: "no-store",
+        signal: controller.signal,
       }).then(async (response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return (await response.json()) as ApiHealth;
@@ -47,15 +54,19 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
         method: "GET",
         headers: { Accept: "application/json" },
         cache: "no-store",
+        signal: controller.signal,
       }).then(async (response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return (await response.json()) as OpenApiDocument;
       }),
     ]);
 
+    window.clearTimeout(timeout);
+    if (activeRequest.current !== controller) return;
+
     if (healthResult.status === "fulfilled") {
       setHealth(healthResult.value);
-      setState("healthy");
+      setState(healthResult.value.status === "healthy" ? "healthy" : "degraded");
     } else {
       setHealth(null);
       setState("unavailable");
@@ -68,7 +79,11 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
   useEffect(() => {
     void checkApi();
     const timer = window.setInterval(() => void checkApi(), 30_000);
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearInterval(timer);
+      activeRequest.current?.abort();
+      activeRequest.current = null;
+    };
   }, [checkApi]);
 
   const endpoints = useMemo(() => {
@@ -87,8 +102,10 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
     state === "checking"
       ? "Checking"
       : state === "healthy"
-        ? "API reachable"
-        : "Browser check unavailable";
+        ? "API healthy"
+        : state === "degraded"
+          ? "API needs attention"
+          : "Browser check unavailable";
 
   return (
     <section className="border-y border-border/60 bg-card/15 py-20 sm:py-24" aria-labelledby="api-live-preview-title">
@@ -110,7 +127,7 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
           </Button>
         </div>
 
-        <div className="mt-10 grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
+        <div className="mt-10 grid min-w-0 gap-6 [&>div]:min-w-0 xl:grid-cols-[0.72fr_1.28fr]">
           <div className="border border-border/70 bg-background/70">
             <div className="flex items-center justify-between border-b border-border/70 px-5 py-4">
               <div className="flex items-center gap-3">
@@ -143,7 +160,7 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
               <div className="bg-background/90 p-5">
                 <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Last browser check</p>
                 <p className="mt-2 font-mono text-sm text-foreground">
-                  {checkedAt ? checkedAt.toLocaleTimeString() : "—"}
+                  {checkedAt ? checkedAt.toLocaleTimeString() : "â€”"}
                 </p>
               </div>
             </div>
@@ -208,12 +225,12 @@ const ApiLivePreview = ({ apiBase }: ApiLivePreviewProps) => {
               </div>
               <div className="bg-background/90 p-4">
                 <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Version</p>
-                <p className="mt-2 font-mono text-sm">{openApi?.info?.version || health?.version || "—"}</p>
+                <p className="mt-2 font-mono text-sm">{openApi?.info?.version || health?.version || "â€”"}</p>
               </div>
               <div className="bg-background/90 p-4">
                 <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Routes loaded</p>
                 <p className="mt-2 font-mono text-sm">
-                  {openApi?.paths ? Object.keys(openApi.paths).length : "—"}
+                  {openApi?.paths ? Object.keys(openApi.paths).length : "â€”"}
                 </p>
               </div>
             </div>
