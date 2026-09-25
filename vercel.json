@@ -19,13 +19,15 @@
     {
       "source": "/api",
       "destination": "/index.html"
-    }
-  ],
-  "redirects": [
+    },
+    {
+      "source": "/whitepaper",
+      "destination": "/index.html"
+    },
     {
       "source": "/investors",
-      "destination": "/#founder-connect",
-      "permanent": false
+      "destination": "/index.html"
     }
-  ]
+  ],
+  "redirects": []
 }

@@ -27,6 +27,7 @@ const resourceItems: NavItem[] = [
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
   { label: "Whitepaper", href: "/whitepaper" },
+  { label: "Investors & partners", href: "/investors" },
 ];
 
 const navItems = [...exploreItems, ...resourceItems];
