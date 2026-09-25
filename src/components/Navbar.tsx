@@ -23,6 +23,7 @@ const exploreItems: NavItem[] = [
 ];
 
 const resourceItems: NavItem[] = [
+  { label: "Workspace", href: "https://api.terrasatch.com/portal/login" },
   { label: "Demo access", href: "/demo-access" },
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
