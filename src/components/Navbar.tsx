@@ -26,7 +26,7 @@ const resourceItems: NavItem[] = [
   { label: "Demo access", href: "/demo-access" },
   { label: "API", href: "/api" },
   { label: "Edge", href: "/edge" },
-  { label: "Whitepaper", href: "/whitepaper" },
+  { label: "Whitepaper", href: "/documents/TerraSatch-Whitepaper.pdf" },
   { label: "Investors & partners", href: "/investors" },
 ];
 
