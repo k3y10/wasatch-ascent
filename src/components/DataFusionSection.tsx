@@ -1,100 +1,210 @@
-import { Radar, Satellite, Radio, Cloud, Cpu } from "lucide-react";
+import IntegrationLogo, { featuredIntegrations } from "@/components/IntegrationLogo";
+import {
+  ArrowRight,
+  CloudSun,
+  Database,
+  FileCheck2,
+  Map,
+  MapPinned,
+  MessageSquareText,
+  Network,
+  Radio,
+  Satellite,
+  ShieldCheck,
+  Waypoints,
+} from "lucide-react";
 
-const steps = [
+const sources = [
   {
-    num: "01",
-    icon: Radar,
-    title: "Terrain Capture",
-    desc: "Drones, LiDAR, satellite imagery, and field kits collect terrain, snowpack, and weather data every pass.",
-  },
-  {
-    num: "02",
-    icon: Cpu,
-    title: "Edge AI & AvyTS",
-    desc: "AvyTS micro-models score hazards on-ridge, even offline, while edge nodes compress data for uplink.",
-  },
-  {
-    num: "03",
+    label: "Radio + voice",
+    detail: "Land mobile, aviation, and team comms.",
     icon: Radio,
-    title: "Sync Channels",
-    desc: "Wireless mesh, LoRa, and SDR radios auto-route packets, voice snippets, and alerts across the patrol area.",
   },
   {
-    num: "04",
+    label: "Weather + terrain",
+    detail: "Forecasts, maps, location, and environment.",
+    icon: CloudSun,
+  },
+  {
+    label: "Sensors + APIs",
+    detail: "Operational feeds and existing software.",
+    icon: Database,
+  },
+  {
+    label: "Cellular + satellite",
+    detail: "Extend to remote and austere locations.",
     icon: Satellite,
-    title: "Backhaul & Cloud",
-    desc: "Multi-link Starlink and LEO channels push synchronized datasets into the cloud with redundancy.",
-  },
-  {
-    num: "05",
-    icon: Cloud,
-    title: "Intelligence & APIs",
-    desc: "Data lakes and APIs redistribute insights to dashboards, partners, and automation hooks.",
   },
 ];
 
-const DataFusionSection = () => {
-  return (
-    <section className="relative py-32 overflow-hidden">
-      <div className="absolute inset-0 topo-overlay opacity-30" />
+const intelligenceSteps = [
+  { label: "Ingest", detail: "Keep source, time, location, and permissions attached.", icon: Network },
+  { label: "Understand", detail: "Normalize signals into shared operational context.", icon: Waypoints },
+  { label: "Coordinate", detail: "Connect related events, people, places, and workflows.", icon: MapPinned },
+  { label: "Review", detail: "Keep outputs traceable and human-approved.", icon: ShieldCheck },
+];
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <div className="signal-badge signal-badge-amber mx-auto mb-4 w-fit">
-            <span className="font-mono text-[10px]">DATA PIPELINE</span>
-          </div>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Terrain Data <span className="text-primary">Fusion</span>
+const outputs = [
+  { label: "Maps & layers", detail: "Enriched maps and situation layers.", icon: Map },
+  { label: "Tasks & handoffs", detail: "Assignments, follow-up, and team coordination.", icon: FileCheck2 },
+  { label: "Reports & exports", detail: "Shareable reports, summaries, and data exports.", icon: Database },
+  { label: "Connected workflows", detail: "Send to your existing tools and systems.", icon: MessageSquareText },
+];
+
+const DataFusionSection = () => (
+  <section id="connect" className="scroll-mt-20 relative overflow-hidden border-y border-border/60 bg-background py-10 sm:py-12">
+    <div className="absolute inset-0 topo-overlay opacity-20" />
+
+    <div className="container relative mx-auto px-4 sm:px-6">
+      <div className="mb-8 grid gap-5 lg:grid-cols-[1fr_0.78fr] lg:items-end">
+        <div>
+          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">Connected field intelligence</p>
+          <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold uppercase leading-[0.95] text-foreground sm:text-4xl lg:text-5xl">
+            Connect the field. See the whole picture<span className="text-primary">.</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Capture flows from sensors to AvyTS inference, crosses AI-managed radio mesh,
-            then rides backhaul into cloud intelligence before streaming out through APIs.
-          </p>
+        </div>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground lg:pb-1">
+          TerraSatch brings radio, maps, weather, sensors, and existing tools together. Satchy turns those signals
+          into shared context your team can search, review, and act on.
+        </p>
+      </div>
+
+      <div className="grid overflow-hidden border-y border-border/70 xl:grid-cols-[0.96fr_1fr_0.96fr]">
+        <div className="border-b border-border/70 px-0 py-6 xl:border-b-0 xl:border-r xl:pr-6">
+          <div className="flex items-start gap-3">
+            <Radio className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" />
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">01 · Sources</p>
+              <h2 className="mt-1 font-display text-xl font-bold uppercase leading-tight text-foreground">
+                Use what the field already uses
+              </h2>
+              <p className="mt-2 max-w-md text-[11px] leading-relaxed text-muted-foreground">
+                Capture approved field communication and environmental data without asking crews to abandon the tools they already carry.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-2">
+            {sources.map(({ label, detail, icon: Icon }) => (
+              <article
+                key={label}
+                className="group flex items-center gap-3 border border-border/70 bg-card/30 px-3 py-2.5 transition-colors hover:border-primary/30 hover:bg-primary/[0.025]"
+              >
+                <div className="flex size-7 shrink-0 items-center justify-center border-r border-primary/25 pr-3 text-primary">
+                  <Icon className="size-4" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-display text-[12px] font-bold uppercase tracking-[0.02em] text-foreground">{label}</h3>
+                  <p className="mt-0.5 text-[9px] leading-relaxed text-muted-foreground">{detail}</p>
+                </div>
+                <ArrowRight className="ml-auto size-3.5 shrink-0 text-muted-foreground/40 transition-colors group-hover:text-primary" aria-hidden="true" />
+              </article>
+            ))}
+          </div>
         </div>
 
-        {/* Pipeline steps */}
-        <div className="max-w-5xl mx-auto">
-          <div className="relative">
-            {/* Connecting line */}
-            <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px">
-              <div className="amber-line w-full" />
+        <div className="border-b border-border/70 py-6 xl:border-b-0 xl:border-r xl:px-6">
+          <div className="flex items-start gap-3">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-primary/45 bg-primary/10">
+              <img src="/terrasatch-logo.png" alt="Satchy" width={36} height={36} className="size-8 object-contain" loading="lazy" />
             </div>
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">02 · Satchy</p>
+              <h2 className="mt-1 font-display text-xl font-bold uppercase leading-tight text-foreground">
+                Turn connection into intelligence
+              </h2>
+              <p className="mt-2 max-w-md text-[11px] leading-relaxed text-muted-foreground">
+                Satchy normalizes fragmented signals into shared operational context that your team can search, review, and act from.
+              </p>
+            </div>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              {steps.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <div key={step.num} className="relative group">
-                    <div className="glass-card-elevated rounded-xl p-5 text-center transition-all duration-500 hover:shadow-[var(--shadow-glow)] hover:translate-y-[-4px] h-full">
-                      <div className="font-mono text-[10px] text-primary/50 mb-3">{step.num}</div>
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
-                        <Icon className="w-5 h-5 text-primary" />
-                      </div>
-                      <h3 className="font-display font-bold text-sm text-foreground mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">
-                        {step.desc}
-                      </p>
-                    </div>
+          <div className="mt-5 grid grid-cols-2 overflow-hidden border border-border/70">
+            {intelligenceSteps.map(({ label, detail, icon: Icon }, index) => (
+              <article
+                key={label}
+                className="min-h-[112px] border-border/70 p-3 even:border-l [&:nth-child(-n+2)]:border-b"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <Icon className="size-4 text-primary" aria-hidden="true" />
+                  <span className="font-mono text-[8px] tracking-[0.16em] text-primary/60">0{index + 1}</span>
+                </div>
+                <h3 className="mt-3 font-display text-[13px] font-bold uppercase text-foreground">{label}</h3>
+                <p className="mt-1.5 text-[9px] leading-relaxed text-muted-foreground">{detail}</p>
+              </article>
+            ))}
+          </div>
+        </div>
 
-                    {/* Arrow between steps (mobile) */}
-                    {i < steps.length - 1 && (
-                      <div className="md:hidden flex justify-center my-2">
-                        <svg className="w-4 h-4 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+        <div className="py-6 xl:pl-6">
+          <div className="flex items-start gap-3">
+            <ArrowRight className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" />
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">03 · Outcomes</p>
+              <h2 className="mt-1 font-display text-xl font-bold uppercase leading-tight text-foreground">
+                Give the team one place to work from
+              </h2>
+              <p className="mt-2 max-w-md text-[11px] leading-relaxed text-muted-foreground">
+                Turn field data into actionable outputs that flow to your existing tools, teams, and decision-makers.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-2">
+            {outputs.map(({ label, detail, icon: Icon }) => (
+              <article key={label} className="flex items-center gap-3 border border-border/70 bg-card/30 px-3 py-2.5">
+                <Icon className="size-4 shrink-0 text-primary" aria-hidden="true" />
+                <div className="min-w-0">
+                  <h3 className="font-display text-[12px] font-bold uppercase text-foreground">{label}</h3>
+                  <p className="mt-0.5 text-[9px] leading-relaxed text-muted-foreground">{detail}</p>
+                </div>
+                <ArrowRight className="ml-auto size-3.5 shrink-0 text-muted-foreground/40" aria-hidden="true" />
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-4 border-b border-border/70 py-4 lg:grid-cols-[250px_1fr] lg:items-center">
+        <div className="flex items-start gap-3">
+          <Network className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" />
+          <div>
+            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">Integrations</p>
+            <h2 className="mt-1 font-display text-base font-bold uppercase text-foreground">Connect with your stack</h2>
+            <p className="mt-1 text-[9px] leading-relaxed text-muted-foreground">
+              TerraSatch adapts to your organization. Connect approved data and workflows to the tools you already use.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-cols-10">
+          {featuredIntegrations.map((name) => (
+            <div
+              key={name}
+              className="flex min-h-[66px] flex-col items-center justify-center gap-1.5 border border-border/70 bg-card/30 px-2 py-2 text-center"
+            >
+              <div className="flex h-8 min-w-8 items-center justify-center"><IntegrationLogo name={name} /></div>
+              <div className="leading-none">
+                <p className="font-display text-[8px] font-bold text-foreground sm:text-[9px]">{name === "onX Backcountry" ? "onX" : name}</p>
+                {name === "onX Backcountry" ? <p className="mt-0.5 text-[7px] text-muted-foreground">Backcountry</p> : null}
+              </div>
+            </div>
+          ))}
+          <div className="flex min-h-[66px] flex-col items-center justify-center gap-1.5 border border-border/70 bg-card/30 px-2 py-2 text-center">
+            <Network className="size-5 text-primary" aria-hidden="true" />
+            <div className="leading-none">
+              <p className="font-display text-[8px] font-bold text-foreground sm:text-[9px]">Custom connectors</p>
+              <p className="mt-0.5 text-[7px] text-muted-foreground">Scoped by deployment</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
-};
+
+      <p className="mt-3 max-w-3xl text-[9px] leading-relaxed text-muted-foreground/70">
+        Connector availability varies by provider API, permissions, deployment scope, and customer configuration.
+      </p>
+    </div>
+  </section>
+);
 
 export default DataFusionSection;

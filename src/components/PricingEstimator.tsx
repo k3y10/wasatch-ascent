@@ -1,5 +1,13 @@
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight, Building2, Check, Database, Gauge, Radio, Route, Users } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  Check,
+  Cpu,
+  Radio,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -11,71 +19,80 @@ type PricingPlan = {
   points: string[];
   icon: LucideIcon;
   featured?: boolean;
+  checkoutUrl?: string;
+  cta: string;
 };
+
+const INDIVIDUAL_CHECKOUT_URL = (
+  import.meta.env.VITE_TERRASATCH_INDIVIDUAL_CHECKOUT_URL as string | undefined
+)?.trim();
+const TEAM_CHECKOUT_URL = (
+  import.meta.env.VITE_TERRASATCH_TEAM_CHECKOUT_URL as string | undefined
+)?.trim();
 
 const pricingPlans: PricingPlan[] = [
   {
-    name: "Limited pilot",
-    price: "$0",
-    cadence: "30-day discovery",
-    description: "A founder-reviewed test designed to prove one useful workflow without creating a production burden.",
+    name: "Individual",
+    price: "$24",
+    cadence: "Per month · beta trial",
+    description:
+      "Personal Satchy for one person in the field. Start with one real workflow and keep the same workspace if you continue.",
     points: [
-      "One small team and one workflow",
-      "Up to two hours of approved sample audio",
-      "One primary language and one findings summary",
-      "No custom hardware, integration, or production SLA",
+      "1 site · 1 member · 1 Edge device",
+      "1 active channel",
+      "15 included processing hours",
+      "14-day operational retention",
     ],
     icon: Radio,
-    featured: true,
+    checkoutUrl: INDIVIDUAL_CHECKOUT_URL,
+    cta: "Start beta trial",
   },
   {
-    name: "Team rollout",
-    price: "Scoped quote",
-    cadence: "Monthly or annual",
-    description: "Defined after a successful pilot, using measured traffic and the minimum operational scope needed.",
+    name: "Team",
+    price: "$399",
+    cadence: "Per month · beta trial",
+    description:
+      "For a working crew sharing radios, channels, maps, logs, integrations, and operational context in one workspace.",
     points: [
-      "Active radios, teams, and channels",
-      "Processed audio and retention volume",
-      "Approved documents and review workflows",
-      "Support matched to operating hours",
+      "1 site · up to 10 members",
+      "Up to 6 Edge devices · 12 channels",
+      "75 included processing hours",
+      "90-day retention + API access",
     ],
     icon: Users,
+    featured: true,
+    checkoutUrl: TEAM_CHECKOUT_URL,
+    cta: "Start beta trial",
   },
   {
-    name: "Organization",
-    price: "Annual scope",
-    cadence: "Custom agreement",
-    description: "For multiple sites, departments, languages, integrations, or higher-assurance operating needs.",
+    name: "Operations",
+    price: "From $1,999",
+    cadence: "Per month · scoped deployment",
+    description:
+      "For a patrol, center, department, or operational team that needs a larger controlled deployment and higher-touch support.",
     points: [
-      "Multiple locations and operating groups",
-      "Language and data-governance requirements",
-      "Integrations, retention, and reporting",
+      "Up to 30 members",
+      "Up to 20 Edge devices · 40 channels",
+      "250 included processing hours",
+      "365-day retention + priority support",
+    ],
+    icon: Cpu,
+    cta: "Scope operations",
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    cadence: "Multi-site · annual / contract",
+    description:
+      "For multi-site, private-hosting, security, integration, data-governance, and higher-assurance operating requirements.",
+    points: [
+      "Multi-site operating model",
+      "Custom retention and integrations",
+      "Security and deployment review",
       "Implementation and support plan",
     ],
     icon: Building2,
-  },
-];
-
-const costDrivers = [
-  {
-    title: "Connected scope",
-    detail: "Active radios, channels, teams, and operating locations.",
-    icon: Radio,
-  },
-  {
-    title: "Actual usage",
-    detail: "Hours of audio processed and how often teams use the workflow.",
-    icon: Gauge,
-  },
-  {
-    title: "Operational memory",
-    detail: "Retention, documents, reports, and approved workflow history.",
-    icon: Database,
-  },
-  {
-    title: "Complexity",
-    detail: "Languages, integrations, custom routing, and support requirements.",
-    icon: Route,
+    cta: "Talk with TerraSatch",
   },
 ];
 
@@ -86,20 +103,27 @@ const PricingEstimator = () => (
 
     <div className="container relative mx-auto px-6">
       <div className="max-w-4xl">
-        <h2 className="font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
-          Simple scope. Honest pricing<span className="text-primary">.</span>
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+          Beta workspace plans
+        </p>
+        <h2 className="mt-3 font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
+          Start small. Keep the same system<span className="text-primary">.</span>
         </h2>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-frost-dim">
-          TerraListen is priced from measured operating needs, not an oversized list of inputs. We start small,
-          validate the workflow, then quote only the radios, processing, retention, and support the team will use.
+          Start with a guided 14-day evaluation of one workflow. For a subscription, confirm the trial length, payment method,
+          renewal price, and cancellation terms at checkout before starting. Your organization, workspace, API identity,
+          and paired Edge devices stay tied to the same TerraSatch account as billing changes.
         </p>
       </div>
 
-      <div className="mt-12 grid border-y border-border/70 lg:grid-cols-3">
-        {pricingPlans.map(({ name, price, cadence, description, points, icon: Icon, featured }) => (
+      <div className="mt-12 grid border-y border-border/70 md:grid-cols-2 xl:grid-cols-4">
+        {pricingPlans.map(({ name, price, cadence, description, points, icon: Icon, featured, checkoutUrl, cta }) => (
           <article
             key={name}
-            className="border-b border-border/70 py-8 lg:border-b-0 lg:border-r lg:px-8 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0"
+            className={cn(
+              "border-b border-border/70 py-8 md:odd:border-r md:px-7 xl:border-b-0 xl:border-r xl:first:pl-0 xl:last:border-r-0 xl:last:pr-0",
+              featured && "bg-primary/[0.025]",
+            )}
           >
             <div className="flex items-start justify-between gap-5">
               <div>
@@ -112,8 +136,8 @@ const PricingEstimator = () => (
               />
             </div>
             <p className="mt-6 font-display text-4xl font-bold text-primary">{price}</p>
-            <p className="mt-4 min-h-20 text-sm leading-relaxed text-muted-foreground">{description}</p>
-            <ul className="mt-6 flex flex-col gap-3">
+            <p className="mt-4 min-h-24 text-sm leading-relaxed text-muted-foreground">{description}</p>
+            <ul className="mt-6 flex min-h-40 flex-col gap-3">
               {points.map((point) => (
                 <li key={point} className="flex items-start gap-3 text-sm leading-relaxed text-foreground/80">
                   <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
@@ -121,44 +145,43 @@ const PricingEstimator = () => (
                 </li>
               ))}
             </ul>
+            <Button
+              asChild
+              className="mt-6 w-full"
+              variant={featured ? "default" : "outline"}
+            >
+              <a href={checkoutUrl || "/#pilot"}>
+                {checkoutUrl ? cta : name === "Individual" || name === "Team" ? "Request evaluation" : cta}
+                <ArrowRight data-icon="inline-end" />
+              </a>
+            </Button>
           </article>
         ))}
       </div>
 
-      <div className="mt-16">
-        <h3 className="font-display text-3xl font-bold uppercase">
-          What changes the quote<span className="text-primary">.</span>
-        </h3>
-        <div className="mt-7 grid gap-7 border-t border-border/70 pt-8 md:grid-cols-2 xl:grid-cols-4">
-          {costDrivers.map(({ title, detail, icon: Icon }) => (
-            <div key={title} className="flex items-start gap-4">
-              <Icon className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" />
-              <div>
-                <h4 className="font-display text-lg font-bold uppercase">{title}</h4>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{detail}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-12 flex flex-col justify-between gap-6 border-l border-primary pl-6 lg:flex-row lg:items-center">
+      <div className="mt-12 grid gap-8 border-l border-primary pl-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div>
-          <p className="font-display text-2xl font-bold uppercase">No invented precision.</p>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Paid pricing is confirmed only after discovery shows real processing volume and requirements. The limited
-            pilot remains $0 because its sample data, workflow, users, and support are explicitly capped.
+          <div className="flex items-center gap-3">
+            <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
+            <p className="font-display text-2xl font-bold uppercase">One account from checkout to field deployment.</p>
+          </div>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            Stripe handles payment collection while TerraSatch keeps organization membership, plan entitlements,
+            API access, sites, and Edge device assignment on the server. Stablecoin invoice billing is being validated and is not yet offered through this page.
+            When available, you will approve each invoice payment in your wallet; automatic wallet renewals are not promised.
           </p>
         </div>
-        <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-          <Button asChild size="lg">
-            <a href="#pilot">
-              Apply for the limited pilot
-              <ArrowRight data-icon="inline-end" />
+        <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+          <Button asChild size="lg" variant="outline">
+            <a href="https://api.terrasatch.com/portal/login" target="_blank" rel="noreferrer">
+              Existing workspace
             </a>
           </Button>
-          <Button asChild variant="outline" size="lg">
-            <a href="mailto:mccunekeaton@gmail.com?subject=TerraSatch%20deployment%20inquiry">Discuss a rollout</a>
+          <Button asChild size="lg">
+            <a href="/#pilot">
+              Evaluate TerraSatch
+              <ArrowRight data-icon="inline-end" />
+            </a>
           </Button>
         </div>
       </div>
@@ -167,4 +190,3 @@ const PricingEstimator = () => (
 );
 
 export default PricingEstimator;
-

@@ -20,5 +20,27 @@
       "source": "/api",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/investors",
+      "destination": "/#founder-connect",
+      "permanent": false
+    },
+    {
+      "source": "/whitepaper",
+      "destination": "/documents/TerraSatch-Whitepaper.pdf",
+      "permanent": false
+    },
+    {
+      "source": "/documents/AvyTS-Whitepaper.pdf",
+      "destination": "/documents/TerraSatch-Whitepaper.pdf",
+      "permanent": false
+    },
+    {
+      "source": "/documents/SherpAI-Whitepaper.pdf",
+      "destination": "/documents/TerraSatch-Whitepaper.pdf",
+      "permanent": false
+    }
   ]
 }

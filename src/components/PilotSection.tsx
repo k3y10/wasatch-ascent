@@ -8,10 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { submitInquiry } from "@/lib/inquiry";
 
 const pilotLimits = [
-  "One small team with up to five participants",
-  "One authorized workflow and one primary language",
-  "Up to two hours of approved sample radio audio",
-  "No hardware, custom integration, or production SLA",
+  "One workflow for an individual, team, or organization",
+  "14 calendar days, starting after scope and setup are agreed",
+  "Approved inputs and supported connections, chosen for your workflow",
+  "A findings review: fewer steps, clearer handoffs, and potential time and cost savings",
 ];
 
 const PilotSection = () => {
@@ -37,16 +37,16 @@ const PilotSection = () => {
     try {
       const { result } = await submitInquiry({
         mode: "pilot",
-        scope: "30 days; one small team; one workflow; up to two hours of approved sample audio; no custom integration or production SLA",
+        scope: "14-day guided beta evaluation request; start date and scope agreed before access; workflow simplification and findings review; radio, mobile, and supported integrations where configured; no custom provider engineering or production SLA",
         ...pilot,
       });
       if (result.fallbackMailto) {
-        toast("Opening your email app so the founder still receives the inquiry.");
+        toast("Your request has not been sent. Send the draft in your email app to contact Keaton.");
         window.location.assign(result.fallbackMailto);
         return;
       }
       if (!result.ok) throw new Error(result.error || "Unable to submit inquiry.");
-      toast.success("Pilot request sent to Keaton.");
+      toast.success("Evaluation request sent to Keaton.");
       setSent(true);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Unable to submit pilot request.");
@@ -65,11 +65,16 @@ const PilotSection = () => {
             <Radio className="size-6 text-primary" aria-hidden="true" />
           </div>
           <h2 className="mt-6 font-display text-5xl font-bold uppercase leading-none lg:text-6xl">
-            Start small. Prove one workflow<span className="text-primary">.</span>
+            Request a 14-day evaluation<span className="text-primary">.</span>
           </h2>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-frost-dim">
-            A no-cost, 30-day discovery using approved sample data. We measure usefulness before custom engineering or
-            production operations create cost.
+            Explore what Satchy could simplify in two weeks. Together, we map one workflow, connect approved inputs,
+            and look for repeated entry, missing context, and unnecessary handoffs. Your team reviews the findings
+            and decides which changes are worth trying.
+          </p>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            This is a free, guided beta evaluation—not automatic subscription signup. No card is needed to request it.
+            We agree the start date and scope first. Savings are evaluated with you, not guaranteed.
           </p>
           <ul className="mt-8 flex flex-col gap-3">
             {pilotLimits.map((item) => (
@@ -84,8 +89,8 @@ const PilotSection = () => {
         {sent ? (
           <div className="flex min-h-80 flex-col items-center justify-center gap-4 border-y border-primary/30 py-10 text-center" role="status">
             <CheckCircle2 className="size-9 text-primary" aria-hidden="true" />
-            <h3 className="font-display text-3xl font-bold uppercase">Pilot request received</h3>
-            <p className="text-sm text-muted-foreground">Keaton will review the scope and follow up directly.</p>
+            <h3 className="font-display text-3xl font-bold uppercase">Evaluation request received</h3>
+            <p className="text-sm text-muted-foreground">Keaton will confirm the workflow, scope, and start date with you.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="border-y border-primary/30 py-8">
@@ -109,13 +114,13 @@ const PilotSection = () => {
                 </Field>
               </div>
               <Field>
-                <FieldLabel htmlFor="pilot-workflow">What single workflow should TerraListen improve?</FieldLabel>
-                <Textarea id="pilot-workflow" value={pilot.workflow} onChange={(event) => setPilot({ ...pilot, workflow: event.target.value })} placeholder="For example: turn recorded patrol calls into a searchable incident timeline." />
+                <FieldLabel htmlFor="pilot-workflow">Which workflow would you like to simplify?</FieldLabel>
+                <Textarea id="pilot-workflow" value={pilot.workflow} onChange={(event) => setPilot({ ...pilot, workflow: event.target.value })} placeholder="For example: turn calls, copied notes, and three separate updates into one reviewed record." />
               </Field>
               <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={pilot.website} onChange={(event) => setPilot({ ...pilot, website: event.target.value })} />
               <Button type="submit" size="lg" disabled={pending}>
                 {pending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                {pending ? "Sending request..." : "Apply for the limited pilot"}
+                {pending ? "Sending request..." : "Request a 14-day evaluation"}
               </Button>
             </FieldGroup>
           </form>

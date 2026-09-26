@@ -11,11 +11,14 @@ import {
   TerminalSquare,
 } from "lucide-react";
 import AmbientParticles from "@/components/AmbientParticles";
+import ApiLivePreview from "@/components/ApiLivePreview";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 
-const API_BASE = "https://api.terrasatch.com";
+const API_BASE =
+  (import.meta.env.VITE_TERRASATCH_API_BASE_URL as string | undefined)?.replace(/\/+$/, "") ||
+  "https://api.terrasatch.com";
 
 const links = [
   {
@@ -109,6 +112,8 @@ const API = () => (
           </div>
         </div>
       </section>
+
+      <ApiLivePreview apiBase={API_BASE} />
 
       <section className="border-y border-border/60 bg-card/20 py-20 sm:py-24">
         <div className="container mx-auto px-6">
