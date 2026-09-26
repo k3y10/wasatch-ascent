@@ -106,7 +106,7 @@ const DataFusionSection = () => (
         <div className="border-b border-border/70 py-6 xl:border-b-0 xl:border-r xl:px-6">
           <div className="flex items-start gap-3">
             <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-primary/45 bg-primary/10">
-              <span className="font-display text-[11px] font-bold uppercase text-primary">S</span>
+              <img src="/terrasatch-logo.png" alt="Satchy" width={36} height={36} className="size-8 object-contain" loading="lazy" />
             </div>
             <div>
               <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">02 · Satchy</p>
