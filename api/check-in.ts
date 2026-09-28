@@ -1,5 +1,6 @@
 const MAX_BODY_LENGTH = 16000;
 const DEFAULT_API_BASE = "https://staging-api.terrasatch.com";
+const FORM_ID = "OUTFIELD-CHECKIN";
 
 type ApiRequest = {
   method?: string;
@@ -43,7 +44,10 @@ const baseUrl = () =>
   (process.env.TERRASATCH_FEEDBACK_API_BASE_URL || DEFAULT_API_BASE).replace(/\/$/, "");
 
 export default async function handler(request: ApiRequest, response: ApiResponse) {
-  response.setHeader("Cache-Control", "private, no-store, no-cache, max-age=0, must-revalidate");
+  response.setHeader(
+    "Cache-Control",
+    "private, no-store, no-cache, max-age=0, must-revalidate",
+  );
   response.setHeader("X-Content-Type-Options", "nosniff");
 
   if (request.method !== "POST") {
@@ -60,17 +64,20 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       return response.status(413).json({ error: "Submission is too large." });
     }
 
-    const upstream = await fetch(baseUrl() + "/api/v1/feedback/responses", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+    const upstream = await fetch(
+      baseUrl() + `/api/v1/feedback/forms/${FORM_ID}/responses`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        credentials: "omit",
+        redirect: "error",
+        signal: AbortSignal.timeout(10_000),
       },
-      body: JSON.stringify(payload),
-      credentials: "omit",
-      redirect: "error",
-      signal: AbortSignal.timeout(10_000),
-    });
+    );
     const body = await upstream
       .json()
       .catch(() => ({ error: "Invalid upstream response." }));

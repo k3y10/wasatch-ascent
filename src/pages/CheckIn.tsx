@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Mountain, Radio, Signal } from "lu
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { normalizeSource, spendOptionsFor, submitSurvey, type SurveyDraft } from "@/lib/checkin";
+import { FORM_ID, FORM_VERSION, normalizeDistribution, spendOptionsFor, submitSurvey, type SurveyDraft } from "@/lib/checkin";
 
 const initialDraft: SurveyDraft = {
   audience: "",
@@ -86,7 +86,7 @@ const StepOptions = ({
 
 const CheckIn = () => {
   const [params] = useSearchParams();
-  const source = useMemo(() => normalizeSource(params.get("src")), [params]);
+  const distributionId = useMemo(() => normalizeDistribution(params.get("d") ?? params.get("src")), [params]);
   const [step, setStep] = useState(0);
   const [draft, setDraft] = useState<SurveyDraft>(initialDraft);
   const [pending, setPending] = useState(false);
@@ -168,7 +168,7 @@ const CheckIn = () => {
     setPending(true);
     setError("");
     try {
-      await submitSurvey(source, draft);
+      await submitSurvey(distributionId, draft);
       setComplete(true);
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Unable to submit the check-in.");
@@ -320,7 +320,7 @@ const CheckIn = () => {
 
         <footer className="flex flex-col gap-2 border-t border-black/10 pt-5 text-xs text-black/45 sm:flex-row sm:items-center sm:justify-between">
           <span>TerraSatch · Turn field information into finished work.</span>
-          <span className="font-mono uppercase tracking-[0.12em]">Source: {source}</span>
+          <span className="font-mono uppercase tracking-[0.12em]">{FORM_ID} · v{FORM_VERSION} · first-party</span>
         </footer>
       </div>
     </main>

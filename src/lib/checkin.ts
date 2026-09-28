@@ -1,3 +1,5 @@
+export const FORM_ID = "OUTFIELD-CHECKIN";
+export const FORM_VERSION = 1;
 
 export type Audience = "recreation" | "work" | "both";
 export type SurveyDraft = {
@@ -10,9 +12,9 @@ export type SurveyDraft = {
   comment: string;
 };
 
-export const normalizeSource = (value: string | null) => {
-  const normalized = (value ?? "").trim().toLowerCase();
-  return /^[a-z0-9][a-z0-9_-]{0,99}$/.test(normalized) ? normalized : "direct";
+export const normalizeDistribution = (value: string | null) => {
+  const normalized = (value ?? "").trim().toUpperCase();
+  return /^[A-Z0-9][A-Z0-9_-]{0,99}$/.test(normalized) ? normalized : "DIRECT";
 };
 
 export const spendOptionsFor = (audience: Audience | "") =>
@@ -38,13 +40,25 @@ export const spendOptionsFor = (audience: Audience | "") =>
 
 const readJson = async <T>(response: Response): Promise<T> => {
   const body = (await response.json()) as T & { error?: string; detail?: string };
-  if (!response.ok) throw new Error(body.error || body.detail || "TerraSatch could not complete that request.");
+  if (!response.ok) {
+    throw new Error(
+      body.error || body.detail || "TerraSatch could not complete that request.",
+    );
+  }
   return body;
 };
 
-export const submitSurvey = (sourceCode: string, draft: SurveyDraft) =>
+export const submitSurvey = (distributionId: string, draft: SurveyDraft) =>
   fetch("/api/check-in", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ source_code: sourceCode, ...draft }),
-  }).then((response) => readJson<{ accepted: boolean; response_id: string }>(response));
+    body: JSON.stringify({ distribution_id: distributionId, ...draft }),
+  }).then((response) =>
+    readJson<{
+      accepted: boolean;
+      response_id: string;
+      form_id: string;
+      form_version: number;
+      distribution_id: string;
+    }>(response),
+  );
