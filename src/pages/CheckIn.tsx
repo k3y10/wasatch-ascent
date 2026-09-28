@@ -217,16 +217,15 @@ const CheckIn = () => {
                     Your check-in was saved without asking for your name or email. It helps TerraSatch understand how information actually moves outside and in field operations.
                   </p>
                   <div className="mt-7 rounded-2xl bg-[#151515] p-6 text-white">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#f5a542]">One more thing</p>
-                    <h2 className="mt-2 font-display text-3xl font-bold uppercase">Want a chance at a free ski day?</h2>
-                    <p className="mt-3 text-sm leading-relaxed text-white/70">
-                      Giveaway entry is separate from this survey. Your contact information is not attached to this response.
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#f5a542]">
+                      TerraSatch field feedback
                     </p>
-                    <Button asChild className="mt-5 bg-[#f28c18] text-black hover:bg-[#ff9d2e]">
-                      <Link to="/giveaway/ski-day">
-                        View the ski-day giveaway <ArrowRight data-icon="inline-end" />
-                      </Link>
-                    </Button>
+                    <h2 className="mt-2 font-display text-3xl font-bold uppercase">
+                      Thanks for helping us understand the field.
+                    </h2>
+                    <p className="mt-3 text-sm leading-relaxed text-white/70">
+                      We use these responses in aggregate to understand tools, friction, connectivity and existing spend across outdoor and field work.
+                    </p>
                   </div>
                 </div>
                 <img
@@ -261,7 +260,7 @@ const CheckIn = () => {
                     </div>
                   </div>
                   <p className="mt-8 text-xs leading-relaxed text-white/45">
-                    Anonymous by default. Giveaway entry, if offered, is handled separately.
+                    Anonymous by default. No name or email is requested.
                   </p>
                 </aside>
 

@@ -23,10 +23,6 @@
     {
       "source": "/check-in",
       "destination": "/index.html"
-    },
-    {
-      "source": "/giveaway/ski-day",
-      "destination": "/index.html"
     }
   ],
   "redirects": [
