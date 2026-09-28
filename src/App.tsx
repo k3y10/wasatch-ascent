@@ -12,6 +12,8 @@ const API = lazy(() => import("./pages/API.tsx"));
 const DemoAccess = lazy(() => import("./pages/DemoAccess.tsx"));
 const Demos = lazy(() => import("./pages/Demos.tsx"));
 const Downloads = lazy(() => import("./pages/Downloads.tsx"));
+const CheckIn = lazy(() => import("./pages/CheckIn.tsx"));
+const SkiDayGiveaway = lazy(() => import("./pages/SkiDayGiveaway.tsx"));
 const ProtectedDemoRoute = lazy(() => import("./components/ProtectedDemoRoute.tsx"));
 
 const queryClient = new QueryClient();
@@ -40,6 +42,8 @@ const App = () => (
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/edge" element={<Downloads />} />
             <Route path="/demo-access" element={<DemoAccess />} />
+            <Route path="/check-in" element={<CheckIn />} />
+            <Route path="/giveaway/ski-day" element={<SkiDayGiveaway />} />
             <Route
               path="/demos"
               element={
