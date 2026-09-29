@@ -324,7 +324,9 @@ const StepOptions = ({
 };
 
 const resolveTurnstileSiteKey = () => {
-  const configured = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined)?.trim();
+  const configured = (
+    import.meta.env.TERRASATCH_TURNSTILE_SITE_KEY as string | undefined
+  )?.trim();
   if (configured) return configured;
   if (typeof window === "undefined") return "";
   const hostname = window.location.hostname;
