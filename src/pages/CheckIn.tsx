@@ -481,7 +481,10 @@ const CheckIn = () => {
         next.spend_band = "";
         if (value === "recreation") next.time_burden = "";
       }
-      if (currentKey === "primary_hassle") next.pain_follow_up = "";
+      if (currentKey === "primary_hassle") {
+        next.pain_follow_up = "";
+        delete next.other_details.pain_follow_up;
+      }
       return next;
     });
     setError("");
