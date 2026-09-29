@@ -49,11 +49,16 @@ const baseUrl = () => {
     (process.env.VERCEL_ENV === "production" ? PRODUCTION_API_BASE : STAGING_API_BASE)
   ).replace(/\/$/, "");
 
-  if (
-    process.env.VERCEL_ENV === "production" &&
-    new URL(candidate).hostname !== "api.terrasatch.com"
-  ) {
-    throw new Error("Production feedback upstream must be api.terrasatch.com");
+  if (process.env.VERCEL_ENV === "production") {
+    const upstream = new URL(candidate);
+    if (
+      upstream.protocol !== "https:" ||
+      upstream.hostname !== "api.terrasatch.com"
+    ) {
+      throw new Error(
+        "Production feedback upstream must use https://api.terrasatch.com",
+      );
+    }
   }
 
   return candidate;
