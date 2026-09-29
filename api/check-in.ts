@@ -44,11 +44,19 @@ const parseBody = (request: ApiRequest): Record<string, unknown> => {
 
 const baseUrl = () => {
   const configured = process.env.TERRASATCH_FEEDBACK_API_BASE_URL?.trim();
-  if (configured) return configured.replace(/\/$/, "");
+  const candidate = (
+    configured ||
+    (process.env.VERCEL_ENV === "production" ? PRODUCTION_API_BASE : STAGING_API_BASE)
+  ).replace(/\/$/, "");
 
-  return process.env.VERCEL_ENV === "production"
-    ? PRODUCTION_API_BASE
-    : STAGING_API_BASE;
+  if (
+    process.env.VERCEL_ENV === "production" &&
+    new URL(candidate).hostname !== "api.terrasatch.com"
+  ) {
+    throw new Error("Production feedback upstream must be api.terrasatch.com");
+  }
+
+  return candidate;
 };
 
 export default async function handler(request: ApiRequest, response: ApiResponse) {
