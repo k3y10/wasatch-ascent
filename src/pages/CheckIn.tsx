@@ -596,7 +596,7 @@ const CheckIn = () => {
               Quick check-in
             </p>
             <h1 className="mt-2 font-display text-3xl font-bold leading-tight sm:text-4xl">
-              Tell us how you work outside.
+              Tell us how you use tools outside.
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-black/55 sm:text-base">
               A few quick questions about the tools you use, what gets in the way, and what would help.
