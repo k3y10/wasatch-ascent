@@ -731,7 +731,7 @@ const CheckIn = () => {
                               </DialogHeader>
                               <div className="space-y-3 text-sm leading-relaxed text-black/65">
                                 <p>
-                                  Prize: one single-day lift ticket to either Brighton Resort or Snowbird during the 2026–27 winter season. The resort is not the winner&apos;s choice.
+                                  Prize: one single-day lift ticket to either Brighton Resort or Snowbird during the 2026–27 winter season, subject to availability and resort terms. The resort is not the winner&apos;s choice.
                                 </p>
                                 <p>One eligible entrant will be selected at random. No purchase is necessary.</p>
                                 <p>
