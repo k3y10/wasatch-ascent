@@ -548,7 +548,7 @@ const CheckIn = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-[#171717]">
+    <main className="h-[100dvh] overflow-hidden bg-[#f7f4ee] text-[#171717]">
       <div
         className="pointer-events-none fixed inset-0 opacity-70"
         aria-hidden="true"
@@ -558,8 +558,8 @@ const CheckIn = () => {
         }}
       />
 
-      <div className="relative mx-auto min-h-screen w-full max-w-4xl px-5 py-6 sm:px-8 sm:py-8">
-        <header className="flex items-center justify-between gap-4 border-b border-black/10 pb-5">
+      <div className="relative mx-auto flex h-full w-full max-w-4xl flex-col px-5 sm:px-8">
+        <header className="z-20 flex shrink-0 items-center justify-between gap-4 border-b border-black/10 bg-[#f7f4ee]/95 py-5 backdrop-blur sm:py-6">
           <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="TerraSatch home">
             <img
               src="/terrasatch-logo.png"
@@ -582,7 +582,7 @@ const CheckIn = () => {
           </span>
         </header>
 
-        <div className="py-8 sm:py-10">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-5 pr-1 sm:py-7">
           <div className="mb-5 max-w-2xl">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#cf6900]">
               Quick check-in
@@ -804,11 +804,12 @@ const CheckIn = () => {
             )}
           </section>
 
-          <div className="mt-5 flex flex-col gap-2 text-xs text-black/45 sm:flex-row sm:items-center sm:justify-between">
-            <span>No account required · contact info optional</span>
-            <span>TerraSatch · Turn field information into finished work.</span>
-          </div>
         </div>
+
+        <footer className="z-20 flex shrink-0 flex-col gap-1.5 border-t border-black/10 bg-[#f7f4ee]/95 py-3 text-[11px] text-black/45 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:py-4 sm:text-xs">
+          <span>No account required · contact info optional</span>
+          <span>TerraSatch · Turn field information into finished work.</span>
+        </footer>
       </div>
     </main>
   );
