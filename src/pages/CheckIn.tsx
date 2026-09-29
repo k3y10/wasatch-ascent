@@ -1,9 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Gift, ShieldCheck } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   activityOptionsFor,
   buildQuestionPlan,
@@ -693,6 +701,50 @@ const CheckIn = () => {
                             : "For example: radio notes, team updates, maps, reports…"
                         }
                       />
+                    </div>
+
+                    <div className="rounded-2xl border border-[#ef8611]/25 bg-[#fff8ee] p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#fff0dc] text-[#cf6900]">
+                          <Gift className="size-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold">Ski pass giveaway</p>
+                          <p className="mt-1 text-xs leading-relaxed text-black/55">
+                            We&apos;re putting together a ski-pass giveaway. To be considered, you&apos;ll need to leave a valid email or phone number so we can contact you.
+                          </p>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <button
+                                type="button"
+                                className="mt-2 text-xs font-semibold text-[#b85e00] underline underline-offset-4"
+                              >
+                                Official Rules
+                              </button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-md border-black/10 bg-white text-black">
+                              <DialogHeader>
+                                <DialogTitle>Ski pass giveaway</DialogTitle>
+                                <DialogDescription>
+                                  Simple rules for entering the TerraSatch giveaway.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-3 text-sm leading-relaxed text-black/65">
+                                <p>No purchase is necessary to enter.</p>
+                                <p>
+                                  A valid email address or phone number is required so TerraSatch can contact the winner.
+                                </p>
+                                <p>
+                                  Prize details, eligibility, entry dates, and winner-selection details will be posted here before the giveaway opens.
+                                </p>
+                                <p>
+                                  Entries that do not meet the posted eligibility requirements will not be considered.
+                                </p>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="rounded-2xl border border-black/10 bg-[#faf8f3] p-4">
