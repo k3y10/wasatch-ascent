@@ -1,20 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  Mountain,
-  Radio,
-  ShieldCheck,
-  Signal,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   activityOptionsFor,
   buildQuestionPlan,
-  FORM_VERSION,
   newSurveyDraft,
   normalizeDistribution,
   spendOptionsFor,
@@ -63,7 +55,7 @@ const optionSets = {
     ["losing_service", "Losing cell service"],
     ["locations", "Keeping track of locations"],
     ["recording", "Recording what happened"],
-    ["updating_others", "Keeping other people updated"],
+    ["updating_others", "Keeping people updated"],
     ["switching_apps", "Switching between tools"],
     ["finding_later", "Finding information later"],
     ["nothing_major", "Nothing major"],
@@ -86,11 +78,11 @@ const optionSets = {
 } as const;
 
 const radioFollowUp = [
-  ["radio_only", "It mostly stays on the radio"],
+  ["radio_only", "It stays on the radio"],
   ["written_down", "Someone writes it down"],
   ["manual_entry", "Someone enters it into a system"],
-  ["recorded_system", "It is already captured / recorded"],
-  ["mixed", "A mix of those"],
+  ["recorded_system", "It is already recorded"],
+  ["mixed", "A mix"],
   ["not_sure", "Not sure"],
 ] as const;
 
@@ -99,21 +91,21 @@ const satelliteFollowUp = [
   ["tracking", "Location tracking"],
   ["sos", "SOS / emergency"],
   ["weather", "Weather"],
-  ["mixed", "A mix of these"],
+  ["mixed", "A mix"],
   ["other", "Something else"],
 ] as const;
 
 const painOptions = {
   losing_service: [
-    ["communicate", "Communicating"],
-    ["navigate", "Navigating / maps"],
+    ["communicate", "Communication"],
+    ["navigate", "Maps / navigation"],
     ["capture", "Recording information"],
-    ["sync", "Syncing or sharing data"],
+    ["sync", "Syncing or sharing"],
     ["coordinate", "Coordinating people"],
     ["other", "Something else"],
   ],
   locations: [
-    ["own_position", "My own position / route"],
+    ["own_position", "My position / route"],
     ["team_positions", "Other people's positions"],
     ["incidents", "Incidents / hazards"],
     ["observations", "Observations / photos"],
@@ -125,8 +117,8 @@ const painOptions = {
     ["paper", "Paper / field notebook"],
     ["photos", "Photos"],
     ["radio_only", "Mostly stays in conversation / radio"],
-    ["multiple_places", "Several different places"],
-    ["nowhere_consistent", "There is no consistent place"],
+    ["multiple_places", "Several places"],
+    ["nowhere_consistent", "No consistent place"],
   ],
   updating_others: [
     ["radio", "Radio"],
@@ -134,7 +126,7 @@ const painOptions = {
     ["group_app", "Group or team app"],
     ["call", "Phone call"],
     ["in_person", "In-person briefing"],
-    ["mixed", "A mix of these"],
+    ["mixed", "A mix"],
   ],
   switching_apps: [
     ["two", "2 tools"],
@@ -162,7 +154,7 @@ type Option = readonly [string, string];
 
 type Question = {
   key: QuestionId;
-  eyebrow: string;
+  label: string;
   title: string;
   detail: string;
   options: readonly Option[];
@@ -173,20 +165,20 @@ const painQuestion = (draft: SurveyDraft): Question => {
   const key = draft.primary_hassle as keyof typeof painOptions;
   const options = painOptions[key] ?? painOptions.other;
   const titles: Partial<Record<keyof typeof painOptions, string>> = {
-    losing_service: "When coverage drops, what becomes hardest?",
+    losing_service: "What gets harder when you lose service?",
     locations: "What is hardest to keep track of?",
-    recording: "Where do useful observations usually end up?",
-    updating_others: "How are updates usually passed along?",
-    switching_apps: "How many tools do you typically move between?",
-    finding_later: "How easy is it to find that information again later?",
-    other: "Which part is closest to the problem?",
+    recording: "Where do you save notes or observations?",
+    updating_others: "How do you update other people?",
+    switching_apps: "How many tools do you switch between?",
+    finding_later: "How easy is it to find that info later?",
+    other: "What is the main issue?",
   };
 
   return {
     key: "pain_follow_up",
-    eyebrow: "One level deeper",
-    title: titles[key] ?? titles.other ?? "What creates the friction?",
-    detail: "This helps us understand the workflow behind the answer you just gave.",
+    label: "Follow-up",
+    title: titles[key] ?? titles.other ?? "What is the main issue?",
+    detail: "Pick the closest answer.",
     options,
   };
 };
@@ -196,63 +188,58 @@ const questionFor = (key: QuestionId, draft: SurveyDraft): Question => {
     case "audience":
       return {
         key,
-        eyebrow: "Start here",
-        title: "What brings you outside most?",
-        detail: "We'll use this to ask only the questions that fit what you actually do.",
+        label: "About you",
+        title: "What do you mostly do outside?",
+        detail: "Pick the best fit.",
         options: optionSets.audience,
       };
     case "activity_context":
       return {
         key,
-        eyebrow: "Your context",
-        title:
-          draft.audience === "work"
-            ? "What kind of field work best matches you?"
-            : draft.audience === "both"
-              ? "Which setting best represents the mix you do?"
-              : "What kind of time outside are you thinking about most?",
-        detail: "Pick the closest match. It does not have to describe everything you do.",
+        label: "Outside",
+        title: "What kind of outdoor activity or field work do you do most?",
+        detail: "Pick the closest match.",
         options: activityOptionsFor(draft.audience),
       };
     case "tools":
       return {
         key,
-        eyebrow: "Your setup",
-        title: "Which tools do you regularly rely on?",
-        detail: "Choose all that apply. We'll only follow up on the ones that matter.",
+        label: "Tools",
+        title: "What tools do you use?",
+        detail: "Pick all that apply.",
         options: optionSets.tools,
         multi: true,
       };
     case "connectivity":
       return {
         key,
-        eyebrow: "Connectivity",
-        title: "How often are you somewhere with weak or no cell service?",
-        detail: "Think about a normal season or work cycle, not just your most remote day.",
+        label: "Cell service",
+        title: "How often do you have weak or no cell service?",
+        detail: "Think about a normal outing, season, or work shift.",
         options: optionSets.connectivity,
       };
     case "primary_hassle":
       return {
         key,
-        eyebrow: "The friction",
-        title: "What creates the most hassle for you?",
-        detail: "Choose the one problem that costs the most time, attention, or effort.",
+        label: "Biggest hassle",
+        title: "What gets in the way most?",
+        detail: "Pick one.",
         options: optionSets.primary_hassle,
       };
     case "tool_follow_up":
       return toolFollowUpKind(draft) === "radio"
         ? {
             key,
-            eyebrow: "Radio workflow",
-            title: "After useful information is said over the radio, what usually happens to it?",
-            detail: "We're trying to understand what happens after the transmission.",
+            label: "Radio",
+            title: "What happens to useful info from the radio?",
+            detail: "Pick what usually happens.",
             options: radioFollowUp,
           }
         : {
             key,
-            eyebrow: "Satellite workflow",
-            title: "What do you mainly use your satellite device for?",
-            detail: "Choose the closest match.",
+            label: "Satellite",
+            title: "What do you use your satellite device for?",
+            detail: "Pick the closest answer.",
             options: satelliteFollowUp,
           };
     case "pain_follow_up":
@@ -260,30 +247,29 @@ const questionFor = (key: QuestionId, draft: SurveyDraft): Question => {
     case "time_burden":
       return {
         key,
-        eyebrow: "Current workload",
-        title:
-          "On a typical field day or shift, how much time goes into organizing, transferring, documenting, or reporting field information?",
-        detail: "Estimate the current workload, not what you hope it could become.",
+        label: "Time",
+        title: "How much time do you spend organizing or reporting field info?",
+        detail: "Think about a typical field day or shift.",
         options: optionSets.time_burden,
       };
     case "spend_band":
       return {
         key,
-        eyebrow: "What you already use",
+        label: "Cost",
         title:
           draft.audience === "recreation"
-            ? "About how much do you spend each year on outdoor apps, navigation, communication, or similar tools?"
-            : "About how much does your team spend each year on communication, mapping, reporting, or field tools?",
-        detail: "We're measuring today's cost — not asking what you would pay for TerraSatch.",
+            ? "About how much do you spend on these tools each year?"
+            : "About how much does your team spend on these tools each year?",
+        detail: "A rough estimate is fine.",
         options: spendOptionsFor(draft.audience),
       };
     case "concept_interest":
       return {
         key,
-        eyebrow: "Last one",
-        title: "Would this be useful in the way you work outside?",
+        label: "TerraSatch",
+        title: "Would this be useful to you?",
         detail:
-          "Imagine your communications, locations, photos, and observations automatically becoming organized notes, maps, timelines, and reports.",
+          "TerraSatch can turn field communications, locations, photos, and observations into notes, maps, timelines, and reports.",
         options: optionSets.concept_interest,
       };
   }
@@ -474,6 +460,24 @@ const CheckIn = () => {
     setStep((value) => Math.max(0, value - 1));
   };
 
+  const contactIsValid = () => {
+    const email = draft.contact_email.trim();
+    const phone = draft.contact_phone.trim();
+
+    if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      setError("Enter a valid email address or leave it blank.");
+      return false;
+    }
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phone && (phoneDigits.length < 7 || phoneDigits.length > 15)) {
+      setError("Enter a valid phone number or leave it blank.");
+      return false;
+    }
+
+    return true;
+  };
+
   const next = async () => {
     if (!answered) {
       setError(current.multi ? "Choose at least one option to continue." : "Choose one option to continue.");
@@ -485,8 +489,10 @@ const CheckIn = () => {
       return;
     }
 
+    if (!contactIsValid()) return;
+
     if (!turnstileToken) {
-      setError("Complete the human verification before submitting.");
+      setError("Complete the human check before submitting.");
       return;
     }
 
@@ -511,15 +517,6 @@ const CheckIn = () => {
     }
   };
 
-  const segmentLabel =
-    draft.audience === "work"
-      ? "Field operations"
-      : draft.audience === "both"
-        ? "Recreation + field work"
-        : draft.audience === "recreation"
-          ? "Outdoor recreation"
-          : "Adaptive check-in";
-
   return (
     <main className="min-h-screen bg-[#f7f4ee] text-[#171717]">
       <div
@@ -533,32 +530,38 @@ const CheckIn = () => {
 
       <div className="relative mx-auto min-h-screen w-full max-w-4xl px-5 py-6 sm:px-8 sm:py-8">
         <header className="flex items-center justify-between gap-4 border-b border-black/10 pb-5">
-          <Link to="/" className="group flex items-center gap-3" aria-label="TerraSatch home">
-            <span className="h-9 w-1 rounded-full bg-[#ef8611] transition group-hover:h-11" aria-hidden="true" />
-            <div>
-              <p className="font-display text-xl font-bold tracking-[0.11em] sm:text-2xl">
+          <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="TerraSatch home">
+            <img
+              src="/terrasatch-logo.png"
+              alt=""
+              className="size-10 rounded-lg"
+              width={1254}
+              height={1254}
+            />
+            <div className="min-w-0 leading-none">
+              <span className="block whitespace-nowrap font-display text-xl font-bold tracking-wide">
                 TERRASATCH
-              </p>
-              <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-black/50 sm:text-[9px]">
+              </span>
+              <span className="mt-1 block whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.2em] text-black/45 sm:text-[9px]">
                 Listen · Watch · Learn · Adapt
-              </p>
+              </span>
             </div>
           </Link>
           <span className="rounded-full border border-[#ef8611]/35 bg-white/75 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.15em] text-black/55 sm:text-[10px]">
-            About 60 seconds
+            About 1 minute
           </span>
         </header>
 
-        <div className="py-9 sm:py-14">
+        <div className="py-8 sm:py-10">
           <div className="mb-5 max-w-2xl">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#cf6900]">
-              Outdoor & field customer discovery
+              Quick check-in
             </p>
             <h1 className="mt-2 font-display text-3xl font-bold leading-tight sm:text-4xl">
-              A few questions that adapt to what you actually do outside.
+              Tell us how you work outside.
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-black/55 sm:text-base">
-              No account, name, or email. We ask different follow-ups based on your answers so the questions stay relevant.
+              A few quick questions about the tools you use, what gets in the way, and what would help.
             </p>
           </div>
 
@@ -566,161 +569,190 @@ const CheckIn = () => {
             <div className="h-1.5 bg-[#ef8611]" />
 
             {complete ? (
-              <div className="p-7 sm:p-11">
+              <div className="p-7 sm:p-10">
                 <div className="flex size-12 items-center justify-center rounded-full bg-[#fff0dc] text-[#dc7200]">
                   <CheckCircle2 className="size-6" />
                 </div>
                 <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-[#cf6900]">
-                  Complete
+                  Done
                 </p>
                 <h2 className="mt-2 max-w-xl font-display text-4xl font-bold leading-tight sm:text-5xl">
-                  Thanks — that's exactly the kind of feedback we need.
+                  Thanks — we got it.
                 </h2>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/60">
-                  Your response was saved anonymously. We use these answers in aggregate to understand real outdoor and field workflows, current friction, connectivity, time, and existing tool costs.
+                  Your response was saved. If you left an email or phone number, we may follow up about TerraSatch.
                 </p>
                 <Button asChild className="mt-7 bg-[#171717] text-white hover:bg-black">
                   <Link to="/">Back to TerraSatch</Link>
                 </Button>
               </div>
             ) : (
-              <>
-                <div className="flex flex-wrap items-center justify-between gap-3 bg-[#171717] px-5 py-4 text-white sm:px-7">
-                  <div className="flex items-center gap-2.5">
-                    {safeStep < 2 ? (
-                      <Mountain className="size-4 text-[#f5a542]" />
-                    ) : safeStep < 5 ? (
-                      <Radio className="size-4 text-[#f5a542]" />
-                    ) : (
-                      <Signal className="size-4 text-[#f5a542]" />
-                    )}
-                    <div>
-                      <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/45">
-                        {segmentLabel}
-                      </p>
-                      <p className="text-xs font-semibold text-white/85">
-                        Question {safeStep + 1} of {plan.length}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-white/45">
-                    {progress}% complete
+              <div className="p-6 sm:p-8 lg:p-10">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-xs font-semibold text-black/55">
+                    Question {safeStep + 1} of {plan.length}
+                  </p>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-black/35">
+                    {progress}%
                   </span>
                 </div>
-
-                <div className="h-1 bg-black/5">
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/5">
                   <div
-                    className="h-full bg-[#ef8611] transition-all duration-300"
+                    className="h-full rounded-full bg-[#ef8611] transition-all duration-300"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
 
-                <div className="p-6 sm:p-8 lg:p-10">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#cf6900]">
-                    {current.eyebrow}
-                  </p>
-                  <h2 className="mt-3 max-w-2xl font-display text-3xl font-bold leading-[1.04] sm:text-4xl">
-                    {current.title}
-                  </h2>
-                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/55">
-                    {current.detail}
-                  </p>
+                <p className="mt-7 font-mono text-[10px] uppercase tracking-[0.2em] text-[#cf6900]">
+                  {current.label}
+                </p>
+                <h2 className="mt-3 max-w-2xl font-display text-3xl font-bold leading-[1.08] sm:text-4xl">
+                  {current.title}
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/55">
+                  {current.detail}
+                </p>
 
-                  <div className="mt-7">
-                    <StepOptions
-                      options={current.options}
-                      value={currentValue}
-                      multi={current.multi}
-                      onChange={setCurrent}
-                    />
-                  </div>
+                <div className="mt-7">
+                  <StepOptions
+                    options={current.options}
+                    value={currentValue}
+                    multi={current.multi}
+                    onChange={setCurrent}
+                  />
+                </div>
 
-                  {currentKey === "concept_interest" ? (
-                    <div className="mt-7 space-y-5 border-t border-black/10 pt-6">
-                      <div>
-                        <label htmlFor="feedback-comment" className="text-sm font-semibold text-black/75">
-                          Anything you wish your outdoor or field tools did better?{" "}
-                          <span className="font-normal text-black/40">Optional</span>
-                        </label>
-                        <Textarea
-                          id="feedback-comment"
-                          value={draft.comment}
-                          onChange={(event) =>
-                            setDraft((previous) => ({
-                              ...previous,
-                              comment: event.target.value.slice(0, 1000),
-                            }))
-                          }
-                          className="mt-2 min-h-24 border-black/15 bg-[#fbfaf7] text-black"
-                          placeholder="A sentence is plenty."
-                        />
-                      </div>
+                {currentKey === "concept_interest" ? (
+                  <div className="mt-7 space-y-6 border-t border-black/10 pt-6">
+                    <div>
+                      <label htmlFor="feedback-comment" className="text-sm font-semibold text-black/75">
+                        Anything else? <span className="font-normal text-black/40">Optional</span>
+                      </label>
+                      <Textarea
+                        id="feedback-comment"
+                        value={draft.comment}
+                        onChange={(event) =>
+                          setDraft((previous) => ({
+                            ...previous,
+                            comment: event.target.value.slice(0, 1000),
+                          }))
+                        }
+                        className="mt-2 min-h-24 border-black/15 bg-[#fbfaf7] text-black"
+                        placeholder="What do you wish your tools did better?"
+                      />
+                    </div>
 
-                      <div className="relative h-0 overflow-hidden" aria-hidden="true">
-                        <label htmlFor="feedback-website">Website</label>
-                        <input
-                          id="feedback-website"
-                          name="website"
-                          type="text"
-                          tabIndex={-1}
-                          autoComplete="off"
-                          value={website}
-                          onChange={(event) => setWebsite(event.target.value)}
-                        />
-                      </div>
-
-                      <div className="rounded-2xl border border-black/10 bg-[#faf8f3] p-4">
-                        <div className="mb-3 flex items-start gap-3">
-                          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#cf6900]" />
-                          <div>
-                            <p className="text-sm font-semibold">Spam protection</p>
-                            <p className="mt-1 text-xs leading-relaxed text-black/50">
-                              Human verification protects the discovery data without asking for personal information.
-                            </p>
-                          </div>
+                    <div className="rounded-2xl border border-black/10 bg-[#faf8f3] p-4">
+                      <p className="text-sm font-semibold">Want us to follow up?</p>
+                      <p className="mt-1 text-xs leading-relaxed text-black/50">
+                        Leave an email or phone number. Both are optional.
+                      </p>
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                        <div>
+                          <label htmlFor="feedback-email" className="text-xs font-semibold text-black/60">
+                            Email
+                          </label>
+                          <Input
+                            id="feedback-email"
+                            type="email"
+                            autoComplete="email"
+                            value={draft.contact_email}
+                            onChange={(event) =>
+                              setDraft((previous) => ({
+                                ...previous,
+                                contact_email: event.target.value.slice(0, 254),
+                              }))
+                            }
+                            className="mt-1.5 border-black/15 bg-white text-black"
+                            placeholder="you@example.com"
+                          />
                         </div>
-                        <Turnstile onToken={setTurnstileToken} resetSignal={turnstileReset} />
+                        <div>
+                          <label htmlFor="feedback-phone" className="text-xs font-semibold text-black/60">
+                            Phone
+                          </label>
+                          <Input
+                            id="feedback-phone"
+                            type="tel"
+                            autoComplete="tel"
+                            value={draft.contact_phone}
+                            onChange={(event) =>
+                              setDraft((previous) => ({
+                                ...previous,
+                                contact_phone: event.target.value.slice(0, 32),
+                              }))
+                            }
+                            className="mt-1.5 border-black/15 bg-white text-black"
+                            placeholder="(555) 555-5555"
+                          />
+                        </div>
                       </div>
                     </div>
-                  ) : null}
 
-                  {error ? (
-                    <p className="mt-5 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
-                      {error}
-                    </p>
-                  ) : null}
+                    <div className="relative h-0 overflow-hidden" aria-hidden="true">
+                      <label htmlFor="feedback-website">Website</label>
+                      <input
+                        id="feedback-website"
+                        name="website"
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={website}
+                        onChange={(event) => setWebsite(event.target.value)}
+                      />
+                    </div>
 
-                  <div className="mt-8 flex items-center justify-between gap-3 border-t border-black/10 pt-5">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={back}
-                      disabled={safeStep === 0 || pending}
-                      className="text-black/55"
-                    >
-                      <ArrowLeft data-icon="inline-start" /> Back
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={next}
-                      disabled={pending}
-                      className="bg-[#ef8611] text-black hover:bg-[#ff9b2b]"
-                    >
-                      {currentKey === "concept_interest"
-                        ? pending
-                          ? "Submitting…"
-                          : "Submit check-in"
-                        : "Continue"}
-                      {!pending ? <ArrowRight data-icon="inline-end" /> : null}
-                    </Button>
+                    <div className="rounded-2xl border border-black/10 bg-[#faf8f3] p-4">
+                      <div className="mb-3 flex items-start gap-3">
+                        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#cf6900]" />
+                        <div>
+                          <p className="text-sm font-semibold">Human check</p>
+                          <p className="mt-1 text-xs leading-relaxed text-black/50">
+                            Helps keep spam out.
+                          </p>
+                        </div>
+                      </div>
+                      <Turnstile onToken={setTurnstileToken} resetSignal={turnstileReset} />
+                    </div>
                   </div>
+                ) : null}
+
+                {error ? (
+                  <p className="mt-5 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+                    {error}
+                  </p>
+                ) : null}
+
+                <div className="mt-8 flex items-center justify-between gap-3 border-t border-black/10 pt-5">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={back}
+                    disabled={safeStep === 0 || pending}
+                    className="text-black/55"
+                  >
+                    <ArrowLeft data-icon="inline-start" /> Back
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={next}
+                    disabled={pending}
+                    className="bg-[#ef8611] text-black hover:bg-[#ff9b2b]"
+                  >
+                    {currentKey === "concept_interest"
+                      ? pending
+                        ? "Submitting…"
+                        : "Submit"
+                      : "Continue"}
+                    {!pending ? <ArrowRight data-icon="inline-end" /> : null}
+                  </Button>
                 </div>
-              </>
+              </div>
             )}
           </section>
 
           <div className="mt-5 flex flex-col gap-2 text-xs text-black/45 sm:flex-row sm:items-center sm:justify-between">
-            <span>Anonymous by default · no account required</span>
+            <span>No account required · contact info optional</span>
             <span>TerraSatch · Turn field information into finished work.</span>
           </div>
         </div>
