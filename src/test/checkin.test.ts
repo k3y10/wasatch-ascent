@@ -11,7 +11,13 @@ import {
 describe("native adaptive check-in helpers", () => {
   it("uses one stable generic form with an explicit adaptive version", () => {
     expect(FORM_ID).toBe("OUTFIELD-CHECKIN");
-    expect(FORM_VERSION).toBe(2);
+    expect(FORM_VERSION).toBe(3);
+  });
+
+  it("starts contact fields empty so they remain optional", () => {
+    const draft = newSurveyDraft();
+    expect(draft.contact_email).toBe("");
+    expect(draft.contact_phone).toBe("");
   });
 
   it("keeps safe first-party distribution IDs and rejects arbitrary values", () => {
