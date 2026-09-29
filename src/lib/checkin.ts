@@ -1,5 +1,5 @@
 export const FORM_ID = "OUTFIELD-CHECKIN";
-export const FORM_VERSION = 2;
+export const FORM_VERSION = 3;
 
 export type Audience = "recreation" | "work" | "both";
 export type QuestionId =
@@ -25,6 +25,8 @@ export type SurveyDraft = {
   time_burden: string;
   spend_band: string;
   concept_interest: string;
+  contact_email: string;
+  contact_phone: string;
   comment: string;
   started_at: string;
 };
@@ -40,6 +42,8 @@ export const newSurveyDraft = (): SurveyDraft => ({
   time_burden: "",
   spend_band: "",
   concept_interest: "",
+  contact_email: "",
+  contact_phone: "",
   comment: "",
   started_at: new Date().toISOString(),
 });
@@ -187,6 +191,8 @@ export const submitSurvey = (
       time_burden: draft.time_burden || null,
       spend_band: draft.spend_band,
       concept_interest: draft.concept_interest,
+      contact_email: draft.contact_email || null,
+      contact_phone: draft.contact_phone || null,
       questions_shown: buildQuestionPlan(draft),
       started_at: draft.started_at,
       completion_seconds: completionSeconds,
