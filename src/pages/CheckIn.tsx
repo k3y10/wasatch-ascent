@@ -267,9 +267,9 @@ const questionFor = (key: QuestionId, draft: SurveyDraft): Question => {
       return {
         key,
         label: "TerraSatch",
-        title: "Would this be useful to you?",
+        title: "Would TerraSatch help with any of this?",
         detail:
-          "TerraSatch can turn field communications, locations, photos, and observations into notes, maps, timelines, and reports.",
+          "It can turn field updates from radios, apps, photos, and locations into organized notes, maps, timelines, and reports.",
         options: optionSets.concept_interest,
       };
   }
@@ -320,11 +320,8 @@ const resolveTurnstileSiteKey = () => {
   if (configured) return configured;
   if (typeof window === "undefined") return "";
   const hostname = window.location.hostname;
-  const preview =
-    hostname === "localhost" ||
-    hostname === "127.0.0.1" ||
-    hostname.endsWith(".vercel.app");
-  return preview ? TURNSTILE_TEST_SITE_KEY : "";
+  const local = hostname === "localhost" || hostname === "127.0.0.1";
+  return local ? TURNSTILE_TEST_SITE_KEY : "";
 };
 
 const Turnstile = ({
@@ -373,7 +370,7 @@ const Turnstile = ({
         sitekey: siteKey,
         theme: "light",
         size: "flexible",
-        appearance: "interaction-only",
+        appearance: "always",
         callback: (token: string) => onToken(token),
         "expired-callback": () => onToken(""),
         "error-callback": () => onToken(""),
@@ -389,7 +386,7 @@ const Turnstile = ({
   if (!siteKey) {
     return (
       <p className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900">
-        Human verification is not configured for this environment yet.
+        Human verification is not configured on this preview yet.
       </p>
     );
   }
@@ -436,14 +433,23 @@ const CheckIn = () => {
           ? previous.tools.filter((item) => item !== value)
           : [...previous.tools, value];
         const needsToolFollowUp = tools.includes("radio") || tools.includes("satellite");
+        const otherDetails = { ...previous.other_details };
+        if (!tools.includes("other")) delete otherDetails.tools;
         return {
           ...previous,
           tools,
+          other_details: otherDetails,
           tool_follow_up: needsToolFollowUp ? previous.tool_follow_up : "",
         };
       }
 
-      const next = { ...previous, [currentKey]: value } as SurveyDraft;
+      const otherDetails = { ...previous.other_details };
+      if (value !== "other") delete otherDetails[currentKey];
+      const next = {
+        ...previous,
+        [currentKey]: value,
+        other_details: otherDetails,
+      } as SurveyDraft;
       if (currentKey === "audience") {
         next.activity_context = "";
         next.spend_band = "";
@@ -452,6 +458,22 @@ const CheckIn = () => {
       if (currentKey === "primary_hassle") next.pain_follow_up = "";
       return next;
     });
+    setError("");
+  };
+
+  const otherSelected =
+    Array.isArray(currentValue)
+      ? currentValue.includes("other")
+      : currentValue === "other";
+
+  const setOtherDetail = (value: string) => {
+    setDraft((previous) => ({
+      ...previous,
+      other_details: {
+        ...previous.other_details,
+        [currentKey]: value.slice(0, 200),
+      },
+    }));
     setError("");
   };
 
@@ -481,6 +503,11 @@ const CheckIn = () => {
   const next = async () => {
     if (!answered) {
       setError(current.multi ? "Choose at least one option to continue." : "Choose one option to continue.");
+      return;
+    }
+
+    if (otherSelected && !draft.other_details[currentKey]?.trim()) {
+      setError("Tell us what you mean by Other.");
       return;
     }
 
@@ -622,11 +649,28 @@ const CheckIn = () => {
                   />
                 </div>
 
+                {otherSelected ? (
+                  <div className="mt-4">
+                    <label htmlFor="feedback-other" className="text-sm font-semibold text-black/70">
+                      What is it?
+                    </label>
+                    <Input
+                      id="feedback-other"
+                      value={draft.other_details[currentKey] ?? ""}
+                      onChange={(event) => setOtherDetail(event.target.value)}
+                      className="mt-2 border-black/15 bg-[#fbfaf7] text-black"
+                      placeholder="Type your answer"
+                      autoFocus
+                    />
+                  </div>
+                ) : null}
+
                 {currentKey === "concept_interest" ? (
                   <div className="mt-7 space-y-6 border-t border-black/10 pt-6">
                     <div>
                       <label htmlFor="feedback-comment" className="text-sm font-semibold text-black/75">
-                        Anything else? <span className="font-normal text-black/40">Optional</span>
+                        What would you want TerraSatch to help with first?{" "}
+                        <span className="font-normal text-black/40">Optional</span>
                       </label>
                       <Textarea
                         id="feedback-comment"
@@ -638,14 +682,14 @@ const CheckIn = () => {
                           }))
                         }
                         className="mt-2 min-h-24 border-black/15 bg-[#fbfaf7] text-black"
-                        placeholder="What do you wish your tools did better?"
+                        placeholder="For example: radio notes, team updates, maps, reports…"
                       />
                     </div>
 
                     <div className="rounded-2xl border border-black/10 bg-[#faf8f3] p-4">
-                      <p className="text-sm font-semibold">Want us to follow up?</p>
+                      <p className="text-sm font-semibold">Want to hear from us?</p>
                       <p className="mt-1 text-xs leading-relaxed text-black/50">
-                        Leave an email or phone number. Both are optional.
+                        Leave an email or phone number and we can follow up. Optional.
                       </p>
                       <div className="mt-4 grid gap-3 sm:grid-cols-2">
                         <div>
