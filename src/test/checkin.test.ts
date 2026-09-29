@@ -18,6 +18,7 @@ describe("native adaptive check-in helpers", () => {
     const draft = newSurveyDraft();
     expect(draft.contact_email).toBe("");
     expect(draft.contact_phone).toBe("");
+    expect(draft.other_details).toEqual({});
   });
 
   it("keeps safe first-party distribution IDs and rejects arbitrary values", () => {
