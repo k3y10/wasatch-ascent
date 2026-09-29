@@ -1,7 +1,7 @@
 const MAX_BODY_LENGTH = 24000;
 const DEFAULT_API_BASE = "https://staging-api.terrasatch.com";
 const FORM_ID = "OUTFIELD-CHECKIN";
-const FORM_VERSION = 2;
+const FORM_VERSION = 3;
 
 type ApiRequest = {
   method?: string;
