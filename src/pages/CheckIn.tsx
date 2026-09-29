@@ -711,7 +711,7 @@ const CheckIn = () => {
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-semibold">Ski pass giveaway</p>
                           <p className="mt-1 text-xs leading-relaxed text-black/55">
-                            We&apos;re getting ready to give away a ski pass. Leave a valid email or phone number if you want to be considered once the giveaway opens.
+                            One person will receive a single-day lift ticket to Brighton Resort or Snowbird for the 2026–27 winter season. Entry dates are coming soon.
                           </p>
                           <Dialog>
                             <DialogTrigger asChild>
@@ -726,16 +726,22 @@ const CheckIn = () => {
                               <DialogHeader>
                                 <DialogTitle>Ski pass giveaway</DialogTitle>
                                 <DialogDescription>
-                                  The giveaway is not open until the entry dates and prize details are posted here.
+                                  The giveaway is not open until the remaining eligibility and entry dates are posted here.
                                 </DialogDescription>
                               </DialogHeader>
                               <div className="space-y-3 text-sm leading-relaxed text-black/65">
-                                <p>No purchase is necessary to enter.</p>
+                                <p>
+                                  Prize: one single-day lift ticket to either Brighton Resort or Snowbird during the 2026–27 winter season. The resort is not the winner&apos;s choice.
+                                </p>
+                                <p>One eligible entrant will be selected at random. No purchase is necessary.</p>
                                 <p>
                                   A valid email address or phone number will be required so TerraSatch can contact the winner.
                                 </p>
                                 <p>
-                                  Prize details, eligibility, entry dates, and winner-selection details will be added before entries are accepted.
+                                  Eligibility, entry dates, and the winner-selection date will be added before entries are accepted.
+                                </p>
+                                <p className="text-xs text-black/45">
+                                  TerraSatch Inc. is the sponsor. Brighton Resort and Snowbird are not sponsors, administrators, or affiliated with this giveaway.
                                 </p>
                               </div>
                             </DialogContent>
