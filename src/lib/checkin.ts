@@ -27,6 +27,7 @@ export type SurveyDraft = {
   concept_interest: string;
   contact_email: string;
   contact_phone: string;
+  other_details: Record<string, string>;
   comment: string;
   started_at: string;
 };
@@ -44,6 +45,7 @@ export const newSurveyDraft = (): SurveyDraft => ({
   concept_interest: "",
   contact_email: "",
   contact_phone: "",
+  other_details: {},
   comment: "",
   started_at: new Date().toISOString(),
 });
@@ -193,6 +195,7 @@ export const submitSurvey = (
       concept_interest: draft.concept_interest,
       contact_email: draft.contact_email || null,
       contact_phone: draft.contact_phone || null,
+      other_details: draft.other_details,
       questions_shown: buildQuestionPlan(draft),
       started_at: draft.started_at,
       completion_seconds: completionSeconds,
