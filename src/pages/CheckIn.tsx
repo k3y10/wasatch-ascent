@@ -267,9 +267,9 @@ const questionFor = (key: QuestionId, draft: SurveyDraft): Question => {
       return {
         key,
         label: "Last question",
-        title: "Would TerraSatch help with any of this?",
+        title: "Would TerraSatch make this easier for you?",
         detail:
-          "It can turn field updates from radios, apps, photos, and locations into organized notes, maps, timelines, and reports.",
+          "TerraSatch is a field intelligence platform. It brings together updates from radios and other field tools with locations, photos, and observations, then turns them into organized notes, maps, timelines, and reports.",
         options: optionSets.concept_interest,
       };
   }
