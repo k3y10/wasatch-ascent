@@ -371,6 +371,7 @@ const Turnstile = ({
         theme: "light",
         size: "flexible",
         appearance: "always",
+        action: "field-checkin",
         callback: (token: string) => onToken(token),
         "expired-callback": () => onToken(""),
         "error-callback": () => onToken(""),
