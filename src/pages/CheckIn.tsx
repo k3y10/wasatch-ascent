@@ -711,7 +711,7 @@ const CheckIn = () => {
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-semibold">Ski pass giveaway</p>
                           <p className="mt-1 text-xs leading-relaxed text-black/55">
-                            We&apos;re putting together a ski-pass giveaway. To be considered, you&apos;ll need to leave a valid email or phone number so we can contact you.
+                            We&apos;re getting ready to give away a ski pass. Leave a valid email or phone number if you want to be considered once the giveaway opens.
                           </p>
                           <Dialog>
                             <DialogTrigger asChild>
@@ -726,33 +726,24 @@ const CheckIn = () => {
                               <DialogHeader>
                                 <DialogTitle>Ski pass giveaway</DialogTitle>
                                 <DialogDescription>
-                                  Simple rules for entering the TerraSatch giveaway.
+                                  The giveaway is not open until the entry dates and prize details are posted here.
                                 </DialogDescription>
                               </DialogHeader>
                               <div className="space-y-3 text-sm leading-relaxed text-black/65">
                                 <p>No purchase is necessary to enter.</p>
                                 <p>
-                                  A valid email address or phone number is required so TerraSatch can contact the winner.
+                                  A valid email address or phone number will be required so TerraSatch can contact the winner.
                                 </p>
                                 <p>
-                                  Prize details, eligibility, entry dates, and winner-selection details will be posted here before the giveaway opens.
-                                </p>
-                                <p>
-                                  Entries that do not meet the posted eligibility requirements will not be considered.
+                                  Prize details, eligibility, entry dates, and winner-selection details will be added before entries are accepted.
                                 </p>
                               </div>
                             </DialogContent>
                           </Dialog>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="rounded-2xl border border-black/10 bg-[#faf8f3] p-4">
-                      <p className="text-sm font-semibold">Want to hear from us?</p>
-                      <p className="mt-1 text-xs leading-relaxed text-black/50">
-                        Leave an email or phone number and we can follow up. Optional.
-                      </p>
-                      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <div className="mt-4 grid gap-3 border-t border-[#ef8611]/15 pt-4 sm:grid-cols-2">
                         <div>
                           <label htmlFor="feedback-email" className="text-xs font-semibold text-black/60">
                             Email
@@ -792,6 +783,9 @@ const CheckIn = () => {
                           />
                         </div>
                       </div>
+                      <p className="mt-3 text-[11px] leading-relaxed text-black/45">
+                        Contact info is optional unless you want to be considered for the giveaway or hear back from TerraSatch.
+                      </p>
                     </div>
 
                     <div className="relative h-0 overflow-hidden" aria-hidden="true">
