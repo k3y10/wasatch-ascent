@@ -443,14 +443,29 @@ const CheckIn = () => {
         const tools = previous.tools.includes(value)
           ? previous.tools.filter((item) => item !== value)
           : [...previous.tools, value];
-        const needsToolFollowUp = tools.includes("radio") || tools.includes("satellite");
+        const previousFollowUpKind = previous.tools.includes("radio")
+          ? "radio"
+          : previous.tools.includes("satellite")
+            ? "satellite"
+            : null;
+        const nextFollowUpKind = tools.includes("radio")
+          ? "radio"
+          : tools.includes("satellite")
+            ? "satellite"
+            : null;
         const otherDetails = { ...previous.other_details };
         if (!tools.includes("other")) delete otherDetails.tools;
+        if (previousFollowUpKind !== nextFollowUpKind) {
+          delete otherDetails.tool_follow_up;
+        }
         return {
           ...previous,
           tools,
           other_details: otherDetails,
-          tool_follow_up: needsToolFollowUp ? previous.tool_follow_up : "",
+          tool_follow_up:
+            nextFollowUpKind && nextFollowUpKind === previousFollowUpKind
+              ? previous.tool_follow_up
+              : "",
         };
       }
 
