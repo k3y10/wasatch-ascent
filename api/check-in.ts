@@ -1,5 +1,6 @@
 const MAX_BODY_LENGTH = 24000;
-const DEFAULT_API_BASE = "https://staging-api.terrasatch.com";
+const STAGING_API_BASE = "https://staging-api.terrasatch.com";
+const PRODUCTION_API_BASE = "https://api.terrasatch.com";
 const FORM_ID = "OUTFIELD-CHECKIN";
 const FORM_VERSION = 3;
 
@@ -41,8 +42,14 @@ const parseBody = (request: ApiRequest): Record<string, unknown> => {
   return {};
 };
 
-const baseUrl = () =>
-  (process.env.TERRASATCH_FEEDBACK_API_BASE_URL || DEFAULT_API_BASE).replace(/\/$/, "");
+const baseUrl = () => {
+  const configured = process.env.TERRASATCH_FEEDBACK_API_BASE_URL?.trim();
+  if (configured) return configured.replace(/\/$/, "");
+
+  return process.env.VERCEL_ENV === "production"
+    ? PRODUCTION_API_BASE
+    : STAGING_API_BASE;
+};
 
 export default async function handler(request: ApiRequest, response: ApiResponse) {
   response.setHeader(
