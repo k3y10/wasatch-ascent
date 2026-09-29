@@ -266,7 +266,7 @@ const questionFor = (key: QuestionId, draft: SurveyDraft): Question => {
     case "concept_interest":
       return {
         key,
-        label: "TerraSatch",
+        label: "Last question",
         title: "Would TerraSatch help with any of this?",
         detail:
           "It can turn field updates from radios, apps, photos, and locations into organized notes, maps, timelines, and reports.",
@@ -414,7 +414,6 @@ const CheckIn = () => {
   const safeStep = Math.min(step, Math.max(plan.length - 1, 0));
   const currentKey = plan[safeStep];
   const current = questionFor(currentKey, draft);
-  const progress = Math.round(((safeStep + 1) / plan.length) * 100);
 
   useEffect(() => {
     if (step >= plan.length) setStep(Math.max(0, plan.length - 1));
@@ -426,6 +425,9 @@ const CheckIn = () => {
   const answered = Array.isArray(currentValue)
     ? currentValue.length > 0
     : Boolean(currentValue);
+  const progress = Math.round(
+    ((safeStep + (answered ? 1 : 0)) / plan.length) * 100,
+  );
 
   const setCurrent = (value: string) => {
     setDraft((previous) => {
@@ -670,7 +672,9 @@ const CheckIn = () => {
                   <div className="mt-7 space-y-6 border-t border-black/10 pt-6">
                     <div>
                       <label htmlFor="feedback-comment" className="text-sm font-semibold text-black/75">
-                        What would you want TerraSatch to help with first?{" "}
+                        {draft.concept_interest === "probably_not"
+                          ? "What would make TerraSatch more useful to you?"
+                          : "What would you want TerraSatch to help with first?"}{" "}
                         <span className="font-normal text-black/40">Optional</span>
                       </label>
                       <Textarea
@@ -683,7 +687,11 @@ const CheckIn = () => {
                           }))
                         }
                         className="mt-2 min-h-24 border-black/15 bg-[#fbfaf7] text-black"
-                        placeholder="For example: radio notes, team updates, maps, reports…"
+                        placeholder={
+                          draft.concept_interest === "probably_not"
+                            ? "A short answer is plenty."
+                            : "For example: radio notes, team updates, maps, reports…"
+                        }
                       />
                     </div>
 
@@ -751,9 +759,9 @@ const CheckIn = () => {
                       <div className="mb-3 flex items-start gap-3">
                         <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#cf6900]" />
                         <div>
-                          <p className="text-sm font-semibold">Human check</p>
+                          <p className="text-sm font-semibold">Spam protection</p>
                           <p className="mt-1 text-xs leading-relaxed text-black/50">
-                            Helps keep spam out.
+                            Cloudflare may verify you automatically. No puzzle is usually needed.
                           </p>
                         </div>
                       </div>
