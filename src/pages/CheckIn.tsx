@@ -479,6 +479,7 @@ const CheckIn = () => {
       if (currentKey === "audience") {
         next.activity_context = "";
         next.spend_band = "";
+        delete next.other_details.activity_context;
         if (value === "recreation") next.time_burden = "";
       }
       if (currentKey === "primary_hassle") {
