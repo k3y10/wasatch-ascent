@@ -8,10 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { submitInquiry } from "@/lib/inquiry";
 
 const pilotLimits = [
-  "One workflow for an individual, team, or organization",
-  "14 calendar days, starting after scope and setup are agreed",
-  "Approved inputs and supported connections, chosen for your workflow",
-  "A findings review: fewer steps, clearer handoffs, and potential time and cost savings",
+  "Day 1–2: map the current workflow and agree on what success looks like",
+  "Days 3–12: run one real workflow with approved inputs and supported connections",
+  "Measure repeated steps, handoffs, processing time, and where context gets lost",
+  "Finish with a Discovery Report: findings, estimated impact, and recommended next steps",
 ];
 
 const PilotSection = () => {
@@ -29,7 +29,7 @@ const PilotSection = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!pilot.name || !pilot.email || !pilot.organization || !pilot.industry) {
-      toast.error("Complete the required pilot fields.");
+      toast.error("Complete the required discovery fields.");
       return;
     }
 
@@ -37,7 +37,7 @@ const PilotSection = () => {
     try {
       const { result } = await submitInquiry({
         mode: "pilot",
-        scope: "14-day guided beta evaluation request; start date and scope agreed before access; workflow simplification and findings review; radio, mobile, and supported integrations where configured; no custom provider engineering or production SLA",
+        scope: "14-day Discovery Phase; one scoped workflow; baseline and success criteria; approved inputs and supported connections; measure repeated steps, handoffs, processing time, and potential cost impact; final Discovery Report and rollout recommendation; no custom provider engineering or production SLA",
         ...pilot,
       });
       if (result.fallbackMailto) {
@@ -46,10 +46,10 @@ const PilotSection = () => {
         return;
       }
       if (!result.ok) throw new Error(result.error || "Unable to submit inquiry.");
-      toast.success("Evaluation request sent to Keaton.");
+      toast.success("Discovery request sent to Keaton.");
       setSent(true);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to submit pilot request.");
+      toast.error(error instanceof Error ? error.message : "Unable to submit discovery request.");
     } finally {
       setPending(false);
     }
@@ -65,16 +65,17 @@ const PilotSection = () => {
             <Radio className="size-6 text-primary" aria-hidden="true" />
           </div>
           <h2 className="mt-6 font-display text-5xl font-bold uppercase leading-none lg:text-6xl">
-            Request a 14-day evaluation<span className="text-primary">.</span>
+            Start with a 14-day Discovery Phase<span className="text-primary">.</span>
           </h2>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-frost-dim">
-            Explore what Satchy could simplify in two weeks. Together, we map one workflow, connect approved inputs,
-            and look for repeated entry, missing context, and unnecessary handoffs. Your team reviews the findings
-            and decides which changes are worth trying.
+            The first 14 days are not a generic free trial. We use them to understand how you work today, map one
+            real workflow, establish a baseline, and connect the approved inputs that matter. Then we measure where
+            Satchy reduces repeated work, missing context, and unnecessary handoffs.
           </p>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            This is a free, guided beta evaluation—not automatic subscription signup. No card is needed to request it.
-            We agree the start date and scope first. Savings are evaluated with you, not guaranteed.
+            At the end, you receive a Discovery Report with what changed, estimated time and cost impact, gaps we found,
+            recommended integrations, and a practical rollout path. Continue into a paid plan only if the findings justify it.
+            Savings are measured with you and are not guaranteed.
           </p>
           <ul className="mt-8 flex flex-col gap-3">
             {pilotLimits.map((item) => (
@@ -89,8 +90,8 @@ const PilotSection = () => {
         {sent ? (
           <div className="flex min-h-80 flex-col items-center justify-center gap-4 border-y border-primary/30 py-10 text-center" role="status">
             <CheckCircle2 className="size-9 text-primary" aria-hidden="true" />
-            <h3 className="font-display text-3xl font-bold uppercase">Evaluation request received</h3>
-            <p className="text-sm text-muted-foreground">Keaton will confirm the workflow, scope, and start date with you.</p>
+            <h3 className="font-display text-3xl font-bold uppercase">Discovery request received</h3>
+            <p className="text-sm text-muted-foreground">Keaton will confirm the workflow, success measures, scope, and start date with you.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="border-y border-primary/30 py-8">
@@ -114,13 +115,13 @@ const PilotSection = () => {
                 </Field>
               </div>
               <Field>
-                <FieldLabel htmlFor="pilot-workflow">Which workflow would you like to simplify?</FieldLabel>
+                <FieldLabel htmlFor="pilot-workflow">Which workflow should the Discovery Phase focus on?</FieldLabel>
                 <Textarea id="pilot-workflow" value={pilot.workflow} onChange={(event) => setPilot({ ...pilot, workflow: event.target.value })} placeholder="For example: turn calls, copied notes, and three separate updates into one reviewed record." />
               </Field>
               <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={pilot.website} onChange={(event) => setPilot({ ...pilot, website: event.target.value })} />
               <Button type="submit" size="lg" disabled={pending}>
                 {pending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                {pending ? "Sending request..." : "Request a 14-day evaluation"}
+                {pending ? "Sending request..." : "Request a 14-day Discovery Phase"}
               </Button>
             </FieldGroup>
           </form>

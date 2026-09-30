@@ -15,7 +15,7 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10px] text-muted-foreground sm:justify-end">
-            <a href="/#pilot" className="transition-colors hover:text-primary">Evaluate</a>
+            <a href="/#pilot" className="transition-colors hover:text-primary">Discovery</a>
             <a href="/demo-access" className="transition-colors hover:text-primary">Demo</a>
             <a href="/#founder-connect" className="transition-colors hover:text-primary">Connect with Keaton</a>
             <a href="/api" className="transition-colors hover:text-primary">API</a>
