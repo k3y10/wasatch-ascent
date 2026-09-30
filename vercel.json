@@ -19,6 +19,10 @@
     {
       "source": "/api",
       "destination": "/index.html"
+    },
+    {
+      "source": "/check-in",
+      "destination": "/index.html"
     }
   ],
   "redirects": [

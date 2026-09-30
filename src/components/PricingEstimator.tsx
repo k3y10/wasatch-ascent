@@ -34,9 +34,9 @@ const pricingPlans: PricingPlan[] = [
   {
     name: "Individual",
     price: "$24",
-    cadence: "Per month · beta trial",
+    cadence: "After discovery · per month",
     description:
-      "Personal Satchy for one person in the field. Start with one real workflow and keep the same workspace if you continue.",
+      "Start with the 14-day Discovery Phase. If the findings justify continuing, keep the same workspace on the Individual plan.",
     points: [
       "1 site · 1 member · 1 Edge device",
       "1 active channel",
@@ -45,14 +45,14 @@ const pricingPlans: PricingPlan[] = [
     ],
     icon: Radio,
     checkoutUrl: INDIVIDUAL_CHECKOUT_URL,
-    cta: "Start beta trial",
+    cta: "Start discovery phase",
   },
   {
     name: "Team",
     price: "$399",
-    cadence: "Per month · beta trial",
+    cadence: "After discovery · per month",
     description:
-      "For a working crew sharing radios, channels, maps, logs, integrations, and operational context in one workspace.",
+      "Begin with a 14-day Discovery Phase for one real team workflow, then continue with the same workspace if the measured value is there.",
     points: [
       "1 site · up to 10 members",
       "Up to 6 Edge devices · 12 channels",
@@ -62,7 +62,7 @@ const pricingPlans: PricingPlan[] = [
     icon: Users,
     featured: true,
     checkoutUrl: TEAM_CHECKOUT_URL,
-    cta: "Start beta trial",
+    cta: "Start discovery phase",
   },
   {
     name: "Operations",
@@ -104,15 +104,15 @@ const PricingEstimator = () => (
     <div className="container relative mx-auto px-6">
       <div className="max-w-4xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-          Beta workspace plans
+          Discovery first · subscription second
         </p>
         <h2 className="mt-3 font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
-          Start small. Keep the same system<span className="text-primary">.</span>
+          Prove the workflow before you pay to scale<span className="text-primary">.</span>
         </h2>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-frost-dim">
-          Start with a guided 14-day evaluation of one workflow. For a subscription, confirm the trial length, payment method,
-          renewal price, and cancellation terms at checkout before starting. Your organization, workspace, API identity,
-          and paired Edge devices stay tied to the same TerraSatch account as billing changes.
+          Every new Individual or Team deployment starts with a guided 14-day Discovery Phase. We map the current workflow,
+          establish a baseline, connect relevant approved inputs, and measure repeated work, handoffs, and time saved. At day 14,
+          review the Discovery Report before choosing whether to continue into a paid subscription.
         </p>
       </div>
 
@@ -163,12 +163,12 @@ const PricingEstimator = () => (
         <div>
           <div className="flex items-center gap-3">
             <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
-            <p className="font-display text-2xl font-bold uppercase">One account from checkout to field deployment.</p>
+            <p className="font-display text-2xl font-bold uppercase">Discovery first. One account if you continue.</p>
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Stripe handles payment collection while TerraSatch keeps organization membership, plan entitlements,
-            API access, sites, and Edge device assignment on the server. Stablecoin invoice billing is being validated and is not yet offered through this page.
-            When available, you will approve each invoice payment in your wallet; automatic wallet renewals are not promised.
+            If you continue after discovery, Stripe handles payment collection while TerraSatch keeps organization membership,
+            plan entitlements, API access, sites, and Edge device assignment tied to the same account. Confirm renewal pricing and
+            cancellation terms at checkout. Stablecoin invoice billing is being validated and is not yet offered through this page.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
@@ -179,7 +179,7 @@ const PricingEstimator = () => (
           </Button>
           <Button asChild size="lg">
             <a href="/#pilot">
-              Evaluate TerraSatch
+              Start Discovery Phase
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>

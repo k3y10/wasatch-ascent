@@ -44,7 +44,7 @@ const interestOptions: Array<{ value: DemoInterest; label: string }> = [
   { value: "mapping", label: "Terrain intelligence / mapping" },
   { value: "edge", label: "Edge / offline field systems" },
   { value: "integration", label: "API / data integration" },
-  { value: "pilot", label: "Pilot / field evaluation" },
+  { value: "pilot", label: "Discovery Phase / field evaluation" },
   { value: "strategic", label: "Strategic / investment conversation" },
   { value: "other", label: "Other" },
 ];
@@ -161,7 +161,7 @@ const DemoAccess = () => {
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
               Tell us a little about what you are evaluating, then browse selected public demos informed
-              by active product conversations, validation work, and pilot scoping across remote field
+              by active product conversations, validation work, and discovery scoping across remote field
               operations.
             </p>
 
@@ -288,7 +288,7 @@ const DemoAccess = () => {
                     id="demo-notes"
                     name="notes"
                     rows={4}
-                    placeholder="A workflow, integration, field problem, pilot idea, or anything you want us to understand."
+                    placeholder="A workflow, integration, field problem, discovery idea, or anything you want us to understand."
                     value={form.notes}
                     onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))}
                     disabled={isSubmitting}

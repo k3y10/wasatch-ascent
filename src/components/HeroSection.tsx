@@ -38,7 +38,7 @@ const CapabilityRail = () => (
           <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
         </h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
-          Start with one workflow. Find the friction. Review a simpler way forward.
+          Start with a 14-day Discovery Phase. Find the friction. Measure the change. Decide what is worth keeping.
         </p>
       </div>
 
@@ -102,9 +102,9 @@ const HeroSection = () => (
             <Button asChild variant="outline" size="lg" className="border-white/25 bg-black/20 text-white hover:bg-white/10 hover:text-white">
               <a
                 href="#pilot"
-                onClick={() => trackFunnelEvent({ stage: "validate", action: "compare-plans", source: "hero" })}
+                onClick={() => trackFunnelEvent({ stage: "validate", action: "start-discovery", source: "hero" })}
               >
-                Explore a two-week evaluation
+                Start the 14-day discovery
                 <ArrowDown data-icon="inline-end" />
               </a>
             </Button>
