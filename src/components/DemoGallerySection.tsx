@@ -64,12 +64,11 @@ const demos: DemoItem[] = [
     mission: "Terrain intelligence",
     description:
       "Regional forecast guidance connected to terrain cells, slope, aspect, elevation, weather stations, observations, and route context.",
-    url: import.meta.env.VITE_AVYTS_PARTNER_DEMO_URL || "https://avyts-partner-demo.vercel.app/",
-    domain: "avyts.terrasatch.com",
+    url: "https://avy.terrasatch.com/",
+    domain: "avy.terrasatch.com",
     status: "Terrain",
     icon: Map,
     featured: true,
-    domainPending: true,
   },
   {
     id: "snowbird-demo",
