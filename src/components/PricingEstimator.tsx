@@ -29,7 +29,7 @@ const pricingPlans: PricingPlan[] = [
     price: "$24",
     cadence: "Planned launch · per month",
     description:
-      "Open Beta access is free. Register for launch if you want the Individual plan when TerraSatch paid subscriptions become available.",
+      "After Discovery, register for the Individual plan you want at launch. Billing will not begin while TerraSatch remains in Open Beta.",
     points: [
       "1 site · 1 member · 1 Edge device",
       "1 active channel",
@@ -45,7 +45,7 @@ const pricingPlans: PricingPlan[] = [
     price: "$399",
     cadence: "Planned launch · per month",
     description:
-      "Use the Open Beta with a real team workflow, then register your interest in the Team plan for subscription launch.",
+      "Use Discovery with a real team workflow, then register the Team plan you want at launch. No billing begins during Open Beta.",
     points: [
       "1 site · up to 10 members",
       "Up to 6 Edge devices · 12 channels",
@@ -110,8 +110,9 @@ const PricingEstimator = () => (
           access does not automatically become a paid subscription.
         </p>
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Pricing below is planned launch pricing and may change as the product develops. If you want to continue when paid
-          subscriptions launch, register your interest and we will notify you before billing begins.
+          Pricing below is planned launch pricing and may change as the product develops. At the end of Discovery, choose the plan
+          you want at launch. We will notify you before TerraSatch leaves Open Beta so you can review the plan and current pricing
+          before any billing is activated.
         </p>
       </div>
 
@@ -161,9 +162,9 @@ const PricingEstimator = () => (
             <p className="font-display text-2xl font-bold uppercase">One workspace from beta to subscription.</p>
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Open Beta does not require Stripe or a card. When subscriptions launch, existing users will be able to activate a paid
-            plan for the same TerraSatch workspace so their Satchy context, Discovery history, integrations, and operational records
-            can remain with the account.
+            Open Beta does not require Stripe or a card. Day 14 records your intended launch plan only. When TerraSatch moves beyond
+            Open Beta, existing users can review and activate that plan for the same workspace so their Satchy context, Discovery
+            history, integrations, and operational records remain with the account.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
