@@ -61,25 +61,25 @@ const LaunchRegistrationSection = () => {
           <div className="flex size-12 items-center justify-center rounded-full border border-primary/45 bg-primary/10">
             <Rocket className="size-6 text-primary" aria-hidden="true" />
           </div>
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Subscription launch</p>
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">After your 14-day Discovery</p>
           <h2 className="mt-3 font-display text-4xl font-bold uppercase leading-none sm:text-5xl">
-            Want TerraSatch when subscriptions launch<span className="text-primary">?</span>
+            Choose what you want after Open Beta<span className="text-primary">.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-frost-dim">
-            Register your interest now and we will let you know before paid subscriptions become available.
+            At the end of Discovery, review your Satchy Discovery Report and register for the subscription you would like when TerraSatch moves beyond Open Beta.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            This is not a purchase or subscription. We do not collect payment information here, and you will not be charged automatically.
-            Planned pricing may change before launch.
+            Registering now does not start billing. No card is required and you will not be charged while TerraSatch remains in Open Beta.
+            Before paid subscriptions begin, we will notify you so you can review your selected plan and current pricing before activation.
           </p>
         </div>
 
         {sent ? (
           <div className="flex min-h-72 flex-col items-center justify-center gap-4 border-y border-primary/30 py-10 text-center" role="status">
             <CheckCircle2 className="size-9 text-primary" aria-hidden="true" />
-            <h3 className="font-display text-3xl font-bold uppercase">You're registered for launch</h3>
+            <h3 className="font-display text-3xl font-bold uppercase">Your launch plan is registered</h3>
             <p className="max-w-lg text-sm text-muted-foreground">
-              We will let you know before TerraSatch paid subscriptions become available. No payment information was collected.
+              Keep using TerraSatch during Open Beta. Before paid subscriptions begin, we will ask you to review your plan and pricing, then activate billing. No payment information was collected.
             </p>
           </div>
         ) : (
@@ -98,7 +98,7 @@ const LaunchRegistrationSection = () => {
                 <Input id="launch-org" autoComplete="organization" value={registration.organization} onChange={(event) => setRegistration({ ...registration, organization: event.target.value })} placeholder="Optional for Individual" />
               </Field>
               <Field>
-                <FieldLabel>Plan you're interested in *</FieldLabel>
+                <FieldLabel>Which plan would you like at launch? *</FieldLabel>
                 <Select value={registration.preferredPlan} onValueChange={(preferredPlan) => setRegistration({ ...registration, preferredPlan })}>
                   <SelectTrigger aria-label="Preferred TerraSatch launch plan">
                     <SelectValue placeholder="Choose a plan" />
@@ -114,7 +114,7 @@ const LaunchRegistrationSection = () => {
               <input className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" value={registration.website} onChange={(event) => setRegistration({ ...registration, website: event.target.value })} />
               <Button type="submit" size="lg" disabled={pending}>
                 {pending ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Send data-icon="inline-start" />}
-                {pending ? "Registering..." : "Register for Subscription Launch"}
+                {pending ? "Registering..." : "Register My Launch Plan"}
               </Button>
             </FieldGroup>
           </form>
