@@ -142,7 +142,7 @@ const demos: DemoItem[] = [
     platformRole:
       "The demo separates public community radio concepts from public avalanche data and from internal systems that would require authorized integration. TerraListen structures the incoming source; TerraSatch keeps the map, observation, review state, and report connected.",
     section: "avalanche",
-    url: "https://colorado-avalanche-demo.vercel.app/",
+    url: "https://colorado-avalanche-demo.vercel.app/public",
     status: "Featured · end-to-end demo",
     accent: "green",
     featured: true,
@@ -278,9 +278,9 @@ const demos: DemoItem[] = [
     platformRole:
       "TerraListen structures authorized expedition radio traffic while TerraSatch connects it to route cells, teams, incidents, weather context, and the operational timeline. The prototype keeps medical, rescue, route, weather, and summit decisions explicitly human-owned.",
     section: "expedition",
-    status: "Coming soon · hosting next",
+    url: "https://terrasatch-everest-demo.vercel.app/",
+    status: "Expedition intelligence",
     accent: "green",
-    comingSoon: true,
     useCases: [
       "Base Camp command and route-cell operational awareness",
       "Radio history, team movement, traffic, weather, and incident context",
