@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -61,7 +61,6 @@ const initialForm: DemoAccessRequest = {
 
 const DemoAccess = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [form, setForm] = useState<DemoAccessRequest>(initialForm);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -93,7 +92,7 @@ const DemoAccess = () => {
       isMounted = false;
       controller.abort();
     };
-  }, [destination, navigate]);
+  }, [destination]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
