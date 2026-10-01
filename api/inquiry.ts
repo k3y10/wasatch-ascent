@@ -13,7 +13,7 @@ type ApiResponse = {
   json: (payload: Record<string, unknown>) => void;
 };
 
-type InquiryMode = "pilot" | "investor";
+type InquiryMode = "pilot" | "open_beta" | "launch" | "investor";
 
 const getHeader = (request: ApiRequest, name: string) => {
   const value = request.headers[name] ?? request.headers[name.toLowerCase()];
@@ -36,7 +36,7 @@ const parseBody = (request: ApiRequest): Record<string, unknown> => {
 };
 
 const buildFallbackMailto = (mode: InquiryMode, fields: Record<string, string>) => {
-  const subject = mode === "pilot" ? "TerraSatch 14-day Discovery Phase inquiry" : "TerraSatch Fall 2026 investor interest";
+  const subject = mode === "launch" ? "TerraSatch subscription launch registration" : mode === "open_beta" ? "TerraSatch Open Beta access request" : mode === "pilot" ? "TerraSatch 14-day Discovery Phase inquiry" : "TerraSatch Fall 2026 investor interest";
   const body = Object.entries(fields)
     .filter(([key, value]) => key !== "website" && value)
     .map(([key, value]) => `${key}: ${value}`)
@@ -75,7 +75,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     }
 
     const mode = clean(raw.mode, 20) as InquiryMode;
-    if (mode !== "pilot" && mode !== "investor") {
+    if (!["pilot", "open_beta", "launch", "investor"].includes(mode)) {
       return response.status(400).json({ ok: false, error: "Choose a valid inquiry type." });
     }
 
@@ -87,8 +87,8 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       return response.status(200).json({ ok: true });
     }
 
-    if (!fields.name || !fields.organization || !emailPattern.test(fields.email ?? "")) {
-      return response.status(400).json({ ok: false, error: "Name, organization, and a valid email are required." });
+    if (!fields.name || !emailPattern.test(fields.email ?? "") || (mode === "investor" && !fields.organization)) {
+      return response.status(400).json({ ok: false, error: mode === "investor" ? "Name, organization, and a valid email are required." : "Name and a valid email are required." });
     }
 
     const fallbackMailto = buildFallbackMailto(mode, fields);
@@ -103,7 +103,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       });
     }
 
-    const title = mode === "pilot" ? "14-day Discovery Phase inquiry" : "Fall 2026 investor interest";
+    const title = mode === "launch" ? "Subscription launch registration" : mode === "open_beta" ? "Open Beta access request" : mode === "pilot" ? "14-day Discovery Phase inquiry" : "Fall 2026 investor interest";
     const entries = Object.entries(fields).filter(
       ([key, value]) => !["website", "mode"].includes(key) && value,
     );
