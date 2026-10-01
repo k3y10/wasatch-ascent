@@ -1,4 +1,6 @@
-const FOUNDER_EMAIL = "mccunekeaton@gmail.com";
+const OPERATIONS_EMAIL = "ops@terrasatch.com";
+const FOUNDER_EMAIL = "keaton@terrasatch.com";
+const FALLBACK_EMAIL = process.env.TERRASATCH_INQUIRY_FALLBACK_TO?.trim() || "mccunekeaton@gmail.com";
 const MAX_BODY_LENGTH = 24000;
 
 type ApiRequest = {
@@ -13,7 +15,7 @@ type ApiResponse = {
   json: (payload: Record<string, unknown>) => void;
 };
 
-type InquiryMode = "pilot" | "investor";
+type InquiryMode = "pilot" | "open_beta" | "launch" | "investor";
 
 const getHeader = (request: ApiRequest, name: string) => {
   const value = request.headers[name] ?? request.headers[name.toLowerCase()];
@@ -35,14 +37,49 @@ const parseBody = (request: ApiRequest): Record<string, unknown> => {
   return {};
 };
 
+const inquiryRecipient = (mode: InquiryMode) => mode === "investor" ? FOUNDER_EMAIL : OPERATIONS_EMAIL;
+
 const buildFallbackMailto = (mode: InquiryMode, fields: Record<string, string>) => {
-  const subject = mode === "pilot" ? "TerraSatch 14-day Discovery Phase inquiry" : "TerraSatch Fall 2026 investor interest";
+  const subject = mode === "launch" ? "TerraSatch subscription launch registration" : mode === "open_beta" ? "TerraSatch Open Beta access request" : mode === "pilot" ? "TerraSatch 14-day Discovery Phase inquiry" : "TerraSatch Fall 2026 investor interest";
   const body = Object.entries(fields)
     .filter(([key, value]) => key !== "website" && value)
     .map(([key, value]) => `${key}: ${value}`)
     .join("\n");
-  return `mailto:${FOUNDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${inquiryRecipient(mode)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 };
+
+const sendInquiryEmail = async ({
+  apiKey,
+  from,
+  to,
+  replyTo,
+  subject,
+  text,
+  html,
+}: {
+  apiKey: string;
+  from: string;
+  to: string;
+  replyTo: string;
+  subject: string;
+  text: string;
+  html: string;
+}) =>
+  fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      reply_to: replyTo,
+      subject,
+      text,
+      html,
+    }),
+  });
 
 const sameOrigin = (request: ApiRequest) => {
   const origin = getHeader(request, "origin");
@@ -75,7 +112,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     }
 
     const mode = clean(raw.mode, 20) as InquiryMode;
-    if (mode !== "pilot" && mode !== "investor") {
+    if (!["pilot", "open_beta", "launch", "investor"].includes(mode)) {
       return response.status(400).json({ ok: false, error: "Choose a valid inquiry type." });
     }
 
@@ -87,8 +124,8 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       return response.status(200).json({ ok: true });
     }
 
-    if (!fields.name || !fields.organization || !emailPattern.test(fields.email ?? "")) {
-      return response.status(400).json({ ok: false, error: "Name, organization, and a valid email are required." });
+    if (!fields.name || !emailPattern.test(fields.email ?? "") || (mode === "investor" && !fields.organization)) {
+      return response.status(400).json({ ok: false, error: mode === "investor" ? "Name, organization, and a valid email are required." : "Name and a valid email are required." });
     }
 
     const fallbackMailto = buildFallbackMailto(mode, fields);
@@ -103,7 +140,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       });
     }
 
-    const title = mode === "pilot" ? "14-day Discovery Phase inquiry" : "Fall 2026 investor interest";
+    const title = mode === "launch" ? "Subscription launch registration" : mode === "open_beta" ? "Open Beta access request" : mode === "pilot" ? "14-day Discovery Phase inquiry" : "Fall 2026 investor interest";
     const entries = Object.entries(fields).filter(
       ([key, value]) => !["website", "mode"].includes(key) && value,
     );
@@ -115,21 +152,30 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       )
       .join("")}</table>`;
 
-    const resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    const subject = `TerraSatch · ${title} · ${fields.organization || fields.name}`;
+    const primaryRecipient = inquiryRecipient(mode);
+    let resendResponse = await sendInquiryEmail({
+      apiKey,
+      from,
+      to: primaryRecipient,
+      replyTo: fields.email,
+      subject,
+      text,
+      html,
+    });
+
+    if (!resendResponse.ok && FALLBACK_EMAIL !== primaryRecipient) {
+      console.warn(`Primary TerraSatch inquiry delivery failed for ${primaryRecipient}; trying fallback.`);
+      resendResponse = await sendInquiryEmail({
+        apiKey,
         from,
-        to: [FOUNDER_EMAIL],
-        reply_to: fields.email,
-        subject: `TerraSatch · ${title} · ${fields.organization}`,
+        to: FALLBACK_EMAIL,
+        replyTo: fields.email,
+        subject: `[Fallback] ${subject}`,
         text,
         html,
-      }),
-    });
+      });
+    }
 
     if (!resendResponse.ok) {
       return response.status(502).json({

@@ -37,9 +37,10 @@ type DemoInterest =
 
 const SESSION_COOKIE = "terrasatch_demo_session";
 const SESSION_SUBJECT = "public-demo";
-const SESSION_TTL_SECONDS = 60 * 60 * 8;
+const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30;
 const MAX_BODY_LENGTH = 12000;
-const DEMO_INQUIRY_TO = process.env.TERRASATCH_INQUIRY_TO || "mccunekeaton@gmail.com";
+const DEMO_INQUIRY_TO = "ops@terrasatch.com";
+const DEMO_INQUIRY_FALLBACK_TO = process.env.TERRASATCH_INQUIRY_FALLBACK_TO?.trim() || "mccunekeaton@gmail.com";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const interestLabels: Record<DemoInterest, string> = {
@@ -232,8 +233,8 @@ const deliverDemoRequest = async (submission: DemoAccessSubmission): Promise<boo
     )
     .join("")}</table>`;
 
-  try {
-    const resendResponse = await fetch("https://api.resend.com/emails", {
+  const sendTo = (to: string, subjectPrefix = "") =>
+    fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -241,14 +242,20 @@ const deliverDemoRequest = async (submission: DemoAccessSubmission): Promise<boo
       },
       body: JSON.stringify({
         from,
-        to: [DEMO_INQUIRY_TO],
+        to: [to],
         reply_to: submission.email,
-        subject: `TerraSatch · Public demo access · ${submission.organization}`,
+        subject: `${subjectPrefix}TerraSatch · Public demo access · ${submission.organization}`,
         text,
         html,
       }),
     });
 
+  try {
+    let resendResponse = await sendTo(DEMO_INQUIRY_TO);
+    if (!resendResponse.ok && DEMO_INQUIRY_FALLBACK_TO !== DEMO_INQUIRY_TO) {
+      console.warn(`Primary demo notification delivery failed for ${DEMO_INQUIRY_TO}; trying fallback.`);
+      resendResponse = await sendTo(DEMO_INQUIRY_FALLBACK_TO, "[Fallback] ");
+    }
     return resendResponse.ok;
   } catch {
     return false;
@@ -307,12 +314,9 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       });
     }
 
-    const delivered = await deliverDemoRequest(submission);
-    if (!delivered) {
-      return response.status(503).json({
-        authenticated: false,
-        error: "Demo access requests are temporarily unavailable. Please try again shortly.",
-      });
+    const notificationDelivered = await deliverDemoRequest(submission);
+    if (!notificationDelivered) {
+      console.warn("Demo access granted, but the notification email could not be delivered.");
     }
 
     const token = createSessionToken(sessionSecret);
@@ -320,6 +324,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     return response.status(200).json({
       authenticated: true,
       user: { access: SESSION_SUBJECT },
+      notificationDelivered,
     });
   }
 

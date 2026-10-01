@@ -38,7 +38,7 @@ const CapabilityRail = () => (
           <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
         </h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
-          Start with a 14-day Discovery Phase. Find the friction. Measure the change. Decide what is worth keeping.
+          Open Beta starts with a 14-day Discovery. On Day 14, review your Satchy report, choose a launch plan if you want one, and keep using the beta without being charged.
         </p>
       </div>
 
@@ -80,13 +80,13 @@ const HeroSection = () => (
       <div className="container relative mx-auto grid min-h-[680px] items-center gap-4 px-6 py-14 md:grid-cols-[0.95fr_1.05fr] lg:min-h-[720px] lg:py-16">
         <div className="relative z-10 max-w-2xl animate-fade-in" style={{ animationDelay: "0.1s", opacity: 0 }}>
           <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.24em] text-primary sm:text-xs">
-            TerraSatch field intelligence platform
+            TerraSatch field intelligence platform · Open Beta
           </p>
           <h1 className="max-w-[12ch] font-display text-6xl font-bold uppercase leading-[0.82] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.75rem]">
             Put Satchy to work<span className="text-primary">.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-            Bring Satchy into the workflows your team already uses. Turn approved field information into clear context, useful next steps, and work your team can review.
+            TerraSatch is now in Open Beta. Bring Satchy into a real workflow, start with a free 14-day Discovery, and help shape the platform as we continue building it. No payment information is required.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -104,7 +104,7 @@ const HeroSection = () => (
                 href="#pilot"
                 onClick={() => trackFunnelEvent({ stage: "validate", action: "start-discovery", source: "hero" })}
               >
-                Start the 14-day discovery
+                Join Open Beta
                 <ArrowDown data-icon="inline-end" />
               </a>
             </Button>

@@ -25,14 +25,22 @@ The public site links to `/demos`. Visitors without a valid session are sent to 
 
 The protected page gates the TerraSatch gallery. Each embedded demo should also enforce its own authorization if its underlying URL or data must not be publicly reachable.
 
-## Pilot and investor inquiries
+## Website inquiry and demo email routing
 
-The public pilot and investor forms post to `/api/inquiry`. Configure these server-only variables in Vercel so inquiries are delivered to `mccunekeaton@gmail.com`:
+Public Open Beta, launch, demo, and general website inquiries should use TerraSatch domain email first:
+
+- `ops@terrasatch.com` for Open Beta, demo, launch, and general operational inquiries
+- `keaton@terrasatch.com` for founder and investor inquiries
+- the personal Gmail address is server-side fallback delivery only and should not be presented as the normal public contact
+
+Configure these server-only variables in Vercel:
 
 - `RESEND_API_KEY`
-- `TERRASATCH_INQUIRY_FROM` using a sender on a domain verified in Resend
+- `TERRASATCH_INQUIRY_FROM` using a sender on the verified `terrasatch.com` domain
+- primary recipients are fixed to `ops@terrasatch.com` and `keaton@terrasatch.com` in the server code so stale deployment variables cannot redirect normal website traffic elsewhere
+- `TERRASATCH_INQUIRY_FALLBACK_TO` remains configurable for the private fallback mailbox
 
-When delivery is not configured or the provider is unavailable, the site opens a pre-addressed email draft so a visitor can still contact the founder. Never expose the Resend key with a `VITE_` prefix.
+If automated inquiry delivery is unavailable, the visitor-facing fallback email draft remains addressed to the appropriate TerraSatch domain mailbox. Never expose the Resend key or fallback mailbox through a `VITE_` variable.
 
 ## PWA behavior
 
