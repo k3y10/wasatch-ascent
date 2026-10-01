@@ -37,9 +37,8 @@ Configure these server-only variables in Vercel:
 
 - `RESEND_API_KEY`
 - `TERRASATCH_INQUIRY_FROM` using a sender on the verified `terrasatch.com` domain
-- `TERRASATCH_INQUIRY_TO=ops@terrasatch.com`
-- `TERRASATCH_FOUNDER_EMAIL=keaton@terrasatch.com`
-- `TERRASATCH_INQUIRY_FALLBACK_TO` for the private fallback mailbox
+- primary recipients are fixed to `ops@terrasatch.com` and `keaton@terrasatch.com` in the server code so stale deployment variables cannot redirect normal website traffic elsewhere
+- `TERRASATCH_INQUIRY_FALLBACK_TO` remains configurable for the private fallback mailbox
 
 If automated inquiry delivery is unavailable, the visitor-facing fallback email draft remains addressed to the appropriate TerraSatch domain mailbox. Never expose the Resend key or fallback mailbox through a `VITE_` variable.
 
