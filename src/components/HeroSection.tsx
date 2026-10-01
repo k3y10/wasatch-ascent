@@ -38,7 +38,7 @@ const CapabilityRail = () => (
           <span className="text-primary">.</span> Adapt<span className="text-primary">.</span>
         </h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground lg:text-right">
-          Open Beta access starts with a 14-day Discovery. Find the friction, measure the change, and keep using the beta while TerraSatch evolves.
+          Open Beta starts with a 14-day Discovery. On Day 14, review your Satchy report, choose a launch plan if you want one, and keep using the beta without being charged.
         </p>
       </div>
 
