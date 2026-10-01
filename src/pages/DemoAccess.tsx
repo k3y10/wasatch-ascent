@@ -77,7 +77,7 @@ const DemoAccess = () => {
     getDemoSession(controller.signal)
       .then((user) => {
         if (user && isMounted) {
-          navigate(destination, { replace: true });
+          window.location.replace(destination);
         }
       })
       .catch(() => {
@@ -108,7 +108,15 @@ const DemoAccess = () => {
         organization: form.organization.trim(),
         notes: form.notes.trim(),
       });
-      navigate(destination, { replace: true });
+
+      const session = await getDemoSession();
+      if (!session) {
+        throw new Error(
+          "Your information was submitted, but the secure demo session could not be confirmed. Please try again.",
+        );
+      }
+
+      window.location.replace(destination);
     } catch (requestError) {
       setError(
         requestError instanceof Error
