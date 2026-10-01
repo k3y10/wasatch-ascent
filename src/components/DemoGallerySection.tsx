@@ -37,7 +37,7 @@ const demos: DemoItem[] = [
     mission: "Avalanche forecasting",
     description:
       "Field and radio observations, terrain context, forecaster review, mapping, queues, audit history, and operational reporting.",
-    url: import.meta.env.VITE_UAC_RELAY_DEMO_URL || "https://uac.terrasatch.com/today",
+    url: "https://uac.terrasatch.com/today",
     domain: "uac.terrasatch.com",
     status: "Featured",
     icon: MountainSnow,
@@ -50,11 +50,12 @@ const demos: DemoItem[] = [
     mission: "Avalanche operations",
     description:
       "Radio-to-observation workflow with transcription, mapped context, human review, shift reporting, and exportable records.",
-    url: "https://caic.terrasatch.com/public",
+    url: "https://colorado-avalanche-demo.vercel.app/public",
     domain: "caic.terrasatch.com",
     status: "Featured",
     icon: MountainSnow,
     featured: true,
+    domainPending: true,
   },
   {
     id: "avyts-demo",
@@ -77,9 +78,7 @@ const demos: DemoItem[] = [
     mission: "Snow & mountain operations",
     description:
       "Snow Safety, Ski Patrol, dispatch, mountain operations, team communications, incidents, check-ins, and shift handoffs.",
-    url:
-      import.meta.env.VITE_SNOWBIRD_RELAY_DEMO_URL ||
-      "https://snowbird.terrasatch.com/today",
+    url: "https://snowbird.terrasatch.com/today",
     domain: "snowbird.terrasatch.com",
     status: "Snow ops",
     icon: Mountain,
