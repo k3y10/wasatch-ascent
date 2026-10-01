@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { AlertTriangle, Eye, LoaderCircle, LogOut } from "lucide-react";
+import { Link } from "react-router-dom";
 import AmbientParticles from "@/components/AmbientParticles";
 import DemoGallerySection from "@/components/DemoGallerySection";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { signOutOfDemos } from "@/lib/demo-auth";
 
 const Demos = () => {
@@ -28,68 +25,96 @@ const Demos = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="relative h-dvh overflow-hidden bg-background text-foreground">
       <AmbientParticles />
-      <Navbar />
-      <main className="relative z-20 pt-16">
-        <section className="border-b border-border/50 bg-card/40">
-          <div className="container mx-auto flex flex-col gap-5 px-6 py-8 md:flex-row md:items-start md:justify-between">
-            <div className="flex items-start gap-4">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Eye className="size-5" aria-hidden="true" />
-              </div>
-              <div>
-                <Badge variant="secondary" className="mb-2">
-                  Public evaluation workspace
-                </Badge>
-                <h1 className="font-display text-2xl font-bold">TerraSatch product demonstrations</h1>
-                <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                  A curated set of workflow examples across avalanche forecasting, terrain intelligence,
-                  snow operations, wildfire, wilderness programs, and expedition use cases. These demos
-                  are intended to help evaluators understand how TerraSatch concepts can be adapted across
-                  different field environments.
-                </p>
-              </div>
+      <div className="pointer-events-none absolute inset-0 topo-overlay opacity-35" />
+
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur-xl">
+        <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4 sm:px-6">
+          <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="TerraSatch home">
+            <img
+              src="/terrasatch-logo.png"
+              alt=""
+              className="size-9 shrink-0 rounded-lg"
+              width={1254}
+              height={1254}
+            />
+            <div className="min-w-0 leading-tight">
+              <span className="font-display block truncate text-sm font-bold tracking-[0.16em]">
+                TERRASATCH
+              </span>
+              <span className="font-mono block truncate text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
+                Evaluation demo workspace
+              </span>
             </div>
-            <Button variant="outline" onClick={handleSignOut} disabled={isSigningOut}>
+          </Link>
+
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="hidden sm:inline-flex">
+              <Eye className="mr-1 size-3" aria-hidden="true" />
+              Session active
+            </Badge>
+            <Button variant="outline" size="sm" onClick={handleSignOut} disabled={isSigningOut}>
               {isSigningOut ? (
                 <LoaderCircle data-icon="inline-start" className="animate-spin" aria-hidden="true" />
               ) : (
                 <LogOut data-icon="inline-start" aria-hidden="true" />
               )}
-              {isSigningOut ? "Closing session" : "Close demo session"}
+              <span className="hidden sm:inline">
+                {isSigningOut ? "Closing" : "Close session"}
+              </span>
             </Button>
           </div>
+        </div>
+      </header>
 
-          <div className="container mx-auto px-6 pb-8">
-            <Alert className="border-amber-500/35 bg-amber-500/5">
-              <AlertTriangle className="size-4 text-amber-500" aria-hidden="true" />
-              <AlertTitle>Demo notice — not for operational use</AlertTitle>
-              <AlertDescription className="max-w-5xl leading-relaxed">
-                The environments below are provided for evaluation and discussion only. Individual demos
-                may be prototypes, snapshots, or configurations prepared for a specific product
-                conversation and may not reflect the newest TerraSatch release, current data, model
-                behavior, integrations, or capabilities. Do not use these environments for operational
-                decision-making, emergency response, field deployment, or other safety-critical activity.
-                References to organizations, locations, or workflows do not imply endorsement, formal
-                partnership, procurement, or active deployment unless explicitly stated.
-              </AlertDescription>
-            </Alert>
+      <main className="absolute inset-x-0 bottom-10 top-16 z-20 min-h-0 overflow-hidden">
+        <div className="flex h-full min-h-0 flex-col">
+          <div className="flex min-h-10 items-center justify-between gap-4 border-b border-amber-500/20 bg-amber-500/5 px-4 py-2 sm:px-6">
+            <div className="flex min-w-0 items-center gap-2">
+              <AlertTriangle className="size-3.5 shrink-0 text-amber-500" aria-hidden="true" />
+              <p className="truncate text-[11px] text-muted-foreground">
+                Evaluation only — demos may be prototypes or snapshots and are not for operational or safety-critical use.
+              </p>
+            </div>
+            <a
+              href="mailto:ops@terrasatch.com"
+              className="hidden shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-primary hover:text-foreground md:block"
+            >
+              Questions · ops@terrasatch.com
+            </a>
           </div>
 
           {signOutError ? (
-            <div className="container mx-auto px-6 pb-6">
-              <Alert variant="destructive">
-                <AlertTitle>Session could not be closed</AlertTitle>
-                <AlertDescription>{signOutError}</AlertDescription>
-              </Alert>
+            <div className="border-b border-destructive/30 bg-destructive/10 px-4 py-2 text-xs text-destructive sm:px-6">
+              {signOutError}
             </div>
           ) : null}
-        </section>
-        <Separator />
-        <DemoGallerySection />
+
+          <div className="min-h-0 flex-1">
+            <DemoGallerySection />
+          </div>
+        </div>
       </main>
-      <Footer />
+
+      <footer className="fixed inset-x-0 bottom-0 z-50 border-t border-border/70 bg-background/95 backdrop-blur-xl">
+        <div className="container mx-auto flex h-10 items-center justify-between gap-4 px-4 sm:px-6">
+          <div className="font-mono text-[9px] uppercase tracking-[0.13em] text-muted-foreground">
+            © 2026 TerraSatch · Listen · Watch · Learn · Adapt
+          </div>
+          <div className="flex items-center gap-4 font-mono text-[9px] uppercase tracking-[0.13em]">
+            <Link to="/" className="text-muted-foreground transition-colors hover:text-primary">
+              Public site
+            </Link>
+            <a
+              href="mailto:ops@terrasatch.com"
+              className="hidden text-muted-foreground transition-colors hover:text-primary sm:inline"
+            >
+              ops@terrasatch.com
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
