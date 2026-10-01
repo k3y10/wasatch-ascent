@@ -134,6 +134,7 @@ describe("demo auth API", () => {
     expect(loginResponse.statusCode).toBe(200);
     expect(setCookie).toContain("HttpOnly");
     expect(setCookie).toContain("SameSite=Strict");
+    expect(setCookie).toContain("Max-Age=2592000");
     expect(setCookie).toContain("Expires=");
     expect(setCookie).not.toContain(validSubmission.email);
     expect(fetch).toHaveBeenCalledWith(
