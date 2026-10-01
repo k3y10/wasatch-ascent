@@ -39,7 +39,7 @@ const SESSION_COOKIE = "terrasatch_demo_session";
 const SESSION_SUBJECT = "public-demo";
 const SESSION_TTL_SECONDS = 60 * 60 * 8;
 const MAX_BODY_LENGTH = 12000;
-const DEMO_INQUIRY_TO = process.env.TERRASATCH_INQUIRY_TO?.trim() || "ops@terrasatch.com";
+const DEMO_INQUIRY_TO = "ops@terrasatch.com";
 const DEMO_INQUIRY_FALLBACK_TO = process.env.TERRASATCH_INQUIRY_FALLBACK_TO?.trim() || "mccunekeaton@gmail.com";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
