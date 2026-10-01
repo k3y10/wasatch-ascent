@@ -75,7 +75,13 @@ const ProtectedDemoRoute = ({ children }: ProtectedDemoRouteProps) => {
   }
 
   if (status === "unauthenticated") {
-    return <Navigate to="/demo-access" replace state={{ from: location.pathname }} />;
+    return (
+      <Navigate
+        to="/demo-access"
+        replace
+        state={{ from: `${location.pathname}${location.search}${location.hash}` }}
+      />
+    );
   }
 
   if (status === "unavailable") {
