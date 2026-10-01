@@ -176,7 +176,7 @@ const Navbar = () => {
           <div className="min-w-0 leading-none">
             <span className="block whitespace-nowrap font-display text-lg font-bold tracking-wide">TERRASATCH</span>
             <span className="hidden whitespace-nowrap font-mono text-[9px] tracking-[0.2em] text-muted-foreground sm:block">
-              FIELD INTELLIGENCE
+              FIELD INTELLIGENCE · OPEN BETA
             </span>
           </div>
         </a>
@@ -188,7 +188,7 @@ const Navbar = () => {
         <div className="flex shrink-0 items-center gap-1.5">
           <Button asChild size="sm" className="hidden xl:inline-flex">
             <a href="/#pilot" onClick={handleEvaluateClick}>
-              Start Discovery
+              Join Open Beta
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
@@ -235,7 +235,7 @@ const Navbar = () => {
                   {exploreItems.map((item) => renderNavLink(item, true))}
                   <Button asChild className="mt-1 h-11 w-full justify-between px-3">
                     <a href="/#pilot" onClick={handleEvaluateClick}>
-                      Start Discovery
+                      Join Open Beta
                       <ArrowRight data-icon="inline-end" />
                     </a>
                   </Button>
