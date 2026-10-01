@@ -87,4 +87,31 @@ describe("inquiry API", () => {
 
     expect(response.statusCode).toBe(403);
   });
+
+  it("accepts launch registrations without an organization", async () => {
+    process.env.RESEND_API_KEY = "test-key";
+    process.env.TERRASATCH_INQUIRY_FROM = "TerraSatch <inquiries@terrasatch.com>";
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    const response = createResponse();
+
+    await handler(
+      {
+        ...validRequest,
+        body: {
+          mode: "launch",
+          name: "Independent Operator",
+          email: "operator@example.com",
+          preferredPlan: "individual",
+        },
+      },
+      response,
+    );
+
+    expect(response.statusCode).toBe(200);
+    const request = fetchMock.mock.calls[0]?.[1] as RequestInit;
+    expect(String(request.body)).toContain("preferredPlan");
+    expect(String(request.body)).toContain("individual");
+  });
+
 });
