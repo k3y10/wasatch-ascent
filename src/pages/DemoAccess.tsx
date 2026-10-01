@@ -193,7 +193,7 @@ const DemoAccess = () => {
               <div className="mt-5 grid max-w-lg gap-2 sm:grid-cols-2">
                 <div className="flex items-center gap-2.5 rounded-lg border border-border/70 bg-card/50 px-3 py-2.5">
                   <LockKeyhole className="size-4 shrink-0 text-primary" aria-hidden="true" />
-                  <span className="text-xs text-muted-foreground">8-hour protected session</span>
+                  <span className="text-xs text-muted-foreground">Remembered on this browser for 30 days</span>
                 </div>
                 <div className="flex items-center gap-2.5 rounded-lg border border-border/70 bg-card/50 px-3 py-2.5">
                   <ShieldCheck className="size-4 shrink-0 text-primary" aria-hidden="true" />
@@ -216,7 +216,7 @@ const DemoAccess = () => {
                   <div>
                     <CardTitle className="font-display text-2xl">View public demos</CardTitle>
                     <CardDescription className="mt-1 text-xs sm:text-sm">
-                      Complete the form once. Your demo workspace opens immediately.
+                      Complete the form once. This browser can return to the demo workspace for 30 days without resubmitting.
                     </CardDescription>
                   </div>
                   <LockKeyhole className="hidden size-5 shrink-0 text-primary sm:block" aria-hidden="true" />
@@ -405,7 +405,7 @@ const DemoAccess = () => {
                       : "Submit & view public demos"}
                 </Button>
                 <p className="text-center text-[11px] leading-relaxed text-muted-foreground">
-                  No operational account is created. Questions?{" "}
+                  No operational account is created. Closing the demo session removes this browser access. Questions?{" "}
                   <a className="text-primary hover:text-foreground" href="mailto:ops@terrasatch.com">
                     ops@terrasatch.com
                   </a>
