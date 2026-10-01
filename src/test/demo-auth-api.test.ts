@@ -151,7 +151,7 @@ describe("demo auth API", () => {
     });
   });
 
-  it("does not issue a session if the access request cannot be delivered", async () => {
+  it("still issues a demo session if the notification email cannot be delivered", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
@@ -172,8 +172,13 @@ describe("demo auth API", () => {
       response,
     );
 
-    expect(response.statusCode).toBe(503);
-    expect(response.headers["Set-Cookie"]).toBeUndefined();
+    expect(response.statusCode).toBe(200);
+    expect(String(response.headers["Set-Cookie"])).toContain("terrasatch_demo_session=");
+    expect(response.body).toEqual({
+      authenticated: true,
+      user: { access: "public-demo" },
+      notificationDelivered: false,
+    });
   });
 
   it("clears the session cookie when signing out", async () => {
