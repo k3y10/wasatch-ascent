@@ -19,24 +19,17 @@ type PricingPlan = {
   points: string[];
   icon: LucideIcon;
   featured?: boolean;
-  checkoutUrl?: string;
+  href: string;
   cta: string;
 };
-
-const INDIVIDUAL_CHECKOUT_URL = (
-  import.meta.env.VITE_TERRASATCH_INDIVIDUAL_CHECKOUT_URL as string | undefined
-)?.trim();
-const TEAM_CHECKOUT_URL = (
-  import.meta.env.VITE_TERRASATCH_TEAM_CHECKOUT_URL as string | undefined
-)?.trim();
 
 const pricingPlans: PricingPlan[] = [
   {
     name: "Individual",
     price: "$24",
-    cadence: "After discovery · per month",
+    cadence: "Planned launch · per month",
     description:
-      "Start with the 14-day Discovery Phase. If the findings justify continuing, keep the same workspace on the Individual plan.",
+      "Open Beta access is free. Register for launch if you want the Individual plan when TerraSatch paid subscriptions become available.",
     points: [
       "1 site · 1 member · 1 Edge device",
       "1 active channel",
@@ -44,15 +37,15 @@ const pricingPlans: PricingPlan[] = [
       "14-day operational retention",
     ],
     icon: Radio,
-    checkoutUrl: INDIVIDUAL_CHECKOUT_URL,
-    cta: "Start discovery phase",
+    href: "/#launch",
+    cta: "Register for launch",
   },
   {
     name: "Team",
     price: "$399",
-    cadence: "After discovery · per month",
+    cadence: "Planned launch · per month",
     description:
-      "Begin with a 14-day Discovery Phase for one real team workflow, then continue with the same workspace if the measured value is there.",
+      "Use the Open Beta with a real team workflow, then register your interest in the Team plan for subscription launch.",
     points: [
       "1 site · up to 10 members",
       "Up to 6 Edge devices · 12 channels",
@@ -61,15 +54,15 @@ const pricingPlans: PricingPlan[] = [
     ],
     icon: Users,
     featured: true,
-    checkoutUrl: TEAM_CHECKOUT_URL,
-    cta: "Start discovery phase",
+    href: "/#launch",
+    cta: "Register for launch",
   },
   {
     name: "Operations",
     price: "From $1,999",
-    cadence: "Per month · scoped deployment",
+    cadence: "Planned launch · scoped deployment",
     description:
-      "For a patrol, center, department, or operational team that needs a larger controlled deployment and higher-touch support.",
+      "For a patrol, center, department, or operational team that expects a larger controlled deployment and higher-touch support.",
     points: [
       "Up to 30 members",
       "Up to 20 Edge devices · 40 channels",
@@ -77,7 +70,8 @@ const pricingPlans: PricingPlan[] = [
       "365-day retention + priority support",
     ],
     icon: Cpu,
-    cta: "Scope operations",
+    href: "/#launch",
+    cta: "Register interest",
   },
   {
     name: "Enterprise",
@@ -92,6 +86,7 @@ const pricingPlans: PricingPlan[] = [
       "Implementation and support plan",
     ],
     icon: Building2,
+    href: "/#founder-connect",
     cta: "Talk with TerraSatch",
   },
 ];
@@ -104,20 +99,24 @@ const PricingEstimator = () => (
     <div className="container relative mx-auto px-6">
       <div className="max-w-4xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-          Discovery first · subscription second
+          Open Beta now · subscriptions later
         </p>
         <h2 className="mt-3 font-display text-4xl font-bold uppercase leading-none text-foreground sm:text-5xl lg:text-6xl">
-          Prove the workflow before you pay to scale<span className="text-primary">.</span>
+          Use TerraSatch before billing launches<span className="text-primary">.</span>
         </h2>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-frost-dim">
-          Every new Individual or Team deployment starts with a guided 14-day Discovery Phase. We map the current workflow,
-          establish a baseline, connect relevant approved inputs, and measure repeated work, handoffs, and time saved. At day 14,
-          review the Discovery Report before choosing whether to continue into a paid subscription.
+          TerraSatch is currently in Open Beta. Your first 14 days are a Discovery period so Satchy can learn how the platform fits
+          your workflow and produce a Discovery Report. Open Beta access is free, no payment information is required, and your beta
+          access does not automatically become a paid subscription.
+        </p>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          Pricing below is planned launch pricing and may change as the product develops. If you want to continue when paid
+          subscriptions launch, register your interest and we will notify you before billing begins.
         </p>
       </div>
 
       <div className="mt-12 grid border-y border-border/70 md:grid-cols-2 xl:grid-cols-4">
-        {pricingPlans.map(({ name, price, cadence, description, points, icon: Icon, featured, checkoutUrl, cta }) => (
+        {pricingPlans.map(({ name, price, cadence, description, points, icon: Icon, featured, href, cta }) => (
           <article
             key={name}
             className={cn(
@@ -145,13 +144,9 @@ const PricingEstimator = () => (
                 </li>
               ))}
             </ul>
-            <Button
-              asChild
-              className="mt-6 w-full"
-              variant={featured ? "default" : "outline"}
-            >
-              <a href={checkoutUrl || "/#pilot"}>
-                {checkoutUrl ? cta : name === "Individual" || name === "Team" ? "Request evaluation" : cta}
+            <Button asChild className="mt-6 w-full" variant={featured ? "default" : "outline"}>
+              <a href={href}>
+                {cta}
                 <ArrowRight data-icon="inline-end" />
               </a>
             </Button>
@@ -163,23 +158,21 @@ const PricingEstimator = () => (
         <div>
           <div className="flex items-center gap-3">
             <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
-            <p className="font-display text-2xl font-bold uppercase">Discovery first. One account if you continue.</p>
+            <p className="font-display text-2xl font-bold uppercase">One workspace from beta to subscription.</p>
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            If you continue after discovery, Stripe handles payment collection while TerraSatch keeps organization membership,
-            plan entitlements, API access, sites, and Edge device assignment tied to the same account. Confirm renewal pricing and
-            cancellation terms at checkout. Stablecoin invoice billing is being validated and is not yet offered through this page.
+            Open Beta does not require Stripe or a card. When subscriptions launch, existing users will be able to activate a paid
+            plan for the same TerraSatch workspace so their Satchy context, Discovery history, integrations, and operational records
+            can remain with the account.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
           <Button asChild size="lg" variant="outline">
-            <a href="https://api.terrasatch.com/portal/login" target="_blank" rel="noreferrer">
-              Existing workspace
-            </a>
+            <a href="/#launch">Register for Launch</a>
           </Button>
           <Button asChild size="lg">
             <a href="/#pilot">
-              Start Discovery Phase
+              Join Open Beta
               <ArrowRight data-icon="inline-end" />
             </a>
           </Button>
