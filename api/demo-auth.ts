@@ -307,12 +307,9 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       });
     }
 
-    const delivered = await deliverDemoRequest(submission);
-    if (!delivered) {
-      return response.status(503).json({
-        authenticated: false,
-        error: "Demo access requests are temporarily unavailable. Please try again shortly.",
-      });
+    const notificationDelivered = await deliverDemoRequest(submission);
+    if (!notificationDelivered) {
+      console.warn("Demo access granted, but the notification email could not be delivered.");
     }
 
     const token = createSessionToken(sessionSecret);
@@ -320,6 +317,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     return response.status(200).json({
       authenticated: true,
       user: { access: SESSION_SUBJECT },
+      notificationDelivered,
     });
   }
 
