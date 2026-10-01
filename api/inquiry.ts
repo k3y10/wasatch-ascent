@@ -1,5 +1,5 @@
-const OPERATIONS_EMAIL = process.env.TERRASATCH_INQUIRY_TO?.trim() || "ops@terrasatch.com";
-const FOUNDER_EMAIL = process.env.TERRASATCH_FOUNDER_EMAIL?.trim() || "keaton@terrasatch.com";
+const OPERATIONS_EMAIL = "ops@terrasatch.com";
+const FOUNDER_EMAIL = "keaton@terrasatch.com";
 const FALLBACK_EMAIL = process.env.TERRASATCH_INQUIRY_FALLBACK_TO?.trim() || "mccunekeaton@gmail.com";
 const MAX_BODY_LENGTH = 24000;
 
