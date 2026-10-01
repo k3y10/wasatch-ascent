@@ -50,12 +50,11 @@ const demos: DemoItem[] = [
     mission: "Avalanche operations",
     description:
       "Radio-to-observation workflow with transcription, mapped context, human review, shift reporting, and exportable records.",
-    url: "https://colorado-avalanche-demo.vercel.app/public",
+    url: "https://caic.terrasatch.com/public",
     domain: "caic.terrasatch.com",
     status: "Featured",
     icon: MountainSnow,
     featured: true,
-    domainPending: true,
   },
   {
     id: "avyts-demo",
