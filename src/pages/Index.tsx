@@ -7,6 +7,7 @@ import LearnAdaptSection from "@/components/LearnAdaptSection";
 import ConnectedStackSection from "@/components/ConnectedStackSection";
 import PricingEstimator from "@/components/PricingEstimator";
 import PilotSection from "@/components/PilotSection";
+import LaunchRegistrationSection from "@/components/LaunchRegistrationSection";
 import DocumentsSection from "@/components/DocumentsSection";
 import EngagementSection from "@/components/EngagementSection";
 import Footer from "@/components/Footer";
@@ -30,9 +31,11 @@ const Index = () => {
       <div className="amber-line" />
       <ScrollReveal><ConnectedStackSection /></ScrollReveal>
       <div className="amber-line" />
+      <ScrollReveal><PilotSection /></ScrollReveal>
+      <div className="amber-line" />
       <ScrollReveal><PricingEstimator /></ScrollReveal>
       <div className="amber-line" />
-      <ScrollReveal><PilotSection /></ScrollReveal>
+      <ScrollReveal><LaunchRegistrationSection /></ScrollReveal>
       <div className="amber-line" />
       <ScrollReveal><EngagementSection /></ScrollReveal>
       <div className="amber-line" />
