@@ -50,6 +50,8 @@ describe("demo auth API", () => {
     secret: process.env.TERRASATCH_DEMO_SESSION_SECRET,
     resend: process.env.RESEND_API_KEY,
     inquiryFrom: process.env.TERRASATCH_INQUIRY_FROM,
+    inquiryTo: process.env.TERRASATCH_INQUIRY_TO,
+    inquiryFallbackTo: process.env.TERRASATCH_INQUIRY_FALLBACK_TO,
     vercel: process.env.VERCEL,
   };
 
@@ -57,6 +59,8 @@ describe("demo auth API", () => {
     process.env.TERRASATCH_DEMO_SESSION_SECRET = "a-32-character-minimum-session-secret";
     process.env.RESEND_API_KEY = "re_test_key";
     process.env.TERRASATCH_INQUIRY_FROM = "TerraSatch <demo@example.com>";
+    process.env.TERRASATCH_INQUIRY_TO = "ops@terrasatch.com";
+    process.env.TERRASATCH_INQUIRY_FALLBACK_TO = "mccunekeaton@gmail.com";
     delete process.env.VERCEL;
     vi.stubGlobal(
       "fetch",
@@ -73,6 +77,8 @@ describe("demo auth API", () => {
     process.env.TERRASATCH_DEMO_SESSION_SECRET = previousEnvironment.secret;
     process.env.RESEND_API_KEY = previousEnvironment.resend;
     process.env.TERRASATCH_INQUIRY_FROM = previousEnvironment.inquiryFrom;
+    process.env.TERRASATCH_INQUIRY_TO = previousEnvironment.inquiryTo;
+    process.env.TERRASATCH_INQUIRY_FALLBACK_TO = previousEnvironment.inquiryFallbackTo;
     process.env.VERCEL = previousEnvironment.vercel;
     vi.unstubAllGlobals();
   });
@@ -134,6 +140,9 @@ describe("demo auth API", () => {
       "https://api.resend.com/emails",
       expect.objectContaining({ method: "POST" }),
     );
+    const deliveryRequest = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]?.[1] as RequestInit;
+    const deliveryPayload = JSON.parse(String(deliveryRequest.body)) as { to: string[] };
+    expect(deliveryPayload.to).toEqual(["ops@terrasatch.com"]);
 
     const sessionResponse = createResponse();
     await handler(
@@ -151,7 +160,7 @@ describe("demo auth API", () => {
     });
   });
 
-  it("still issues a demo session if the notification email cannot be delivered", async () => {
+  it("still issues a demo session if both notification destinations cannot be reached", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
@@ -205,4 +214,39 @@ describe("demo auth API", () => {
       error: "Demo access has not been configured for this environment.",
     });
   });
+  it("falls back to the private Gmail mailbox when the operations mailbox delivery fails", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ error: "primary failed" }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: "fallback_email_123" }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    const response = createResponse();
+
+    await handler(
+      {
+        method: "POST",
+        headers: requestHeaders,
+        body: validSubmission,
+      },
+      response,
+    );
+
+    expect(response.statusCode).toBe(200);
+    const primary = JSON.parse(String((fetchMock.mock.calls[0]?.[1] as RequestInit).body)) as { to: string[] };
+    const fallback = JSON.parse(String((fetchMock.mock.calls[1]?.[1] as RequestInit).body)) as { to: string[] };
+    expect(primary.to).toEqual(["ops@terrasatch.com"]);
+    expect(fallback.to).toEqual(["mccunekeaton@gmail.com"]);
+  });
+
+
 });
