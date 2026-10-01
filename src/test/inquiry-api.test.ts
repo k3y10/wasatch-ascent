@@ -45,20 +45,23 @@ const validRequest = {
 afterEach(() => {
   delete process.env.RESEND_API_KEY;
   delete process.env.TERRASATCH_INQUIRY_FROM;
+  delete process.env.TERRASATCH_INQUIRY_TO;
+  delete process.env.TERRASATCH_FOUNDER_EMAIL;
+  delete process.env.TERRASATCH_INQUIRY_FALLBACK_TO;
   vi.unstubAllGlobals();
 });
 
 describe("inquiry API", () => {
-  it("returns a founder-addressed mail fallback when delivery is not configured", async () => {
+  it("returns a TerraSatch-domain mail fallback when delivery is not configured", async () => {
     const response = createResponse();
 
     await handler(validRequest, response);
 
     expect(response.statusCode).toBe(503);
-    expect(response.body?.fallbackMailto).toContain("mailto:mccunekeaton@gmail.com");
+    expect(response.body?.fallbackMailto).toContain("mailto:ops@terrasatch.com");
   });
 
-  it("sends configured inquiries to the founder through the server-only provider", async () => {
+  it("sends general website inquiries to the TerraSatch operations mailbox", async () => {
     process.env.RESEND_API_KEY = "test-key";
     process.env.TERRASATCH_INQUIRY_FROM = "TerraSatch <inquiries@terrasatch.com>";
     const fetchMock = vi.fn().mockResolvedValue({ ok: true });
@@ -73,7 +76,7 @@ describe("inquiry API", () => {
       to: string[];
       reply_to: string;
     };
-    expect(payload.to).toEqual(["mccunekeaton@gmail.com"]);
+    expect(payload.to).toEqual(["ops@terrasatch.com"]);
     expect(payload.reply_to).toBe("pat@example.com");
   });
 
@@ -113,5 +116,51 @@ describe("inquiry API", () => {
     expect(String(request.body)).toContain("preferredPlan");
     expect(String(request.body)).toContain("individual");
   });
+
+  it("routes investor inquiries to the TerraSatch founder mailbox", async () => {
+    process.env.RESEND_API_KEY = "test-key";
+    process.env.TERRASATCH_INQUIRY_FROM = "TerraSatch <inquiries@terrasatch.com>";
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    const response = createResponse();
+
+    await handler(
+      {
+        ...validRequest,
+        body: {
+          mode: "investor",
+          name: "Investor Example",
+          email: "investor@example.com",
+          organization: "Example Capital",
+        },
+      },
+      response,
+    );
+
+    expect(response.statusCode).toBe(200);
+    const request = fetchMock.mock.calls[0]?.[1] as RequestInit;
+    const payload = JSON.parse(String(request.body)) as { to: string[] };
+    expect(payload.to).toEqual(["keaton@terrasatch.com"]);
+  });
+
+  it("uses the private Gmail mailbox only after primary automated delivery fails", async () => {
+    process.env.RESEND_API_KEY = "test-key";
+    process.env.TERRASATCH_INQUIRY_FROM = "TerraSatch <inquiries@terrasatch.com>";
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: false })
+      .mockResolvedValueOnce({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    const response = createResponse();
+
+    await handler(validRequest, response);
+
+    expect(response.statusCode).toBe(200);
+    const primary = JSON.parse(String((fetchMock.mock.calls[0]?.[1] as RequestInit).body)) as { to: string[] };
+    const fallback = JSON.parse(String((fetchMock.mock.calls[1]?.[1] as RequestInit).body)) as { to: string[] };
+    expect(primary.to).toEqual(["ops@terrasatch.com"]);
+    expect(fallback.to).toEqual(["mccunekeaton@gmail.com"]);
+  });
+
 
 });
