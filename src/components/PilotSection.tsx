@@ -11,7 +11,7 @@ const discoverySteps = [
   "Start with one real workflow and define what success looks like",
   "Use TerraSatch and Satchy during your first 14 days",
   "Let Satchy identify repeated work, handoffs, missing context, and useful patterns",
-  "Receive a Discovery Report without being automatically moved into a paid subscription",
+  "On Day 14, review your Discovery Report and choose whether to register for a future subscription",
 ];
 
 const PilotSection = () => {
@@ -75,7 +75,7 @@ const PilotSection = () => {
           </p>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
             Your first 14 days are treated as a Discovery period. Satchy uses that window to understand how TerraSatch fits your
-            workflow and prepare a Discovery Report. Reaching day 14 does not automatically charge you or end your Open Beta access.
+            workflow and prepare a Discovery Report. On Day 14, you can choose a planned subscription and register for launch. You will not be charged while TerraSatch remains in Open Beta, and your Open Beta access does not automatically become paid.
           </p>
           <ul className="mt-8 flex flex-col gap-3">
             {discoverySteps.map((item) => (
