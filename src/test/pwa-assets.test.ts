@@ -61,7 +61,8 @@ describe("TerraSatch PWA", () => {
       "src/components/TerraListenSection.tsx": "7f16983814bf367dbe7eb7c3dc8df9bc577add36",
       "src/components/OperationalSnapshot.tsx": "97436d48b7a63179478b345dd8547490b953ac52",
       "src/components/LearnAdaptSection.tsx": "6025f2c681067063562b2e9c4839883fb79d7153",
-      "src/components/HeroSection.tsx": "4ba2955507814c2b64f17f5e04db48d306db9aa6",
+      // PR #28 intentionally changed the hero to the approved free Open Beta flow.
+      "src/components/HeroSection.tsx": "3db8bf1a94689a6be8ca62a5facb446d22169f92",
       "index.html": "dcb10827188b4444633ff3d095ab573cdec92a4a",
       "src/index.css": "c5641321369a864adaafccd157c499fcea5b6dd2",
     } as const;
@@ -69,6 +70,11 @@ describe("TerraSatch PWA", () => {
     for (const [path, sha] of Object.entries(expected)) {
       expect(gitBlobSha(path), path).toBe(sha);
     }
+
+    const hero = readFileSync(resolve(process.cwd(), "src", "components", "HeroSection.tsx"), "utf8");
+    expect(hero).toContain("free 14-day Discovery");
+    expect(hero).toContain("No payment information is required.");
+    expect(hero).toContain("keep using the beta without being charged.");
 
     expect(existsSync(resolve(process.cwd(), "public", "terrasatch-logo.webp"))).toBe(false);
     expect(existsSync(resolve(process.cwd(), "src", "assets", "terrasatch-logo.png"))).toBe(false);

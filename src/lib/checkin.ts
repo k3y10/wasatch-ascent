@@ -93,7 +93,7 @@ export const activityOptionsFor = (audience: Audience | "") =>
       ? bothActivities
       : recreationActivities;
 
-export const spendOptionsFor = (audience: Audience | "") =>
+export const spendOptionsFor = (audience: Audience | ""): readonly (readonly [string, string])[] =>
   audience === "recreation"
     ? [
         ["zero", "$0"],
